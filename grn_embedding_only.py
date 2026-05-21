@@ -75,6 +75,11 @@ EMBEDDINGS = {
         'key': 'embedding.weight',
         'type': 'checkpoint',
     },
+    'scconcept': {
+        'path': f'{BASE_DIR}/save_pretrain/scconcept/best_model.pt',
+        'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
+        'type': 'checkpoint',
+    },
     # 'GF-12L95M': {
     #     'dir': '/root/autodl-tmp/gene_embeddings/intersect/GF-12L95M',
     #     'type': 'geneformer',
@@ -91,7 +96,7 @@ DEFAULT_DATASETS = [
     'mHSC-L500',
 ]
 REQUIRED_DATASET_FILES = ['Target.csv', 'Train_set.csv', 'Validation_set.csv', 'Test_set.csv']
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'difference_v3', 'GF-12L95M', 'random_256']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'difference_v3', 'GF-12L95M', 'random_256']
 TABLE_DATASET_CHUNK_SIZE = 6
 
 

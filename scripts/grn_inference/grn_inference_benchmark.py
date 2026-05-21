@@ -23,6 +23,10 @@ EMBEDDINGS = {
     "v4_bias_rec_best": {"path": f"{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt", "key": "embedding.weight"},
     "v4_plain_best": {"path": f"{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt", "key": "encoder.embedding.weight"},
     "v4_type_pe_best": {"path": f"{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt", "key": "embedding.weight"},
+    "scconcept": {
+        "path": f"{BASE_DIR}/save_pretrain/scconcept/best_model.pt",
+        "key": "gene_token_encoder.learnable_embs.hsapiens.weight",
+    },
 }
 REQUIRED_SPLITS = ("Train_set", "Validation_set", "Test_set")
 

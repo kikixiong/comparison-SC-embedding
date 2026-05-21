@@ -62,6 +62,10 @@ FIXED_EMBEDDINGS = {
         "path": f"{SCBENCH_BASE}/save_pretrain/v4_type_pe_best/best_model.pt",
         "key": "embedding.weight",
     },
+    "scconcept": {
+        "path": f"{SCBENCH_BASE}/save_pretrain/scconcept/best_model.pt",
+        "key": "gene_token_encoder.learnable_embs.hsapiens.weight",
+    },
 }
 
 
