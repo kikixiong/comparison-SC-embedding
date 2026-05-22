@@ -77,6 +77,11 @@ EMBEDDINGS = {
         'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
         'type': 'checkpoint',
     },
+    'scconcept_encoded': {
+        'path': f'{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt',
+        'key': 'embedding.weight',
+        'type': 'checkpoint',
+    },
     # 'GF-12L95M': {
     #     'dir': '/root/autodl-tmp/gene_embeddings/intersect/GF-12L95M',
     #     'type': 'geneformer',
@@ -87,7 +92,7 @@ EMBEDDINGS = {
 HUMAN_DATASETS = ['hESC500', 'hHep500', 'hHEP500']
 MOUSE_DATASETS = ['mDC500', 'mESC500', 'mHSC-E500', 'mHSC-GM500', 'mHSC-L500']
 TARGET_DATASETS_7 = ['hESC500', 'hHep500', 'mDC500', 'mESC500', 'mHSC-E500', 'mHSC-GM500', 'mHSC-L500']
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'difference_v3', 'GF-12L95M', 'random_256', 'BioBERT_original']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'difference_v3', 'GF-12L95M', 'random_256', 'BioBERT_original']
 TABLE_DATASET_CHUNK_SIZE = 6
 
 RAW_DATASET_CONFIGS = {

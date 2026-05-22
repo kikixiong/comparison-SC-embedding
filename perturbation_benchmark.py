@@ -85,6 +85,11 @@ EMBEDDINGS = {
         'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
         'type': 'checkpoint',
     },
+    'scconcept_encoded': {
+        'path': f'{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt',
+        'key': 'embedding.weight',
+        'type': 'checkpoint',
+    },
     # 'GF-12L95M': {
     #     'dir': '/root/autodl-tmp/gene_embeddings/intersect/GF-12L95M',
     #     'type': 'geneformer',

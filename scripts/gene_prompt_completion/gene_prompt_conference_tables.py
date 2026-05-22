@@ -12,7 +12,7 @@ import pandas as pd
 LOWER_IS_BETTER = {"mse", "mae", "nonzero_mse", "high_expr_mse"}
 HIGHER_IS_BETTER = {"r2", "pearson_all", "spearman_all", "nonzero_pearson", "high_expr_pearson", "rank_spearman_mean", "ndcg20_mean", "ndcg50_mean"}
 PRIMARY_METRICS = ["mse", "pearson_all", "spearman_all", "r2"]
-EMBED_ORDER = ["baseline", "minus", "scGPT_human", "v4_bias_rec_best", "v4_plain_best", "v4_type_pe_best", "scconcept"]
+EMBED_ORDER = ["baseline", "minus", "scGPT_human", "v4_bias_rec_best", "v4_plain_best", "v4_type_pe_best", "scconcept", "scconcept_encoded"]
 
 
 def _available_metrics(df: pd.DataFrame, requested: Iterable[str] = PRIMARY_METRICS) -> list[str]:

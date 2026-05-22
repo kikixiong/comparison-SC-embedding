@@ -71,6 +71,10 @@ EMBEDDINGS = {
         "path": f"{BASE_DIR}/save_pretrain/scconcept/best_model.pt",
         "key": "gene_token_encoder.learnable_embs.hsapiens.weight",
     },
+    "scconcept_encoded": {
+        "path": f"{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt",
+        "key": "embedding.weight",
+    },
 }
 
 SEED = 42

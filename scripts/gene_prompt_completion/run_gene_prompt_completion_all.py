@@ -17,6 +17,7 @@ FIXED_EMBEDDING_KEYS={
     'v4_plain_best':'encoder.embedding.weight',
     'v4_type_pe_best':'embedding.weight',
     'scconcept':'gene_token_encoder.learnable_embs.hsapiens.weight',
+    'scconcept_encoded':'embedding.weight',
 }
 
 def load_embedding(path,key=None):
@@ -47,7 +48,7 @@ def main():
     ap.add_argument('--out-dir',default='results/gene_prompt_completion')
     ap.add_argument('--data-dir',default=DEFAULT_PERTURB_DATA_DIR)
     ap.add_argument('--datasets',default='adamson,dixit,norman')
-    ap.add_argument('--embeddings',default='minus,baseline,scGPT_human,v4_bias_rec_best,v4_plain_best,v4_type_pe_best,scconcept')
+    ap.add_argument('--embeddings',default='minus,baseline,scGPT_human,v4_bias_rec_best,v4_plain_best,v4_type_pe_best,scconcept,scconcept_encoded')
     ap.add_argument('--models',default='mean,knn_prompt,ridge_pair,mlp_pair')
     ap.add_argument('--split-modes',default='cell_holdout,gene_holdout')
     ap.add_argument('--prompt-ratios',default='0.05,0.10,0.20')

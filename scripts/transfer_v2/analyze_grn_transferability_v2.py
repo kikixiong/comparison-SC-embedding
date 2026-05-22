@@ -108,6 +108,7 @@ def default_embeddings_config(base_dir: str) -> dict[str, dict[str, str]]:
         "v4_plain_best": {"path": f"{base_dir}/save_pretrain/v4_plain_best/best_model.pt", "key": "embedding.weight"},
         "v4_type_pe_best": {"path": f"{base_dir}/save_pretrain/v4_type_pe_best/best_model.pt", "key": "embedding.weight"},
         "scconcept": {"path": f"{base_dir}/save_pretrain/scconcept/best_model.pt", "key": "gene_token_encoder.learnable_embs.hsapiens.weight"},
+        "scconcept_encoded": {"path": f"{base_dir}/save_pretrain/scconcept_encoded/best_model.pt", "key": "embedding.weight"},
     }
 
 

@@ -78,6 +78,11 @@ EMBEDDINGS = {
         'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
         'type': 'checkpoint',
     },
+    'scconcept_encoded': {
+        'path': f'{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt',
+        'key': 'embedding.weight',
+        'type': 'checkpoint',
+    },
     'GF-12L95M': {
         'dir': '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/gene_embeddings/intersect/GF-12L95M',
         'type': 'geneformer',
@@ -138,7 +143,7 @@ NETWORK_TYPES = {
 }
 
 N_HVGS = [500, 1000]
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'difference_v3', 'GF-12L95M', 'random_256', 'BioBERT_original']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'difference_v3', 'GF-12L95M', 'random_256', 'BioBERT_original']
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     line = f'[{ts}] {msg}'
