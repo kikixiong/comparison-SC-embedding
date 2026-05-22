@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 from typing import Dict, Iterable, List, Tuple
 
 import numpy as np
@@ -14,24 +15,12 @@ from sklearn.metrics import average_precision_score, f1_score, precision_recall_
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings
+
 BASE_DIR = "/bigdata2/hyt/projects/scbenchmark"
 VOCAB_PATH = f"{BASE_DIR}/vocab.json"
-EMBEDDINGS = {
-    "minus": {"path": f"{BASE_DIR}/save_pretrain/minus/best_model.pt", "key": "module.embedding.weight"},
-    "baseline": {"path": f"{BASE_DIR}/save_pretrain/baseline/best_model.pt", "key": "module.embedding.weight"},
-    "scGPT_human": {"path": f"{BASE_DIR}/save_pretrain/scGPT_human/best_model.pt", "key": "encoder.embedding.weight"},
-    "v4_bias_rec_best": {"path": f"{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt", "key": "embedding.weight"},
-    "v4_plain_best": {"path": f"{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt", "key": "encoder.embedding.weight"},
-    "v4_type_pe_best": {"path": f"{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt", "key": "embedding.weight"},
-    "scconcept": {
-        "path": f"{BASE_DIR}/save_pretrain/scconcept/best_model.pt",
-        "key": "gene_token_encoder.learnable_embs.hsapiens.weight",
-    },
-    "scconcept_encoded": {
-        "path": f"{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt",
-        "key": "embedding.weight",
-    },
-}
+EMBEDDINGS = build_primary_embeddings(BASE_DIR)
 REQUIRED_SPLITS = ("Train_set", "Validation_set", "Test_set")
 
 

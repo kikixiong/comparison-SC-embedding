@@ -3,7 +3,7 @@
 This benchmark now follows the fixed project configuration you provided (no recursive auto-discovery):
 - Base data root: `/bigdata2/hyt/projects/scbenchmark`
 - Datasets: `adamson`, `dixit`, `norman`
-- Embeddings: `minus`, `baseline`, `scGPT_human`, `v4_bias_rec_best`, `v4_plain_best`, `v4_type_pe_best`
+- Embeddings: `minus`, `baseline`, `scGPT_human`, `v4_bias_rec_best`, `v4_plain_best`, `v4_type_pe_best`, `scconcept`, `scconcept_encoded`
 
 ## Usage
 ```bash
@@ -23,7 +23,7 @@ You can restrict with `--datasets` and `--embeddings` (comma-separated names fro
 
 ## Conference-style summary tables
 After a run, the runner also writes:
-- `gene_prompt_completion_conference_tables.md`: one compact markdown file comparing the six fixed embeddings side by side with best/baseline highlighting.
+- `gene_prompt_completion_conference_tables.md`: one compact markdown file comparing the fixed embeddings side by side with best/baseline highlighting.
 - Conservative ridge_pair-vs-baseline diagnostics are included inside the markdown when the required model rows are present.
 
 You can rebuild these tables from an existing results CSV without rerunning the benchmark:

@@ -17,6 +17,7 @@ import argparse
 import json
 import os
 import warnings
+from pathlib import Path
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
@@ -34,6 +35,10 @@ from sklearn.preprocessing import StandardScaler
 
 warnings.filterwarnings("ignore")
 
+import sys
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings
+
 BASE_DIR = '/bigdata2/hyt/projects/scbenchmark'
 OUTPUT_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/results/perturbation_regression'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -42,40 +47,7 @@ VOCAB_PATH = f"{BASE_DIR}/vocab.json"
 PERTURB_DATA_DIR = f"{BASE_DIR}/data/downstreams/perturbation/processed_data"
 DATASETS = ["adamson", "dixit", "norman"]
 
-EMBEDDINGS = {
-    "minus": {
-        "path": f"{BASE_DIR}/save_pretrain/minus/best_model.pt",
-        "key": "module.embedding.weight",
-    },
-    "baseline": {
-        "path": f"{BASE_DIR}/save_pretrain/baseline/best_model.pt",
-        "key": "module.embedding.weight",
-    },
-    "scGPT_human": {
-        "path": f"{BASE_DIR}/save_pretrain/scGPT_human/best_model.pt",
-        "key": "encoder.embedding.weight",
-    },
-    "v4_bias_rec_best": {
-        "path": f"{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt",
-        "key": "embedding.weight",
-    },
-    "v4_plain_best": {
-        "path": f"{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt",
-        "key": "encoder.embedding.weight",
-    },
-    "v4_type_pe_best": {
-        "path": f"{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt",
-        "key": "embedding.weight",
-    },
-    "scconcept": {
-        "path": f"{BASE_DIR}/save_pretrain/scconcept/best_model.pt",
-        "key": "gene_token_encoder.learnable_embs.hsapiens.weight",
-    },
-    "scconcept_encoded": {
-        "path": f"{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt",
-        "key": "embedding.weight",
-    },
-}
+EMBEDDINGS = build_primary_embeddings(BASE_DIR)
 
 SEED = 42
 TOP_K = 256

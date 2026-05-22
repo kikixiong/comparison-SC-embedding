@@ -101,7 +101,8 @@ DEFAULT_DATASETS = [
     'mHSC-L500',
 ]
 REQUIRED_DATASET_FILES = ['Target.csv', 'Train_set.csv', 'Validation_set.csv', 'Test_set.csv']
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'difference_v3', 'GF-12L95M', 'random_256']
+# Historical extras (difference_v3/GF/random/BioBERT) are intentionally disabled for config consistency.
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded']
 TABLE_DATASET_CHUNK_SIZE = 6
 
 

@@ -1,24 +1,18 @@
 #!/usr/bin/env python
-import argparse, logging, csv
+import argparse, logging, csv, sys
 from pathlib import Path
 import numpy as np, pandas as pd
 from gene_prompt_completion_benchmark import run_single
 from utils import load_gene_list
 from gene_prompt_conference_tables import build_conference_tables
 
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings
+
 DEFAULT_BASE_DIR='/bigdata2/hyt/projects/scbenchmark'
 DEFAULT_PERTURB_DATA_DIR=f"{DEFAULT_BASE_DIR}/data/downstreams/perturbation/processed_data"
 FIXED_DATASETS=['adamson','dixit','norman']
-FIXED_EMBEDDING_KEYS={
-    'minus':'module.embedding.weight',
-    'baseline':'module.embedding.weight',
-    'scGPT_human':'encoder.embedding.weight',
-    'v4_bias_rec_best':'embedding.weight',
-    'v4_plain_best':'encoder.embedding.weight',
-    'v4_type_pe_best':'embedding.weight',
-    'scconcept':'gene_token_encoder.learnable_embs.hsapiens.weight',
-    'scconcept_encoded':'embedding.weight',
-}
+FIXED_EMBEDDING_KEYS={k:v['key'] for k,v in build_primary_embeddings(DEFAULT_BASE_DIR).items()}
 
 def load_embedding(path,key=None):
     p=Path(path); s=p.suffix.lower()

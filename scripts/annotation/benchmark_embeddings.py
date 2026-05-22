@@ -20,6 +20,7 @@ Evaluation: 5-fold stratified CV, LR + MLP
 """
 
 import os, sys, json, time, gzip, warnings, urllib.request, argparse
+from pathlib import Path
 import numpy as np
 import torch
 from sklearn.linear_model import LogisticRegression
@@ -31,6 +32,9 @@ import pandas as pd
 from datetime import datetime
 
 warnings.filterwarnings("ignore")
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings
 
 # =============================================================
 # Configuration
@@ -44,36 +48,7 @@ os.makedirs(PERTURBATION_OUTPUT_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(RESULTS_ROOT_DIR, 'benchmark.log')
 
-EMBEDDINGS = {
-    # 'difference_v3': {
-    #     'path': f'{BASE_DIR}/save_pretrain/difference_aligned_v3/best_model.pt',
-    #     'key': 'module.embedding.weight',
-    # },
-    'minus': {
-        'path': f'{BASE_DIR}/save_pretrain/minus/best_model.pt',
-        'key': 'module.embedding.weight',
-    },
-    'baseline': {
-        'path': f'{BASE_DIR}/save_pretrain/baseline/best_model.pt',
-        'key': 'module.embedding.weight',
-    },
-    'scGPT_human': {
-        'path': f'{BASE_DIR}/save_pretrain/scGPT_human/best_model.pt',
-        'key': 'encoder.embedding.weight',
-    },
-    "v4_bias_rec_best": {
-        "path": f"{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt",
-        "key": "embedding.weight",
-    },
-    "v4_plain_best": {
-        "path": f"{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt",
-        "key": "encoder.embedding.weight",
-    },
-    "v4_type_pe_best": {
-        "path": f"{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt",
-        "key": "embedding.weight",
-    }
-}
+EMBEDDINGS = build_primary_embeddings(BASE_DIR)
 
 GF_CONFIG = {
     'dir': '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/gene_embeddings/intersect/GF-12L95M',

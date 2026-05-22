@@ -143,7 +143,8 @@ NETWORK_TYPES = {
 }
 
 N_HVGS = [500, 1000]
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'difference_v3', 'GF-12L95M', 'random_256', 'BioBERT_original']
+# Historical extras (difference_v3/GF/random/BioBERT) are intentionally disabled for config consistency.
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded']
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     line = f'[{ts}] {msg}'

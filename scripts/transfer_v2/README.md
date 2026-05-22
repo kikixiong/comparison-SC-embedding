@@ -20,9 +20,16 @@
 
 ### 1.2 比较对象
 
+代码默认 embedding 配置（见 `analyze_grn_transferability_v2.py::default_embeddings_config`）为：
+
 - `baseline`
 - `minus`
 - `scGPT_human`
+- `v4_bias_rec_best`
+- `v4_plain_best`
+- `v4_type_pe_best`
+- `scconcept`
+- `scconcept_encoded`
 
 默认路径和权重 key 可通过 `--embeddings-config` 覆盖（JSON）。
 
@@ -53,7 +60,7 @@ transfer-v2 同时评估 4 种协议：
 
 - 数据集：`hESC, hHep, mDC, mHSC-E, mHSC-GM, mHSC-L`（共 6 个）；
 - 有向迁移对数量：`N*(N-1)=6*5=30`；
-- 每个迁移对有 18 条聚合记录（3 protocol × 2 clf × 3 embedding）；
+- 每个迁移对有 48 条聚合记录（3 protocol × 2 clf × 8 embedding）；
 - 每条聚合记录对应 5 个 seeds。
 
 > 若数据集是 7 个，则有向迁移对应为 `7*6=42`。当前仓库这批 v2 结果文件实际只包含 6 个数据集，因此是 30 对。

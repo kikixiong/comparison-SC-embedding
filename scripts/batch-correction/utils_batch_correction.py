@@ -5,6 +5,10 @@ import json
 import pickle
 import numpy as np
 import pandas as pd
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings
 
 
 SCBENCH_BASE = os.environ.get("SCBENCH_BASE", "/bigdata2/hyt/projects/scbenchmark")
@@ -37,37 +41,7 @@ LABEL_KEYS = [
     "fine_celltype",
 ]
 
-FIXED_EMBEDDINGS = {
-    "minus": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/minus/best_model.pt",
-        "key": "module.embedding.weight",
-    },
-    "baseline": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/baseline/best_model.pt",
-        "key": "module.embedding.weight",
-    },
-    "scGPT_human": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/scGPT_human/best_model.pt",
-        "key": "encoder.embedding.weight",
-    },
-    "v4_bias_rec_best": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/v4_bias_rec_best/best_model.pt",
-        "key": "embedding.weight",
-    },
-    "v4_plain_best": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/v4_plain_best/best_model.pt",
-        "key": "encoder.embedding.weight",
-    },
-    "v4_type_pe_best": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/v4_type_pe_best/best_model.pt",
-        "key": "embedding.weight",
-    },
-    "scconcept": {
-        "path": f"{SCBENCH_BASE}/save_pretrain/scconcept/best_model.pt",
-        "key": "gene_token_encoder.learnable_embs.hsapiens.weight",
-    },
-}
-
+FIXED_EMBEDDINGS = build_primary_embeddings(SCBENCH_BASE)
 
 def _norm_col(x):
     return re.sub(r"[^a-z0-9]", "", str(x).lower())
