@@ -44,14 +44,6 @@ data
 # Loggings
 nohup.out
 *.patch
-scgreat.log
-grn_beeline.log
-grn_embedding_only.log
 **/sampled_edges
-gene_prompt_completion.log
-gene_prompt_completion*.log
 tmp/
-analyze_grn_transferability_v2.log
-perturbation_benchmark.log
-perturbation_regression_topk256_no_full_finetune.log
-results/benchmark.log
+logs/

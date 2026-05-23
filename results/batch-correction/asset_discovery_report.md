@@ -5,7 +5,7 @@ Embeddings are loaded from fixed registry.
 
 SCBENCH_BASE: /bigdata2/hyt/projects/scbenchmark
 VOCAB_PATH: /bigdata2/hyt/projects/scbenchmark/vocab.json
-Embeddings: 6
+Embeddings: 8
 Datasets: 2
 Missing/skipped/errors: 0
 

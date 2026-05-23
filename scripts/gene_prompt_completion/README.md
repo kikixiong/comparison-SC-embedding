@@ -7,9 +7,7 @@ This benchmark now follows the fixed project configuration you provided (no recu
 
 ## Usage
 ```bash
-python scripts/gene_prompt_completion/run_gene_prompt_completion_all.py \
-  --out-dir results/gene_prompt_completion \
-  --models mean,knn_prompt,ridge_pair,mlp_pair
+nohup python scripts/gene_prompt_completion/run_gene_prompt_completion_all.py --data-dir /bigdata2/hyt/projects/scbenchmark/data/cellxgene --datasets test_data --max-cells 5000 --models ridge_pair --split-modes cell_holdout --target-size 64 --prompt-ratios 0.1 --seeds 0 > logs/gene_prompt_completion_ridge_pair.log 2>&1 &
 ```
 
 You can restrict with `--datasets` and `--embeddings` (comma-separated names from the fixed list).

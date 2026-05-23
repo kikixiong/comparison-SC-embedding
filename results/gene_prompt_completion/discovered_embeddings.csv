@@ -3,5 +3,7 @@ minus,/bigdata2/hyt/projects/scbenchmark/save_pretrain/minus/best_model.pt,modul
 baseline,/bigdata2/hyt/projects/scbenchmark/save_pretrain/baseline/best_model.pt,module.embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
 scGPT_human,/bigdata2/hyt/projects/scbenchmark/save_pretrain/scGPT_human/best_model.pt,encoder.embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
 v4_bias_rec_best,/bigdata2/hyt/projects/scbenchmark/save_pretrain/v4_bias_rec_best/best_model.pt,embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
-v4_plain_best,/bigdata2/hyt/projects/scbenchmark/save_pretrain/v4_plain_best/best_model.pt,encoder.embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
+v4_plain_best,/bigdata2/hyt/projects/scbenchmark/save_pretrain/v4_plain_best/best_model.pt,embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
 v4_type_pe_best,/bigdata2/hyt/projects/scbenchmark/save_pretrain/v4_type_pe_best/best_model.pt,embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
+scconcept,/bigdata2/hyt/projects/scbenchmark/save_pretrain/scconcept/best_model.pt,gene_token_encoder.learnable_embs.hsapiens.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json
+scconcept_encoded,/bigdata2/hyt/projects/scbenchmark/save_pretrain/scconcept_encoded/best_model.pt,embedding.weight,/bigdata2/hyt/projects/scbenchmark/vocab.json

@@ -14,6 +14,10 @@ DEFAULT_PERTURB_DATA_DIR=f"{DEFAULT_BASE_DIR}/data/downstreams/perturbation/proc
 FIXED_DATASETS=['adamson','dixit','norman']
 FIXED_EMBEDDING_KEYS={k:v['key'] for k,v in build_primary_embeddings(DEFAULT_BASE_DIR).items()}
 
+
+class UnsupportedDatasetSchemaError(ValueError):
+    """Raised when a dataset cannot be interpreted as a rectangular cell×gene matrix."""
+
 def load_embedding(path,key=None):
     p=Path(path); s=p.suffix.lower()
     if s in ['.pt','.pth']:
@@ -170,7 +174,7 @@ def main():
                                 msg += (' Detected perturbation-style fields base_idx/single_ctrl; this file is likely a '
                                         'gene-indexed perturbation dataset, not a direct cell×gene matrix for prompt completion.')
                             if args.ragged_policy=='error':
-                                raise ValueError(msg + ' Use --ragged-policy truncate only for exploratory debugging.')
+                                raise UnsupportedDatasetSchemaError(msg + ' Use --ragged-policy truncate only for exploratory debugging.')
                             logger.warning(msg + ' Applying truncate policy to min length.')
                         X=np.vstack([np.asarray(v).reshape(-1)[:min_len] for v in X]).T
                     # case B: list of cell-vectors (standard)
@@ -181,11 +185,11 @@ def main():
                 else:
                     X=np.asarray(X.detach().cpu().numpy() if hasattr(X,'detach') else X)
                 if X.ndim!=2:
-                    raise ValueError(f'Expression matrix must be 2D, got shape={X.shape} from {p}')
+                    raise UnsupportedDatasetSchemaError(f'Expression matrix must be 2D, got shape={X.shape} from {p}')
                 if genes is None: genes=np.array(vocab[:X.shape[1]])
                 else: genes=np.asarray(genes).astype(str)
                 if len(genes)!=X.shape[1]:
-                    raise ValueError(f'Gene count mismatch for {p}: len(genes)={len(genes)} vs X.shape[1]={X.shape[1]}')
+                    raise UnsupportedDatasetSchemaError(f'Gene count mismatch for {p}: len(genes)={len(genes)} vs X.shape[1]={X.shape[1]}')
                 return X,genes
             raise ValueError(f'Unsupported pt object type: {type(obj)}')
         raise ValueError(f'Unsupported dataset suffix: {p.suffix}')
@@ -239,12 +243,20 @@ def main():
             gene_rows.append(gdf.assign(dataset=r['dataset'],embedding=r['embedding'],model=r['model'],split_mode=r['split_mode'],prompt_ratio=r['prompt_ratio'],seed=r['seed']))
             manifests.append(dict(dataset=r['dataset'],split_mode=r['split_mode'],prompt_ratio=r['prompt_ratio'],seed=r['seed'],prompt_genes=man['prompt_genes'],target_genes=man['target_genes'],train_target_genes='',heldout_target_genes=''))
         except Exception as e:
-            rows.append({**r,'status':'FAILED','error_message':str(e)})
+            status='FAILED'
+            if isinstance(e, UnsupportedDatasetSchemaError):
+                status='SKIPPED_SCHEMA_MISMATCH'
+                logger.warning(
+                    f"SKIPPED dataset={r['dataset']} emb={r['embedding']} model={r['model']} "
+                    f"split={r['split_mode']} pr={r['prompt_ratio']} seed={r['seed']}: {e}"
+                )
+            rows.append({**r,'status':status,'error_message':str(e)})
             with open(progress_path,'a',newline='') as f:
                 w=csv.DictWriter(f,fieldnames=list(rows[-1].keys()))
                 if f.tell()==0: w.writeheader()
                 w.writerow(rows[-1]); f.flush()
-            logger.exception(f"FAILED dataset={r['dataset']} emb={r['embedding']} model={r['model']} split={r['split_mode']} pr={r['prompt_ratio']} seed={r['seed']}: {e}")
+            if status=='FAILED':
+                logger.exception(f"FAILED dataset={r['dataset']} emb={r['embedding']} model={r['model']} split={r['split_mode']} pr={r['prompt_ratio']} seed={r['seed']}: {e}")
             if args.strict: raise
     pd.DataFrame(rows).to_csv(out/'gene_prompt_completion_all_results.csv',index=False)
     if gene_rows: pd.concat(gene_rows,ignore_index=True).to_csv(out/'gene_prompt_completion_gene_metrics.csv',index=False)

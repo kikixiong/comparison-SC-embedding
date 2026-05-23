@@ -10,7 +10,7 @@ Good integration must preserve cell type (AvgBIO) while mitigating batch signal 
 
 ## One-command usage
 ```bash
-python scripts/batch-correction/run_batch_correction_all.py --base-dir . --out-dir results/batch-correction --datasets auto --embeddings auto
+nohup python scripts/batch-correction/run_batch_correction_all.py --base-dir . --out-dir results/batch-correction --datasets auto --embeddings auto > logs/batch_correction.log 2>&1 &
 ```
 
 Use `--datasets` / `--embeddings` to restrict scope.

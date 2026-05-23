@@ -11,6 +11,10 @@ annotation,Myeloid,v4_plain_best,lr,13178,21,0.7045,0.0058,0.5765,0.0187,0.7007,
 annotation,Myeloid,v4_plain_best,mlp,13178,21,0.7428,0.0083,0.6049,0.0027,0.7354,0.0063
 annotation,Myeloid,v4_type_pe_best,lr,13178,21,0.7063,0.0098,0.5836,0.0189,0.7036,0.0102
 annotation,Myeloid,v4_type_pe_best,mlp,13178,21,0.7389,0.0105,0.6099,0.0088,0.7323,0.0083
+annotation,Myeloid,scconcept,lr,13178,21,0.6339,0.0103,0.5164,0.0127,0.6357,0.0095
+annotation,Myeloid,scconcept,mlp,13178,21,0.7147,0.0102,0.5549,0.0091,0.7035,0.0094
+annotation,Myeloid,scconcept_encoded,lr,13178,21,0.6759,0.0096,0.5367,0.0098,0.6724,0.0093
+annotation,Myeloid,scconcept_encoded,mlp,13178,21,0.6474,0.0064,0.4762,0.0091,0.633,0.0069
 annotation,Multiple_Sclerosis,minus,lr,21312,18,0.8677,0.0036,0.801,0.006,0.8651,0.0033
 annotation,Multiple_Sclerosis,minus,mlp,21312,18,0.8808,0.0031,0.8263,0.0073,0.8784,0.0023
 annotation,Multiple_Sclerosis,baseline,lr,21312,18,0.8661,0.0046,0.8005,0.0106,0.8636,0.0049
@@ -23,6 +27,10 @@ annotation,Multiple_Sclerosis,v4_plain_best,lr,21312,18,0.8704,0.0039,0.8054,0.0
 annotation,Multiple_Sclerosis,v4_plain_best,mlp,21312,18,0.8834,0.0033,0.8238,0.0086,0.8803,0.004
 annotation,Multiple_Sclerosis,v4_type_pe_best,lr,21312,18,0.8707,0.0042,0.8028,0.0068,0.8684,0.004
 annotation,Multiple_Sclerosis,v4_type_pe_best,mlp,21312,18,0.8808,0.0043,0.8203,0.0129,0.8774,0.0055
+annotation,Multiple_Sclerosis,scconcept,lr,21312,18,0.8088,0.0073,0.7448,0.0139,0.8089,0.0075
+annotation,Multiple_Sclerosis,scconcept,mlp,21312,18,0.823,0.0061,0.7489,0.012,0.8195,0.0064
+annotation,Multiple_Sclerosis,scconcept_encoded,lr,21312,18,0.8159,0.0075,0.7413,0.0128,0.8127,0.008
+annotation,Multiple_Sclerosis,scconcept_encoded,mlp,21312,18,0.7552,0.0039,0.6851,0.0139,0.7522,0.0037
 annotation,pancread,minus,lr,14818,14,0.9833,0.0017,0.903,0.022,0.9831,0.0017
 annotation,pancread,minus,mlp,14818,14,0.985,0.0015,0.9065,0.0061,0.9848,0.0015
 annotation,pancread,baseline,lr,14818,14,0.9827,0.0022,0.9164,0.0263,0.9826,0.0022
@@ -35,6 +43,10 @@ annotation,pancread,v4_plain_best,lr,14818,14,0.9814,0.0011,0.8992,0.0162,0.9813
 annotation,pancread,v4_plain_best,mlp,14818,14,0.9857,0.0016,0.8971,0.0187,0.9855,0.0016
 annotation,pancread,v4_type_pe_best,lr,14818,14,0.982,0.0024,0.8956,0.051,0.9818,0.0024
 annotation,pancread,v4_type_pe_best,mlp,14818,14,0.9841,0.0025,0.9019,0.0559,0.984,0.0027
+annotation,pancread,scconcept,lr,14818,14,0.9837,0.0018,0.8744,0.0467,0.9835,0.0019
+annotation,pancread,scconcept,mlp,14818,14,0.9859,0.0016,0.8649,0.028,0.9856,0.0017
+annotation,pancread,scconcept_encoded,lr,14818,14,0.9789,0.0022,0.8685,0.0337,0.9786,0.0022
+annotation,pancread,scconcept_encoded,mlp,14818,14,0.9795,0.0014,0.8513,0.0485,0.9792,0.0015
 annotation,lupus,minus,lr,50000,14,0.8021,0.0029,0.7886,0.0044,0.7999,0.0033
 annotation,lupus,minus,mlp,50000,14,0.8012,0.0039,0.7849,0.0078,0.7989,0.0041
 annotation,lupus,baseline,lr,50000,14,0.7978,0.0062,0.7817,0.0048,0.7952,0.0062
@@ -47,3 +59,7 @@ annotation,lupus,v4_plain_best,lr,50000,14,0.7934,0.0041,0.7746,0.004,0.7907,0.0
 annotation,lupus,v4_plain_best,mlp,50000,14,0.7914,0.0054,0.7751,0.0044,0.7895,0.0049
 annotation,lupus,v4_type_pe_best,lr,50000,14,0.7917,0.0056,0.7754,0.0051,0.7889,0.0059
 annotation,lupus,v4_type_pe_best,mlp,50000,14,0.7864,0.0053,0.7605,0.0122,0.7829,0.0069
+annotation,lupus,scconcept,lr,50000,14,0.7847,0.0039,0.7602,0.0062,0.783,0.0039
+annotation,lupus,scconcept,mlp,50000,14,0.7843,0.0019,0.7697,0.0043,0.7831,0.0019
+annotation,lupus,scconcept_encoded,lr,50000,14,0.7588,0.0045,0.7288,0.0094,0.7555,0.0044
+annotation,lupus,scconcept_encoded,mlp,50000,14,0.6729,0.0063,0.6247,0.0105,0.6687,0.0055
