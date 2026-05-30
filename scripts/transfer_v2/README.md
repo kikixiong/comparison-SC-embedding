@@ -80,11 +80,12 @@ python scripts/transfer_v2/transfer_v2_prepare.py \
 ### 2.2 主实验
 
 ```bash
-python scripts/transfer_v2/analyze_grn_transferability_v2.py \
+nohup python scripts/transfer_v2/analyze_grn_transferability_v2.py \
   --h5ad-root processed/native \
   --pair-manifest results/transfer_v2/pair_manifest.csv \
   --out-dir results/transfer_v2 \
-  --split-mode gene_disjoint
+  --split-mode gene_disjoint \
+  > logs/transfer_v2_gene_disjoint.log 2>&1 &
 ```
 
 > 默认输出仅保留核心主表：`embedding_transfer_seed_results_v2.csv` 与 `embedding_transfer_summary_v2.csv`。

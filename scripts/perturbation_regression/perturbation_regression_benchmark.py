@@ -39,8 +39,8 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from common.embedding_config import build_primary_embeddings
 
-BASE_DIR = '/bigdata2/hyt/projects/scbenchmark'
-OUTPUT_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/results/perturbation_regression'
+BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
+OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/results/perturbation_regression'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 VOCAB_PATH = f"{BASE_DIR}/vocab.json"

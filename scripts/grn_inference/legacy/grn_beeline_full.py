@@ -11,6 +11,7 @@ Gene counts: 500, 1000
 """
 
 import os, sys, json, gzip, zipfile, warnings, random
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
@@ -21,15 +22,17 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, average_precision_score, f1_score, confusion_matrix
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+from common.embedding_config import build_primary_embeddings
 warnings.filterwarnings("ignore")
 
 # =============================================================
 # Config
 # =============================================================
-BASE_DIR = '/bigdata2/hyt/projects/scbenchmark'
-BEELINE_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/BEELINE'
-SCGREAT_DIR = '/bigdata2/hyt/projects/scGREAT'
-OUTPUT_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/grn_benchmark'
+BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
+BEELINE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/BEELINE'
+SCGREAT_DIR = '/root/autodl-tmp/projects/scGREAT'
+OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/grn_benchmark'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', 'grn_beeline_full')
 os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -37,57 +40,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 LOG_FILE = os.path.join(RESULTS_DIR, 'grn_beeline_full.log')
 VOCAB_PATH = f'{BASE_DIR}/vocab.json'
 
-EMBEDDINGS = {
-    # 'difference_v3': {
-    #     'path': f'{BASE_DIR}/save_pretrain/difference_aligned_v3/best_model.pt',
-    #     'key': 'module.embedding.weight',
-    #     'type': 'checkpoint',
-    # },
-    'minus': {
-        'path': f'{BASE_DIR}/save_pretrain/minus/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'baseline': {
-        'path': f'{BASE_DIR}/save_pretrain/baseline/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'scGPT_human': {
-        'path': f'{BASE_DIR}/save_pretrain/scGPT_human/best_model.pt',
-        'key': 'encoder.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_bias_rec_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_plain_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_type_pe_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'scconcept': {
-        'path': f'{BASE_DIR}/save_pretrain/scconcept/best_model.pt',
-        'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
-        'type': 'checkpoint',
-    },
-    'scconcept_encoded': {
-        'path': f'{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'GF-12L95M': {
-        'dir': '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/gene_embeddings/intersect/GF-12L95M',
-        'type': 'geneformer',
-    },
-}
+EMBEDDINGS = build_primary_embeddings(BASE_DIR)
 
 # Cell type -> expression dir, species, specific network file
 CELL_CONFIGS = {
@@ -144,7 +97,7 @@ NETWORK_TYPES = {
 
 N_HVGS = [500, 1000]
 # Historical extras (difference_v3/GF/random/BioBERT) are intentionally disabled for config consistency.
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'cl_scratch_v5']
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     line = f'[{ts}] {msg}'
@@ -342,7 +295,7 @@ def build_symbol_to_entrez():
     if os.path.exists(mapping_file):
         with open(mapping_file) as f:
             return json.load(f)
-    alt_path = '/bigdata2/hyt/projects/embedding_benchmark/gene_symbol_to_entrez.json'
+    alt_path = '/root/autodl-tmp/projects/embedding_benchmark/gene_symbol_to_entrez.json'
     if os.path.exists(alt_path):
         import shutil
         shutil.copy2(alt_path, mapping_file)

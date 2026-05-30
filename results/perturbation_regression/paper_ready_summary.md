@@ -10,7 +10,7 @@
 ## Descriptive observations by dataset
 
 - Adamson (primary/frozen_linear): best embedding = `v4_bias_rec_best`.
-- Norman (primary/frozen_linear): best embedding = `scconcept`.
+- Norman (primary/frozen_linear): best embedding = `cl_scratch_v5`.
 - Dixit (primary/frozen_linear): best embedding = `v4_bias_rec_best`, but this dataset has small sample size and high variance; treat conclusions as unstable.
 
 ## Paired fold-level comparison notes
@@ -28,7 +28,7 @@
 
 ### frozen_backbone_trainable_head
 
-- adamson: baseline appeared competitive in some paired comparisons.
+- adamson: results were mixed with no clear directional advantage.
 - norman: baseline appeared competitive in some paired comparisons.
 
 ## Conservative conclusion

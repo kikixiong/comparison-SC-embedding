@@ -3,9 +3,9 @@
 Embedding discovery is disabled.
 Embeddings are loaded from fixed registry.
 
-SCBENCH_BASE: /bigdata2/hyt/projects/scbenchmark
-VOCAB_PATH: /bigdata2/hyt/projects/scbenchmark/vocab.json
-Embeddings: 8
+SCBENCH_BASE: /root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark
+VOCAB_PATH: /root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark/vocab.json
+Embeddings: 9
 Datasets: 2
 Missing/skipped/errors: 0
 

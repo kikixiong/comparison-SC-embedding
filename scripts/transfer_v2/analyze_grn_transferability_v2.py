@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import sys
+from pathlib import Path
 from collections import defaultdict
 from dataclasses import dataclass
 from statistics import mean, pstdev
@@ -21,6 +22,10 @@ from statistics import mean, pstdev
 import anndata as ad
 import numpy as np
 from scipy import sparse
+
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings
 
 
 @dataclass

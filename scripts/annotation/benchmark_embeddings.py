@@ -39,8 +39,8 @@ from common.embedding_config import build_primary_embeddings
 # =============================================================
 # Configuration
 # =============================================================
-BASE_DIR = '/bigdata2/hyt/projects/scbenchmark'
-RESULTS_ROOT_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/results'
+BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
+RESULTS_ROOT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/results'
 ANNOTATION_OUTPUT_DIR = os.path.join(RESULTS_ROOT_DIR, 'annotation')
 PERTURBATION_OUTPUT_DIR = os.path.join(RESULTS_ROOT_DIR, 'perturbation')
 os.makedirs(ANNOTATION_OUTPUT_DIR, exist_ok=True)
@@ -51,7 +51,7 @@ LOG_FILE = os.path.join(RESULTS_ROOT_DIR, 'benchmark.log')
 EMBEDDINGS = build_primary_embeddings(BASE_DIR)
 
 GF_CONFIG = {
-    'dir': '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/gene_embeddings/intersect/GF-12L95M',
+    'dir': '/root/autodl-tmp/projects/comparison-SC-embedding/gene_embeddings/intersect/GF-12L95M',
     'name': 'GF-12L95M',
 }
 
@@ -449,7 +449,7 @@ def main(args):
     log(f"Vocab: {len(vocab)} genes")
 
     # --- Check if scGPT_human uses same vocab ---
-    scgpt_vocab = load_vocab('/bigdata2/hyt/projects/scbenchmark/save_pretrain/scGPT_human/vocab.json')
+    scgpt_vocab = load_vocab('/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark/save_pretrain/scGPT_human/vocab.json')
     common = set(vocab.keys()) & set(scgpt_vocab.keys())
     log(f"Vocab overlap with scGPT_human: {len(common)}/{len(vocab)}")
     if len(common) < len(vocab) * 0.9:

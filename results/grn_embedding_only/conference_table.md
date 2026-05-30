@@ -1,61 +1,73 @@
 # GRN Embedding Only (Conference-style Tables)
 
 说明：`-`表示该组合无结果；按列（同一dataset）比较：**加粗**表示优于baseline；<span style="color:red"><strong>红色加粗</strong></span>表示该列最优。
-仅将`dataset`与`embedding`作为显式变量；其余设置作为表上方 latent variables 展示；`A->B`/`A->C`汇总为`A`。
+仅将`dataset`与`embedding`作为显式变量；其余设置作为表上方 latent variables 展示。
 
 ## AUROC | Classifier=lr
 
 Latent variables: metric=AUROC, classifier=lr, aggregation=mean, dataset_split=1/1
 
-| Embedding | hESC500 | hHep500 | mESC500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
-|---|---:|---:|---:|---:|---:|---:|
-| minus | **0.6646** | 0.4348 | **0.4648** | <span style='color:red'><strong>0.6533</strong></span> | 0.5232 | 0.5357 |
-| baseline | 0.5121 | 0.5822 | 0.4624 | 0.6475 | 0.6929 | <span style='color:red'><strong>0.7086</strong></span> |
-| scGPT_human | **0.5280** | **0.6082** | **0.6044** | 0.5034 | 0.6811 | 0.5351 |
-| v4_bias_rec_best | **0.5381** | **0.5861** | **0.6056** | 0.6306 | 0.6905 | 0.7023 |
-| v4_plain_best | **0.5161** | 0.5725 | **0.5983** | 0.4821 | <span style='color:red'><strong>0.6931</strong></span> | 0.5254 |
-| v4_type_pe_best | **0.6666** | 0.4252 | **0.6293** | 0.4813 | 0.5186 | 0.6953 |
-| random_256 | <span style='color:red'><strong>0.8533</strong></span> | <span style='color:red'><strong>1.0000</strong></span> | <span style='color:red'><strong>0.8738</strong></span> | 0.5597 | 0.6790 | 0.6978 |
+| Embedding | hHep500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
+|---|---:|---:|---:|---:|
+| minus | 0.3986 | <span style='color:red'><strong>0.7195</strong></span> | 0.5291 | 0.5444 |
+| baseline | 0.6249 | 0.7166 | 0.7798 | <span style='color:red'><strong>0.7960</strong></span> |
+| scGPT_human | **0.6605** | 0.4967 | 0.7666 | 0.5466 |
+| v4_bias_rec_best | **0.6282** | 0.6871 | 0.7708 | 0.7867 |
+| v4_plain_best | 0.6060 | 0.4714 | <span style='color:red'><strong>0.7847</strong></span> | 0.5298 |
+| v4_type_pe_best | 0.3874 | 0.4716 | 0.5167 | 0.7799 |
+| scconcept | 0.4057 | 0.4299 | 0.7684 | 0.7672 |
+| scconcept_encoded | **0.6343** | 0.4359 | 0.7632 | 0.5211 |
+| cl_scratch_v5 | 0.6231 | 0.4779 | 0.7784 | 0.7790 |
+| random_256 | <span style='color:red'><strong>1.0000</strong></span> | 0.5594 | 0.6790 | 0.6978 |
 
 ## AUROC | Classifier=mlp
 
 Latent variables: metric=AUROC, classifier=mlp, aggregation=mean, dataset_split=1/1
 
-| Embedding | hESC500 | mESC500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
-|---|---:|---:|---:|---:|---:|
-| minus | **0.6798** | **0.4711** | 0.6544 | 0.5429 | 0.7343 |
-| baseline | 0.5295 | 0.4592 | <span style='color:red'><strong>0.6960</strong></span> | 0.7290 | <span style='color:red'><strong>0.7471</strong></span> |
-| scGPT_human | **0.6725** | **0.6261** | 0.5268 | 0.7287 | 0.5722 |
-| v4_bias_rec_best | 0.5269 | 0.4539 | 0.6755 | **0.7314** | 0.7340 |
-| v4_plain_best | 0.5136 | 0.4519 | 0.4945 | 0.7126 | 0.7396 |
-| v4_type_pe_best | **0.6811** | **0.6253** | 0.6904 | <span style='color:red'><strong>0.7342</strong></span> | 0.7387 |
-| random_256 | <span style='color:red'><strong>0.8534</strong></span> | <span style='color:red'><strong>0.8987</strong></span> | 0.6146 | 0.6516 | 0.7115 |
+| Embedding | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
+|---|---:|---:|---:|
+| minus | 0.7320 | 0.5713 | 0.8380 |
+| baseline | <span style='color:red'><strong>0.7745</strong></span> | 0.8171 | 0.8402 |
+| scGPT_human | 0.5248 | **0.8268** | 0.5987 |
+| v4_bias_rec_best | 0.7508 | <span style='color:red'><strong>0.8283</strong></span> | 0.8332 |
+| v4_plain_best | 0.4920 | 0.8097 | **0.8441** |
+| v4_type_pe_best | 0.7695 | **0.8178** | **0.8423** |
+| scconcept | 0.4843 | 0.5641 | 0.5687 |
+| scconcept_encoded | 0.4505 | 0.5004 | 0.5433 |
+| cl_scratch_v5 | 0.5158 | 0.5672 | <span style='color:red'><strong>0.8497</strong></span> |
+| random_256 | 0.6146 | 0.6510 | 0.7120 |
 
 ## AUPRC | Classifier=lr
 
 Latent variables: metric=AUPRC, classifier=lr, aggregation=mean, dataset_split=1/1
 
-| Embedding | hESC500 | hHep500 | mESC500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
-|---|---:|---:|---:|---:|---:|---:|
-| minus | <span style='color:red'><strong>0.6455</strong></span> | 0.4811 | **0.5521** | 0.6025 | 0.5517 | 0.5612 |
-| baseline | 0.5625 | 0.5649 | 0.5441 | 0.6061 | 0.6363 | 0.6523 |
-| scGPT_human | **0.5832** | **0.5851** | **0.6187** | 0.5400 | 0.6205 | 0.5613 |
-| v4_bias_rec_best | **0.5890** | 0.5579 | **0.6183** | 0.5885 | 0.6350 | 0.6414 |
-| v4_plain_best | **0.5808** | 0.5494 | **0.6190** | 0.5154 | 0.6335 | 0.5496 |
-| v4_type_pe_best | **0.6364** | 0.4882 | **0.6244** | 0.5177 | 0.5432 | 0.6401 |
-| random_256 | 0.5255 | <span style='color:red'><strong>1.0000</strong></span> | <span style='color:red'><strong>0.7514</strong></span> | <span style='color:red'><strong>0.6929</strong></span> | <span style='color:red'><strong>0.7619</strong></span> | <span style='color:red'><strong>0.7965</strong></span> |
+| Embedding | hHep500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
+|---|---:|---:|---:|---:|
+| minus | 0.6051 | 0.7800 | 0.7083 | 0.7205 |
+| baseline | 0.7309 | <span style='color:red'><strong>0.7905</strong></span> | <span style='color:red'><strong>0.8333</strong></span> | <span style='color:red'><strong>0.8517</strong></span> |
+| scGPT_human | **0.7597** | 0.6898 | 0.8105 | 0.7221 |
+| v4_bias_rec_best | 0.7207 | 0.7628 | 0.8285 | 0.8381 |
+| v4_plain_best | 0.7014 | 0.6581 | 0.8310 | 0.7027 |
+| v4_type_pe_best | 0.6162 | 0.6586 | 0.6915 | 0.8350 |
+| scconcept | 0.6078 | 0.6319 | 0.8119 | 0.8162 |
+| scconcept_encoded | 0.7180 | 0.6404 | 0.8122 | 0.7015 |
+| cl_scratch_v5 | 0.7267 | 0.6704 | 0.8301 | 0.8361 |
+| random_256 | <span style='color:red'><strong>1.0000</strong></span> | 0.6928 | 0.7619 | 0.7965 |
 
 ## AUPRC | Classifier=mlp
 
 Latent variables: metric=AUPRC, classifier=mlp, aggregation=mean, dataset_split=1/1
 
-| Embedding | hESC500 | mESC500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
-|---|---:|---:|---:|---:|---:|
-| minus | **0.6509** | **0.5565** | 0.6204 | 0.5756 | 0.6712 |
-| baseline | 0.5890 | 0.5475 | 0.6519 | 0.6658 | 0.6784 |
-| scGPT_human | **0.6467** | **0.6339** | 0.5653 | 0.6636 | 0.5921 |
-| v4_bias_rec_best | 0.5888 | **0.5525** | 0.6397 | **0.6708** | 0.6695 |
-| v4_plain_best | 0.5754 | 0.5435 | 0.5455 | 0.6542 | 0.6750 |
-| v4_type_pe_best | <span style='color:red'><strong>0.6527</strong></span> | **0.6318** | 0.6466 | **0.6751** | 0.6764 |
-| random_256 | 0.5301 | <span style='color:red'><strong>0.8088</strong></span> | <span style='color:red'><strong>0.7526</strong></span> | <span style='color:red'><strong>0.7622</strong></span> | <span style='color:red'><strong>0.8031</strong></span> |
+| Embedding | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
+|---|---:|---:|---:|
+| minus | 0.8180 | 0.7525 | 0.8840 |
+| baseline | <span style='color:red'><strong>0.8548</strong></span> | 0.8735 | 0.8884 |
+| scGPT_human | 0.7238 | **0.8792** | 0.7694 |
+| v4_bias_rec_best | 0.8407 | <span style='color:red'><strong>0.8806</strong></span> | 0.8779 |
+| v4_plain_best | 0.7058 | 0.8672 | 0.8871 |
+| v4_type_pe_best | 0.8468 | **0.8796** | **0.8901** |
+| scconcept | 0.6962 | 0.7336 | 0.7433 |
+| scconcept_encoded | 0.6763 | 0.7075 | 0.7240 |
+| cl_scratch_v5 | 0.7143 | 0.7538 | <span style='color:red'><strong>0.8932</strong></span> |
+| random_256 | 0.7526 | 0.7617 | 0.8035 |
 

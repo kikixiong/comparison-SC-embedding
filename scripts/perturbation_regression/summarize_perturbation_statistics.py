@@ -22,14 +22,14 @@ PRIMARY_METHOD = "frozen_linear"
 SECONDARY_METHOD = "frozen_backbone_trainable_head"
 TARGET_METHODS = [PRIMARY_METHOD, SECONDARY_METHOD]
 TARGET_EMBEDDING = "baseline"
-COMPARATORS = ["scGPT_human","minus","v4_bias_rec_best", "v4_plain_best", "v4_type_pe_best", "scconcept" , "scconcept_encoded"]
+COMPARATORS = ["scGPT_human","minus","v4_bias_rec_best", "v4_plain_best", "v4_type_pe_best", "scconcept" , "scconcept_encoded", "cl_scratch_v5"]
 METRICS = ["pearson_r", "mse", "sign_acc"]
 EMBEDDING_ORDER = [TARGET_EMBEDDING, *COMPARATORS]
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Paired statistics for perturbation regression results")
-    p.add_argument("--input_dir", type=str, default="/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/results/perturbation_regression")
+    p.add_argument("--input_dir", type=str, default="/root/autodl-tmp/projects/comparison-SC-embedding/results/perturbation_regression")
     p.add_argument("--results_csv", type=str, default="perturbation_regression_results.csv")
     p.add_argument("--ranking_csv", type=str, default="perturbation_regression_ranking_summary.csv")
     p.add_argument("--fold_csv", type=str, default="perturbation_regression_fold_results.csv")

@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 from common.embedding_config import build_primary_embeddings
 
 
-SCBENCH_BASE = os.environ.get("SCBENCH_BASE", "/bigdata2/hyt/projects/scbenchmark")
+SCBENCH_BASE = os.environ.get("SCBENCH_BASE", "/autodl-tmp/projects/comparison-SC-embedding/scbenchmark")
 VOCAB_PATH = f"{SCBENCH_BASE}/vocab.json"
 
 REQUIRED_SCGPT_DATASETS = ["PBMC 10K", "Immune Human"]

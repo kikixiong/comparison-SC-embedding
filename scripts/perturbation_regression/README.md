@@ -77,9 +77,10 @@
 ## 5. 运行示例
 
 ```bash
-python scripts/perturbation_regression/perturbation_regression_benchmark.py \
+nohup python scripts/perturbation_regression/perturbation_regression_benchmark.py \
   --top_k 256 \
-  --enable_full_finetune false
+  --enable_full_finetune false \
+  > logs/perturbation_regression_top256.log 2>&1 &
 ```
 
 常见可调参数：
