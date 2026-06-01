@@ -193,6 +193,8 @@ Latent variables: metric=AUPRC, negative_protocol=full_candidate, classifier=agg
 
 ## AUPRC_LIFT (Main)
 
+AUPRC_LIFT normalizes AUPRC by the random-ranking baseline, which equals the test positive ratio. It indicates how many times better the model ranks true edges compared with random expectation.
+
 ### Negative protocol: tf_stratified_1to10
 
 Latent variables: metric=AUPRC_LIFT, negative_protocol=tf_stratified_1to10, classifier=aggregated(lr,mlp), aggregation=mean

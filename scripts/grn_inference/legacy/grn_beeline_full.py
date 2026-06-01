@@ -204,7 +204,7 @@ def _infer_network_group(dataset_name):
     return None
 
 
-PRIMARY_METRICS = ['auroc', 'auprc', 'auprc_lift', 'auprc_gain']
+PRIMARY_METRICS = ['auroc', 'auprc', 'auprc_lift']
 SUPPLEMENTARY_METRICS = ['precision_at_k', 'recall_at_k', 'f1', 'specificity']
 DIAGNOSTIC_METRICS = [
     'random_auprc_baseline',
@@ -291,6 +291,33 @@ def _infer_n_hvg(dataset_name):
     except ValueError:
         return np.nan
 
+
+
+def ensure_auprc_lift(df):
+    """Ensure AUPRC lift and its random-ranking baseline are present per result row."""
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    if 'random_auprc_baseline' not in out.columns:
+        out['random_auprc_baseline'] = np.nan
+    if 'test_positive_ratio' not in out.columns:
+        out['test_positive_ratio'] = out['random_auprc_baseline']
+
+    baseline = out['random_auprc_baseline']
+    missing_baseline = baseline.isna()
+    out.loc[missing_baseline, 'random_auprc_baseline'] = out.loc[missing_baseline, 'test_positive_ratio']
+    out['test_positive_ratio'] = out['random_auprc_baseline']
+
+    if 'auprc' in out.columns:
+        baseline = out['random_auprc_baseline']
+        out['auprc_lift'] = np.where(
+            pd.notna(baseline) & (baseline > 0),
+            out['auprc'] / baseline,
+            np.nan,
+        )
+    elif 'auprc_lift' not in out.columns:
+        out['auprc_lift'] = np.nan
+    return out
 
 def add_baseline_comparisons(df):
     """Add per-dataset/protocol/classifier deltas relative to the baseline embedding."""
@@ -491,6 +518,7 @@ def write_conference_md(df):
     out_md = os.path.join(RESULTS_DIR, 'conference_table.md')
     out_csv = os.path.join(RESULTS_DIR, 'grn_beeline_full_results.csv')
 
+    df = ensure_auprc_lift(df)
     df.to_csv(out_csv, index=False)
 
     embeddings = [e for e in EMBED_ORDER if e in df['embedding'].unique()] + [e for e in sorted(df['embedding'].unique()) if e not in EMBED_ORDER]
@@ -502,23 +530,25 @@ def write_conference_md(df):
         ''
     ]
     network_groups = ['Specific', 'Non-Specific', 'STRING']
-    conference_diagnostic_metrics = [
-        'random_auprc_baseline',
-        'test_positive_ratio',
-        'test_negative_to_positive_ratio',
-    ]
     all_metrics = (
-        PRIMARY_METRICS
+        [m for m in PRIMARY_METRICS if m in df.columns]
         + [m for m in SUPPLEMENTARY_METRICS if m in df.columns]
-        + [m for m in conference_diagnostic_metrics if m in df.columns]
     )
     protocol_values = ['']
     if 'negative_protocol' in df.columns:
-        protocol_values = [p for p in df['negative_protocol'].dropna().unique()]
+        requested_protocols = ['tf_stratified_1to10', 'full_candidate']
+        observed_protocols = [p for p in df['negative_protocol'].dropna().unique()]
+        protocol_values = requested_protocols.copy()
+        protocol_values += [p for p in observed_protocols if p not in protocol_values]
 
     for metric in all_metrics:
-        section = "Diagnostics" if metric in conference_diagnostic_metrics else ("Supplementary" if metric in SUPPLEMENTARY_METRICS else "Main")
+        section = "Supplementary" if metric in SUPPLEMENTARY_METRICS else "Main"
         lines += [f'## {metric.upper()} ({section})', '']
+        if metric == 'auprc_lift':
+            lines.append(
+                'AUPRC_LIFT normalizes AUPRC by the random-ranking baseline, which equals the test positive ratio. '
+                'It indicates how many times better the model ranks true edges compared with random expectation.')
+            lines.append('')
 
         for protocol in protocol_values:
             sub = df.copy()
@@ -529,12 +559,6 @@ def write_conference_md(df):
             protocol_label = protocol or 'default'
             lines.append(f'### Negative protocol: {protocol_label}')
             lines.append('')
-            if protocol_label == 'full_candidate' and metric in ['auprc', 'auprc_lift', 'auprc_gain']:
-                lines.append(
-                    'Note: under `full_candidate`, raw AUPRC should be interpreted together with '
-                    '`RANDOM_AUPRC_BASELINE` and `AUPRC_LIFT`; low raw AUPRC can still be many times '
-                    'the random-ranking baseline when the positive edge ratio is very small.')
-                lines.append('')
             lines.append(
                 f'Latent variables: metric={metric.upper()}, negative_protocol={protocol_label}, '
                 'classifier=aggregated(lr,mlp), aggregation=mean')
@@ -1347,7 +1371,7 @@ def main():
     log(f"{'='*70}")
 
     if all_results:
-        df = add_baseline_comparisons(pd.DataFrame(all_results))
+        df = add_baseline_comparisons(ensure_auprc_lift(pd.DataFrame(all_results)))
         lr_df = df[df['clf'] == 'lr']
         mlp_df = df[df['clf'] == 'mlp']
 
