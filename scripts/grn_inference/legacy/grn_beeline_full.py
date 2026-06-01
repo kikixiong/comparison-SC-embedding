@@ -34,8 +34,12 @@ BEELINE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/BEELINE'
 SCGREAT_DIR = '/root/autodl-tmp/projects/scGREAT'
 OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/grn_benchmark'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', 'grn_beeline_full')
+REPO_ROOT = Path(__file__).resolve().parents[3]
+RESULTS_DIR = os.path.join(REPO_ROOT, 'results', 'grn_beeline_full')
 os.makedirs(RESULTS_DIR, exist_ok=True)
+# Keep the user-requested spelling for the diagnostics directory name.
+DIAGNOSTICS_DIR = os.path.join(RESULTS_DIR, 'diagnotics')
+os.makedirs(DIAGNOSTICS_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(RESULTS_DIR, 'grn_beeline_full.log')
 VOCAB_PATH = f'{BASE_DIR}/vocab.json'
@@ -154,6 +158,115 @@ def _infer_network_group(dataset_name):
 
 PRIMARY_METRICS = ['auroc', 'auprc']
 SUPPLEMENTARY_METRICS = ['precision_at_k', 'recall_at_k', 'f1', 'specificity']
+
+
+def _split_label_diagnostics(prefix, labels):
+    """Return class-balance diagnostics for one labeled split."""
+    labels = np.asarray(labels).astype(int) if labels is not None else np.array([], dtype=int)
+    n_total = int(len(labels))
+    n_positive = int(np.sum(labels == 1)) if n_total else 0
+    n_negative = int(np.sum(labels == 0)) if n_total else 0
+    positive_ratio = n_positive / n_total if n_total else np.nan
+    negative_to_positive_ratio = n_negative / n_positive if n_positive else np.nan
+    return {
+        f'{prefix}_n_total': n_total,
+        f'{prefix}_n_positive': n_positive,
+        f'{prefix}_n_negative': n_negative,
+        f'{prefix}_positive_ratio': positive_ratio,
+        f'{prefix}_negative_to_positive_ratio': negative_to_positive_ratio,
+    }
+
+
+def build_dataset_diagnostic(ds_name, source, gene_list, train_labels, val_labels, test_labels,
+                             n_positive_edges=None, n_tfs=None, network_path=None,
+                             expression_path=None, n_hvg=None):
+    """Build one dataset-level diagnostics row.
+
+    AUPRC is highly sensitive to the positive class prevalence; the test split
+    positive ratio is therefore also the random-ranking AUPRC baseline.
+    """
+    all_train_labels = np.concatenate([
+        np.asarray(train_labels).astype(int),
+        np.asarray(val_labels).astype(int),
+    ]) if len(val_labels) else np.asarray(train_labels).astype(int)
+
+    row = {
+        'dataset': ds_name,
+        'source': source,
+        'network_group': _infer_network_group(ds_name) or source,
+        'n_genes': int(len(gene_list)),
+        'n_positive_edges_after_filter': int(n_positive_edges) if n_positive_edges is not None else np.nan,
+        'n_tfs_after_filter': int(n_tfs) if n_tfs is not None else np.nan,
+        'n_hvg': int(n_hvg) if n_hvg is not None else np.nan,
+        'network_path': network_path or '',
+        'expression_path': expression_path or '',
+    }
+    row.update(_split_label_diagnostics('train', train_labels))
+    row.update(_split_label_diagnostics('validation', val_labels))
+    row.update(_split_label_diagnostics('combined_train', all_train_labels))
+    row.update(_split_label_diagnostics('test', test_labels))
+    row['random_auprc_baseline'] = row['test_positive_ratio']
+    return row
+
+
+def write_diagnostics(dataset_diagnostics, results_df):
+    """Write BEELINE-full-only diagnostics under results/grn_beeline_full/diagnotics."""
+    os.makedirs(DIAGNOSTICS_DIR, exist_ok=True)
+    diag_df = pd.DataFrame(dataset_diagnostics)
+    dataset_csv = os.path.join(DIAGNOSTICS_DIR, 'dataset_class_balance.csv')
+    diag_df.to_csv(dataset_csv, index=False)
+
+    metric_csv = os.path.join(DIAGNOSTICS_DIR, 'metric_summary_by_network_embedding.csv')
+    if results_df is not None and len(results_df) > 0:
+        metric_df = results_df.copy()
+        metric_df['network_group'] = metric_df['dataset'].map(lambda x: _infer_network_group(x) or ('scGREAT' if 'scGREAT' in str(x) else 'other'))
+        summary_metrics = [m for m in ['auroc', 'auprc', 'precision_at_k', 'recall_at_k', 'f1', 'specificity'] if m in metric_df.columns]
+        metric_summary = (
+            metric_df
+            .groupby(['network_group', 'embedding', 'clf'], dropna=False)[summary_metrics]
+            .agg(['mean', 'std', 'min', 'max', 'count'])
+        )
+        metric_summary.columns = ['_'.join(col).strip('_') for col in metric_summary.columns]
+        metric_summary = metric_summary.reset_index()
+        metric_summary.to_csv(metric_csv, index=False)
+    else:
+        pd.DataFrame().to_csv(metric_csv, index=False)
+
+    md_path = os.path.join(DIAGNOSTICS_DIR, 'diagnostics_summary.md')
+    lines = [
+        '# GRN BEELINE Full Diagnostics',
+        '',
+        'Diagnostics are scoped to the GRN BEELINE full benchmark only.',
+        '',
+        '## Files',
+        '',
+        '- `dataset_class_balance.csv`: per-dataset split sizes, positive ratios, and the random-ranking AUPRC baseline.',
+        '- `metric_summary_by_network_embedding.csv`: metric summaries by network group, embedding, and classifier.',
+        '',
+    ]
+    if not diag_df.empty:
+        display_cols = ['dataset', 'network_group', 'n_genes', 'test_n_positive', 'test_n_negative', 'test_positive_ratio', 'random_auprc_baseline']
+        available_cols = [c for c in display_cols if c in diag_df.columns]
+        lines += [
+            '## Class-balance summary',
+            '',
+            '| ' + ' | '.join(available_cols) + ' |',
+            '| ' + ' | '.join(['---'] * len(available_cols)) + ' |',
+        ]
+        for _, row in diag_df[available_cols].iterrows():
+            values = []
+            for col in available_cols:
+                val = row[col]
+                if isinstance(val, float):
+                    values.append('nan' if pd.isna(val) else f'{val:.6f}')
+                else:
+                    values.append(str(val))
+            lines.append('| ' + ' | '.join(values) + ' |')
+        lines.append('')
+    with open(md_path, 'w') as f:
+        f.write('\n'.join(lines) + '\n')
+
+    log(f'Diagnostics saved to {DIAGNOSTICS_DIR}')
 
 
 def write_conference_md(df):
@@ -640,6 +753,7 @@ def main():
     download_beeline()
 
     all_results = []
+    dataset_diagnostics = []
 
     # =========================================================
     # Part 1: scGREAT pre-processed datasets (hESC500, mESC500)
@@ -656,6 +770,8 @@ def main():
                 train_p, train_l = splits['Train_set']
                 val_p, val_l = splits['Validation_set']
                 test_p, test_l = splits['Test_set']
+                dataset_diagnostics.append(build_dataset_diagnostic(
+                    f"{d} [scGREAT]", 'scGREAT', gene_list, train_l, val_l, test_l))
 
                 # Combine train+val
                 if len(val_p) > 0:
@@ -723,6 +839,10 @@ def main():
 
                     (train_p, train_l), (val_p, val_l), (test_p, test_l) = \
                         hard_negative_split(pos_pairs, gene_indices, tf_indices)
+                    dataset_diagnostics.append(build_dataset_diagnostic(
+                        ds_name, 'BEELINE', gene_list, train_l, val_l, test_l,
+                        n_positive_edges=len(pos_pairs), n_tfs=len(tf_indices),
+                        network_path=net_path, expression_path=expr_path, n_hvg=n_hvg))
 
                     if len(test_p) < 10 or len(train_p) < 10:
                         log(f"  {ds_name}: too few samples after split, skipping")
@@ -811,6 +931,7 @@ def main():
         csv_path = os.path.join(RESULTS_DIR, 'grn_beeline_full_results.csv')
         df.to_csv(csv_path, index=False)
         write_conference_md(df)
+        write_diagnostics(dataset_diagnostics, df)
         log(f"\nResults saved to {csv_path}")
 
     log("\nDone!")
