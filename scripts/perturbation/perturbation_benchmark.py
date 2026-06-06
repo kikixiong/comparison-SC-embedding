@@ -43,8 +43,8 @@ from common.embedding_config import build_primary_embeddings, merge_incremental_
 # =============================================================
 # Config
 # =============================================================
-BASE_DIR = '/bigdata2/hyt/projects/scbenchmark'
-OUTPUT_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/perturbation_benchmark'
+BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
+OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/results'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(OUTPUT_DIR, 'perturbation.log')
@@ -92,13 +92,13 @@ def build_symbol_to_entrez():
     if os.path.exists(mapping_file):
         with open(mapping_file) as f:
             return json.load(f)
-    alt_path = '/bigdata2/hyt/projects/embedding_benchmark/gene_symbol_to_entrez.json'
+    alt_path = '/root/autodl-tmp/projects/embedding_benchmark/gene_symbol_to_entrez.json'
     if os.path.exists(alt_path):
         import shutil
         shutil.copy2(alt_path, mapping_file)
         with open(mapping_file) as f:
             return json.load(f)
-    alt2 = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/grn_benchmark/gene_symbol_to_entrez.json'
+    alt2 = '/root/autodl-tmp/projects/comparison-SC-embedding/grn_benchmark/gene_symbol_to_entrez.json'
     if os.path.exists(alt2):
         import shutil
         shutil.copy2(alt2, mapping_file)

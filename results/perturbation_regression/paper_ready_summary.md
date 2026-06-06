@@ -28,7 +28,7 @@
 
 ### frozen_backbone_trainable_head
 
-- adamson: results were mixed with no clear directional advantage.
+- adamson: baseline appeared competitive in some paired comparisons.
 - norman: baseline appeared competitive in some paired comparisons.
 
 ## Conservative conclusion

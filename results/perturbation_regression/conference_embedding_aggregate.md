@@ -6,15 +6,16 @@
 
 | Embedding | Frozen Linear Rank | Backbone+Head Rank | Overall Rank |
 |---|---:|---:|---:|
-| baseline | 3.667 | 3.500 | 3.583 |
-| scGPT_human | 4.667 | 6.500 | 5.583 |
-| minus | 5.667 | 5.500 | 5.583 |
-| v4_bias_rec_best | **2.667** | 2.000 | 2.333 |
-| v4_plain_best | 5.000 | 5.500 | 5.250 |
-| v4_type_pe_best | 6.667 | 5.000 | 5.833 |
-| scconcept | 6.333 | 7.000 | 6.667 |
-| scconcept_encoded | 7.333 | 8.500 | 7.917 |
-| **cl_scratch_v5** | 3.000 | **1.500** | **2.250** |
+| baseline | 3.667 | 4.000 | 3.833 |
+| scGPT_human | 5.333 | 7.500 | 6.417 |
+| minus | 6.333 | 6.000 | 6.167 |
+| v4_bias_rec_best | **3.000** | 2.500 | 2.750 |
+| v4_plain_best | 5.667 | 6.500 | 6.083 |
+| v4_type_pe_best | 7.333 | 5.500 | 6.417 |
+| scconcept | 7.000 | 8.000 | 7.500 |
+| scconcept_encoded | 8.333 | 9.500 | 8.917 |
+| **cl_scratch_v5** | 3.333 | **1.500** | **2.417** |
+| cl_v6_fair | 5.000 | 4.000 | 4.500 |
 
 ## Table B. Dataset-wise regression metrics
 
@@ -39,5 +40,7 @@
 | scconcept_encoded(frozen_head) | 0.0024 | 1.5755 | - | - | 0.0114 | 1.5925 | 0.0069 | 1.5840 | 0.5061 | - |
 | cl_scratch_v5(frozen_linear) | 0.1575 | 1.3575 | 0.3881 | 0.9273 | 0.1292 | 1.5379 | 0.2249 | 1.2743 | 0.5967 | - |
 | cl_scratch_v5(frozen_head) | 0.1948 | 1.1385 | - | - | **0.1617** | 1.1911 | 0.1783 | 1.1648 | 0.5680 | - |
+| cl_v6_fair(frozen_linear) | 0.1088 | 1.4654 | 0.4632 | 0.9412 | 0.0984 | 1.6524 | 0.2234 | 1.3530 | 0.6020 | - |
+| cl_v6_fair(frozen_head) | 0.1693 | 1.1728 | - | - | 0.1480 | 1.2233 | 0.1587 | 1.1980 | 0.5573 | - |
 
 注：当同一张表内同时出现多个 method 时，embedding 名称后会添加括号用于区分 latent variable。

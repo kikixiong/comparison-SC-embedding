@@ -71,3 +71,11 @@ annotation,lupus,scconcept_encoded,lr,50000,14,0.7586,0.0043,0.7285,0.0102,0.755
 annotation,lupus,scconcept_encoded,mlp,50000,14,0.6752,0.0051,0.6263,0.0108,0.67,0.0032
 annotation,lupus,cl_scratch_v5,lr,50000,14,0.7961,0.0027,0.7813,0.0049,0.7937,0.0028
 annotation,lupus,cl_scratch_v5,mlp,50000,14,0.7927,0.0039,0.7778,0.0058,0.7901,0.0035
+annotation,Myeloid,cl_v6_fair,lr,13178,21,0.7082,0.0084,0.5829,0.0104,0.705,0.0079
+annotation,Myeloid,cl_v6_fair,mlp,13178,21,0.7448,0.0137,0.6051,0.0186,0.7356,0.0135
+annotation,Multiple_Sclerosis,cl_v6_fair,lr,21312,18,0.8669,0.0025,0.8081,0.0082,0.8647,0.0024
+annotation,Multiple_Sclerosis,cl_v6_fair,mlp,21312,18,0.8815,0.0017,0.8255,0.0088,0.8785,0.0028
+annotation,pancread,cl_v6_fair,lr,14818,14,0.9818,0.0023,0.8963,0.0446,0.9816,0.0024
+annotation,pancread,cl_v6_fair,mlp,14818,14,0.9856,0.0018,0.9017,0.0472,0.9855,0.0019
+annotation,lupus,cl_v6_fair,lr,50000,14,0.7933,0.002,0.7745,0.0056,0.7909,0.0019
+annotation,lupus,cl_v6_fair,mlp,50000,14,0.7901,0.0037,0.7653,0.0071,0.7865,0.004

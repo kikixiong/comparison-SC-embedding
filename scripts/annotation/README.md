@@ -5,7 +5,7 @@
 ## Usage
 
 ```bash
-python scripts/annotation/benchmark_embeddings.py
+nohup python scripts/annotation/benchmark_embeddings.py > logs/annotation.log 2>&1 &
 ```
 
 To rebuild the annotation conference markdown from an existing merged CSV without rerunning embeddings:

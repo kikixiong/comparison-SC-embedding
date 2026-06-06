@@ -5,7 +5,7 @@
 ## Usage
 
 ```bash
-python scripts/perturbation/perturbation_benchmark.py
+nohup python scripts/perturbation/perturbation_benchmark.py > logs/perturbation.log 2>&1 &
 ```
 
 ## Incremental embedding reruns
