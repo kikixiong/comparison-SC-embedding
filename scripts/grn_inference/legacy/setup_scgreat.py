@@ -20,6 +20,10 @@ import urllib.request
 import zipfile
 import ssl
 from datetime import datetime
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+from common.embedding_config import build_primary_embeddings, get_incre_embeddings, merge_incremental_results
 
 # =============================================================
 # Config
@@ -36,64 +40,15 @@ LOG_FILE = os.path.join(RESULTS_DIR, 'setup.log')
 VOCAB_PATH = f'{BASE_DIR}/vocab.json'
 
 # Embedding sources
-EMBEDDINGS = {
-    'difference_v3': {
-        'path': f'{BASE_DIR}/save_pretrain/difference_aligned_v3/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'minus': {
-        'path': f'{BASE_DIR}/save_pretrain/minus/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'baseline': {
-        'path': f'{BASE_DIR}/save_pretrain/baseline/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'scGPT_human': {
-        'path': f'{BASE_DIR}/save_pretrain/scGPT_human/best_model.pt',
-        'key': 'encoder.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_bias_rec_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_plain_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_type_pe_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'scconcept': {
-        'path': f'{BASE_DIR}/save_pretrain/scconcept/best_model.pt',
-        'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
-        'type': 'checkpoint',
-    },
-    'scconcept_encoded': {
-        'path': f'{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    # 'GF-12L95M': {
-    #     'dir': '/root/autodl-tmp/gene_embeddings/intersect/GF-12L95M',
-    #     'type': 'geneformer',
-    # },
-}
+EMBEDDINGS = build_primary_embeddings(BASE_DIR)
+
 
 # Preferred scGREAT datasets (will auto-discover additional *_500 datasets)
 HUMAN_DATASETS = ['hESC500', 'hHep500', 'hHEP500']
 MOUSE_DATASETS = ['mDC500', 'mESC500', 'mHSC-E500', 'mHSC-GM500', 'mHSC-L500']
 TARGET_DATASETS_7 = ['hESC500', 'hHep500', 'mDC500', 'mESC500', 'mHSC-E500', 'mHSC-GM500', 'mHSC-L500']
 # Historical extras (difference_v3/GF/random/BioBERT) are intentionally disabled for config consistency.
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'cl_scratch_v5', 'cl_v6_fair']
 TABLE_DATASET_CHUNK_SIZE = 6
 
 RAW_DATASET_CONFIGS = {
@@ -180,7 +135,9 @@ def export_run_all_conference_table():
     if not rows:
         return
     df = pd.DataFrame(rows)
-    df.to_csv(os.path.join(RESULTS_DIR, 'run_all_summary_parsed.csv'), index=False)
+    summary_csv = os.path.join(RESULTS_DIR, 'run_all_summary_parsed.csv')
+    result_keys = ['embedding', 'dataset']
+    df = merge_incremental_results(df, summary_csv, result_keys)
     df['dataset_display'] = df['dataset'].map(_collapse_dataset_label)
 
     embeddings = [e for e in EMBED_ORDER if e in df['embedding'].unique()] + [e for e in sorted(df['embedding'].unique()) if e not in EMBED_ORDER]
@@ -1012,7 +969,7 @@ def generate_run_script(all_datasets):
         '#!/bin/bash',
         'set -uo pipefail',
         f'# scGREAT GRN benchmark - generated {datetime.now()}',
-        f'# Experiments: {len(EMBEDDINGS) + 1} embeddings x {len(all_datasets)} datasets',
+        f'# Experiments: {len(EMBEDDINGS) + (0 if get_incre_embeddings() else 1)} embeddings x {len(all_datasets)} datasets',
         '',
         f'SCGREAT_DIR="{SCGREAT_DIR}"',
         f'OUTPUT_DIR="{OUTPUT_DIR}"',
@@ -1029,7 +986,8 @@ def generate_run_script(all_datasets):
         '',
     ]
 
-    # All embedding configs: 4 custom + 1 BioBERT original
+    # In incremental mode, only configured new embeddings are scheduled; the
+    # historical BioBERT baseline is preserved via the parsed-summary CSV merge.
     emb_configs = []
     for emb_name, emb_cfg in EMBEDDINGS.items():
         if emb_cfg['type'] == 'checkpoint':
@@ -1037,7 +995,8 @@ def generate_run_script(all_datasets):
         else:
             emb_dim = 512
         emb_configs.append((emb_name, emb_dim))
-    emb_configs.append(('BioBERT_original', 768))
+    if not get_incre_embeddings():
+        emb_configs.append(('BioBERT_original', 768))
 
     for emb_name, emb_dim in emb_configs:
         for ds in all_datasets:
@@ -1240,8 +1199,12 @@ def main():
                 log(f"  SKIP {emb_name} x {ds}: {e}")
 
     # 7. BioBERT baseline
-    log("\nSetting up BioBERT original baseline...")
-    setup_biobert_baseline(all_datasets)
+    incremental_embeddings = get_incre_embeddings()
+    if incremental_embeddings:
+        log(f"\nSkipping BioBERT original baseline in incremental mode: {incremental_embeddings}")
+    else:
+        log("\nSetting up BioBERT original baseline...")
+        setup_biobert_baseline(all_datasets)
 
     # 8. Coverage summary
     log("\n" + "=" * 60)

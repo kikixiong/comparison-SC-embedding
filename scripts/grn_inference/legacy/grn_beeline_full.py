@@ -23,7 +23,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, average_precision_score, f1_score, confusion_matrix
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
-from common.embedding_config import build_primary_embeddings
+from common.embedding_config import build_primary_embeddings, merge_incremental_results
 warnings.filterwarnings("ignore")
 
 # =============================================================
@@ -149,7 +149,7 @@ def resolve_negative_protocols():
     return [(name, NEGATIVE_PROTOCOL_SPECS[name]) for name in names]
 
 # Historical extras (difference_v3/GF/random/BioBERT) are intentionally disabled for config consistency.
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'cl_scratch_v5']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'cl_scratch_v5', 'cl_v6_fair']
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     line = f'[{ts}] {msg}'
@@ -1429,10 +1429,13 @@ def main():
                         log(f"  {emb_name:<20} AUROC: {mean_auroc:.4f}±{std_auroc:.4f}  AUPRC: {mean_auprc:.4f}±{std_auprc:.4f}  (n={len(emb_data)})")
 
         csv_path = os.path.join(RESULTS_DIR, 'grn_beeline_full_results.csv')
+        result_keys = ['dataset', 'negative_protocol', 'embedding', 'clf']
+        df = merge_incremental_results(df, csv_path, result_keys)
+        df = add_baseline_comparisons(ensure_auprc_lift(df))
         df.to_csv(csv_path, index=False)
         write_conference_md(df)
         write_diagnostics(dataset_diagnostics, df)
-        log(f"\nResults saved to {csv_path}")
+        log(f"\nResults merged into {csv_path}")
 
     log("\nDone!")
 

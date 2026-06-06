@@ -26,7 +26,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
-from common.embedding_config import build_primary_embeddings
+from common.embedding_config import build_primary_embeddings, get_incre_embeddings, merge_incremental_results
 
 warnings.filterwarnings("ignore")
 
@@ -56,7 +56,7 @@ DEFAULT_DATASETS = [
 ]
 REQUIRED_DATASET_FILES = ['Target.csv', 'Train_set.csv', 'Validation_set.csv', 'Test_set.csv']
 # Historical extras (difference_v3/GF/random/BioBERT) are intentionally disabled for config consistency.
-EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'cl_scratch_v5']
+EMBED_ORDER = ['minus', 'baseline', 'scGPT_human', 'v4_bias_rec_best', 'v4_plain_best', 'v4_type_pe_best', 'scconcept', 'scconcept_encoded', 'cl_scratch_v5', 'cl_v6_fair']
 TABLE_DATASET_CHUNK_SIZE = 6
 
 
@@ -381,8 +381,12 @@ def main():
 
     symbol_to_entrez = build_symbol_to_entrez()
 
-    # Also add random baseline
-    log("Adding random embedding baseline (256-dim)...")
+    incremental_embeddings = get_incre_embeddings()
+    include_random_baseline = not incremental_embeddings
+    if include_random_baseline:
+        log("Adding random embedding baseline (256-dim)...")
+    else:
+        log(f"Skipping random embedding baseline in incremental mode: {incremental_embeddings}")
 
     # Results storage
     all_results = []
@@ -458,25 +462,27 @@ def main():
                 except Exception as e:
                     log(f"{emb_name:<20} {clf_name:<5} {coverage:>10} ERROR: {e}")
 
-        # Random embedding baseline
-        np.random.seed(42)
-        random_lookup = np.random.randn(len(dataset_genes), 256).astype(np.float32)
-        train_X = build_pair_features(random_lookup, all_train_tf, all_train_tgt)
-        test_X = build_pair_features(random_lookup, test_tf, test_tgt)
-        for clf_name in ['lr', 'mlp']:
-            try:
-                auroc, auprc = evaluate(train_X, all_train_y, test_X, test_y, clf_name)
-                log(f"{'random_256':<20} {clf_name:<5} {'910/910':>10} {auroc:>11.4f} {auprc:>11.4f}")
-                all_results.append({
-                    'dataset': ds_name, 'embedding': 'random_256',
-                    'setting': 'in_domain',
-                    'train_dataset': ds_name,
-                    'test_dataset': ds_name,
-                    'clf': clf_name, 'coverage': f"{len(dataset_genes)}/{len(dataset_genes)}",
-                    'auroc': auroc, 'auprc': auprc,
-                })
-            except Exception as e:
-                log(f"{'random_256':<20} {clf_name:<5} ERROR: {e}")
+        # Random embedding baseline is only produced on full reruns. In incremental
+        # mode, merge_incremental_results preserves the historical random_256 rows.
+        if include_random_baseline:
+            np.random.seed(42)
+            random_lookup = np.random.randn(len(dataset_genes), 256).astype(np.float32)
+            train_X = build_pair_features(random_lookup, all_train_tf, all_train_tgt)
+            test_X = build_pair_features(random_lookup, test_tf, test_tgt)
+            for clf_name in ['lr', 'mlp']:
+                try:
+                    auroc, auprc = evaluate(train_X, all_train_y, test_X, test_y, clf_name)
+                    log(f"{'random_256':<20} {clf_name:<5} {f'{len(dataset_genes)}/{len(dataset_genes)}':>10} {auroc:>11.4f} {auprc:>11.4f}")
+                    all_results.append({
+                        'dataset': ds_name, 'embedding': 'random_256',
+                        'setting': 'in_domain',
+                        'train_dataset': ds_name,
+                        'test_dataset': ds_name,
+                        'clf': clf_name, 'coverage': f"{len(dataset_genes)}/{len(dataset_genes)}",
+                        'auroc': auroc, 'auprc': auprc,
+                    })
+                except Exception as e:
+                    log(f"{'random_256':<20} {clf_name:<5} ERROR: {e}")
 
     # =========================================================
     # Cross-dataset transfer: train on source, test on target
@@ -554,12 +560,19 @@ def main():
         for r in ds_results:
             log(f"{r['embedding']:<20} {r['clf']:<5} {r['coverage']:>10} {r['auroc']:>11.4f} {r['auprc']:>11.4f}")
 
-    # Save CSV
+    # Save CSV. Incremental runs merge newly evaluated rows into the existing
+    # table so old embeddings/datasets/settings are preserved, then regenerate
+    # markdown from the merged CSV.
     csv_path = os.path.join(RESULTS_DIR, 'grn_emb_only_results.csv')
     df = pd.DataFrame(all_results)
-    df.to_csv(csv_path, index=False)
+    if df.empty:
+        log("No GRN embedding-only results produced; existing CSV/markdown files left unchanged.")
+        log("Done!")
+        return
+    result_keys = ['dataset', 'embedding', 'setting', 'train_dataset', 'test_dataset', 'clf']
+    df = merge_incremental_results(df, csv_path, result_keys)
     write_conference_md(df)
-    log(f"\nResults saved to {csv_path}")
+    log(f"\nResults merged into {csv_path}")
     log("Done!")
 
 
