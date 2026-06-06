@@ -21,11 +21,12 @@ from statistics import mean, pstdev
 
 import anndata as ad
 import numpy as np
+import pandas as pd
 from scipy import sparse
 
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from common.embedding_config import build_primary_embeddings
+from common.embedding_config import build_primary_embeddings, apply_incre_filter, merge_incremental_results
 
 
 @dataclass
@@ -43,6 +44,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--pair-manifest", default="results/transfer_v2/pair_manifest.csv")
     p.add_argument("--out-dir", default="results/transfer_v2")
     p.add_argument("--embeddings-config", default="", help="Optional JSON file: {name:{path,key},...}")
+    p.add_argument("--embeddings", default="", help="Optional comma-separated embedding names. Overrides INCRE_EMBEDDINGS when set.")
     p.add_argument("--classifiers", nargs="*", default=["lr", "mlp"])
     p.add_argument("--seeds", nargs="*", type=int, default=[0, 1, 2, 3, 4])
     p.add_argument("--split-mode", choices=["edge_disjoint", "tf_disjoint", "target_disjoint", "gene_disjoint"], default="edge_disjoint")
@@ -105,7 +107,7 @@ def canonical(g: str, mode: str) -> str:
 
 
 def default_embeddings_config(base_dir: str) -> dict[str, dict[str, str]]:
-    return build_primary_embeddings(base_dir)
+    return build_primary_embeddings(base_dir, apply_incremental=False)
 
 
 def load_embedding(path: str, key: str):
@@ -633,6 +635,7 @@ def main() -> None:
     else:
         emb_cfg = default_embeddings_config(args.base_dir)
 
+    emb_cfg = apply_incre_filter(emb_cfg, args.embeddings.split(",") if args.embeddings else None)
     emb_cfg = {k: v for k, v in emb_cfg.items() if os.path.exists(v.get("path", ""))}
     emb_map = {name: load_embedding(cfg["path"], cfg["key"]) for name, cfg in emb_cfg.items()}
 
@@ -920,9 +923,10 @@ def main() -> None:
                         )
         render_progress(i_row, total_jobs, prefix="transfer_v2")
 
-    write_csv(seed_csv, seed_rows, infer_fields(seed_rows) if seed_rows else [])
-    sum_rows = summarize(seed_rows)
-    write_csv(sum_csv, sum_rows, infer_fields(sum_rows) if sum_rows else [])
+    seed_keys=["train_dataset","test_dataset","protocol","embedding","clf","seed"]
+    merged_seed=merge_incremental_results(pd.DataFrame(seed_rows), seed_csv, seed_keys)
+    sum_rows = summarize(merged_seed.to_dict("records"))
+    merge_incremental_results(pd.DataFrame(sum_rows), sum_csv, ["train_dataset","test_dataset","protocol","embedding","clf"])
     print(f"[OK] wrote {seed_csv}")
     print(f"[OK] wrote {sum_csv}")
 

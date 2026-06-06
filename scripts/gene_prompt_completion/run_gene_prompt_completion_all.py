@@ -7,12 +7,12 @@ from utils import load_gene_list
 from gene_prompt_conference_tables import build_conference_tables
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from common.embedding_config import build_primary_embeddings
+from common.embedding_config import build_primary_embeddings, get_incre_embeddings, merge_incremental_results
 
 DEFAULT_BASE_DIR='/bigdata2/hyt/projects/scbenchmark'
 DEFAULT_PERTURB_DATA_DIR=f"{DEFAULT_BASE_DIR}/data/downstreams/perturbation/processed_data"
 FIXED_DATASETS=['adamson','dixit','norman']
-FIXED_EMBEDDING_KEYS={k:v['key'] for k,v in build_primary_embeddings(DEFAULT_BASE_DIR).items()}
+FIXED_EMBEDDING_KEYS={k:v['key'] for k,v in build_primary_embeddings(DEFAULT_BASE_DIR, apply_incremental=False).items()}
 
 
 class UnsupportedDatasetSchemaError(ValueError):
@@ -64,7 +64,8 @@ def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', handlers=[logging.StreamHandler(), logging.FileHandler(log_file)])
     logger=logging.getLogger('gene_prompt')
 
-    selected_embs=[e.strip() for e in args.embeddings.split(',') if e.strip()]
+    incre_embs=get_incre_embeddings()
+    selected_embs=incre_embs or [e.strip() for e in args.embeddings.split(',') if e.strip()]
     selected_datasets=[d.strip() for d in args.datasets.split(',') if d.strip()]
     emb_rows=[]
     for e in selected_embs:
@@ -258,10 +259,15 @@ def main():
             if status=='FAILED':
                 logger.exception(f"FAILED dataset={r['dataset']} emb={r['embedding']} model={r['model']} split={r['split_mode']} pr={r['prompt_ratio']} seed={r['seed']}: {e}")
             if args.strict: raise
-    pd.DataFrame(rows).to_csv(out/'gene_prompt_completion_all_results.csv',index=False)
-    if gene_rows: pd.concat(gene_rows,ignore_index=True).to_csv(out/'gene_prompt_completion_gene_metrics.csv',index=False)
-    pd.DataFrame(manifests).to_csv(out/'prompt_target_manifest.csv',index=False)
-    build_conference_tables(out/'gene_prompt_completion_all_results.csv', out)
+    result_keys=['dataset','embedding','model','split_mode','prompt_ratio','seed','target_size']
+    results_csv=out/'gene_prompt_completion_all_results.csv'
+    merge_incremental_results(pd.DataFrame(rows), results_csv, result_keys)
+    if gene_rows:
+        gene_keys=result_keys+['gene']
+        merge_incremental_results(pd.concat(gene_rows,ignore_index=True), out/'gene_prompt_completion_gene_metrics.csv', gene_keys)
+    merge_incremental_results(pd.DataFrame(manifests), out/'prompt_target_manifest.csv', ['dataset','split_mode','prompt_ratio','seed'])
+    # Markdown is always regenerated from the merged CSV, never patched incrementally.
+    build_conference_tables(results_csv, out)
     (out/'gene_prompt_completion_report.md').write_text('# Gene Prompt Completion Report\n\nSee `gene_prompt_completion_conference_tables.md` for compact conference-style aggregation tables.\n')
 
 if __name__=='__main__': main()

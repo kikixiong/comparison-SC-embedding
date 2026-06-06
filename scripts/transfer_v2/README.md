@@ -90,6 +90,13 @@ nohup python scripts/transfer_v2/analyze_grn_transferability_v2.py \
 
 > 默认输出仅保留核心主表：`embedding_transfer_seed_results_v2.csv` 与 `embedding_transfer_summary_v2.csv`。
 
+
+### 2.2.1 增量 embedding 重跑
+
+主实验命令不需要另起一套。`analyze_grn_transferability_v2.py` 会读取 `scripts/common/embedding_config.py` 中的 `INCRE_EMBEDDINGS`；当该列表非空时，只评估这些 embedding，并把新 seed-level 行合并进 `embedding_transfer_seed_results_v2.csv`，再基于合并后的 seed CSV 重新生成 `embedding_transfer_summary_v2.csv`。
+
+如需临时覆盖配置，可在主实验命令中加 `--embeddings name1,name2`。需要全量重跑时，把 `INCRE_EMBEDDINGS = ()`。`build_native_lr_train_embedding_tables.py` 仍然从合并后的 seed CSV 生成 markdown 矩阵，不直接增量 patch markdown。
+
 默认输出：
 
 - `results/transfer_v2/embedding_transfer_seed_results_v2.csv`

@@ -34,7 +34,7 @@ from datetime import datetime
 warnings.filterwarnings("ignore")
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from common.embedding_config import build_primary_embeddings
+from common.embedding_config import build_primary_embeddings, get_incre_embeddings, merge_incremental_results
 
 # =============================================================
 # Configuration
@@ -469,21 +469,26 @@ def main(args):
     # --- Load Geneformer ---
     gf_emb = None
     vocab_to_gf = None
-    try:
-        gf_dir = GF_CONFIG['dir']
-        gf_name = GF_CONFIG['name']
-        gf_emb, gf_genelist = load_csv_embedding(gf_dir, gf_name)
-        log(f"Loaded {gf_name}: emb={gf_emb.shape}, genelist={len(gf_genelist)}")
+    incremental_embeddings = get_incre_embeddings()
+    load_geneformer = not incremental_embeddings or GF_CONFIG['name'] in incremental_embeddings
+    if load_geneformer:
+        try:
+            gf_dir = GF_CONFIG['dir']
+            gf_name = GF_CONFIG['name']
+            gf_emb, gf_genelist = load_csv_embedding(gf_dir, gf_name)
+            log(f"Loaded {gf_name}: emb={gf_emb.shape}, genelist={len(gf_genelist)}")
 
-        symbol_to_entrez = build_symbol_to_entrez()
-        if symbol_to_entrez:
-            vocab_to_gf = build_vocab_to_gf_index(vocab, gf_genelist, symbol_to_entrez)
-            log(f"  Vocab->GF mapping: {len(vocab_to_gf)} genes mapped")
-        else:
-            log("  Gene mapping failed, GF-12L95M will be skipped")
-            gf_emb = None
-    except Exception as e:
-        log(f"Failed to load Geneformer: {e}")
+            symbol_to_entrez = build_symbol_to_entrez()
+            if symbol_to_entrez:
+                vocab_to_gf = build_vocab_to_gf_index(vocab, gf_genelist, symbol_to_entrez)
+                log(f"  Vocab->GF mapping: {len(vocab_to_gf)} genes mapped")
+            else:
+                log("  Gene mapping failed, GF-12L95M will be skipped")
+                gf_emb = None
+        except Exception as e:
+            log(f"Failed to load Geneformer: {e}")
+    else:
+        log(f"Skipping Geneformer in incremental mode: {incremental_embeddings}")
 
     all_results = []
 
@@ -497,16 +502,24 @@ def main(args):
 
     # --- Save results ---
     results_df = pd.DataFrame(all_results)
+    if results_df.empty:
+        log("No benchmark results produced; existing CSV/markdown files left unchanged.")
+        log("\nDone!")
+        return results_df
+
     ann_df = results_df[results_df['task'] == 'annotation'].copy()
     perturb_df = results_df[results_df['task'] == 'perturbation_cls'].copy()
 
     ann_csv_path = os.path.join(args.annotation_output_dir, 'benchmark_results.csv')
     perturb_csv_path = os.path.join(args.perturbation_output_dir, 'benchmark_results.csv')
-    ann_df.to_csv(ann_csv_path, index=False)
-    perturb_df.to_csv(perturb_csv_path, index=False)
-    log(f"\nAnnotation results saved to {ann_csv_path}")
-    log(f"Perturbation results saved to {perturb_csv_path}")
-    export_annotation_conference_markdown(ann_df, args.annotation_output_dir)
+    result_keys = ['task', 'dataset', 'embedding', 'classifier']
+    ann_df = merge_incremental_results(ann_df, ann_csv_path, result_keys)
+    perturb_df = merge_incremental_results(perturb_df, perturb_csv_path, result_keys)
+    results_df = pd.concat([ann_df, perturb_df], ignore_index=True, sort=False)
+    log(f"\nAnnotation results merged into {ann_csv_path}")
+    log(f"Perturbation results merged into {perturb_csv_path}")
+    # Markdown is always regenerated from the merged CSV, never patched incrementally.
+    export_annotation_conference_markdown_from_csv(ann_csv_path, args.annotation_output_dir)
 
     # --- Summary Table ---
     log("\n" + "=" * 70)

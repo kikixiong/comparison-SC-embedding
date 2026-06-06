@@ -14,6 +14,13 @@ nohup python scripts/batch-correction/run_batch_correction_all.py --base-dir . -
 ```
 
 Use `--datasets` / `--embeddings` to restrict scope.
+
+## Incremental embedding reruns
+
+The same command above is still the normal entry point. If `INCRE_EMBEDDINGS` is non-empty in `scripts/common/embedding_config.py` (currently used for newly added checkpoints such as `cl_v6_fair`), `--embeddings auto` discovers only that incremental subset, evaluates those embeddings, and merges the new rows into the existing `batch_correction_all_results.csv`.
+
+After the CSV merge, `batch_correction_conference_tables.md` is regenerated from the merged CSV; markdown is not updated incrementally. Set `INCRE_EMBEDDINGS = ()` for a full embedding rerun. If you want a non-incremental explicit subset with `--embeddings name1,name2`, first clear `INCRE_EMBEDDINGS` so the registry is not pre-filtered.
+
 If `Immune_Human_openproblems` is present, it is prioritized first by default (`--priority-datasets`).
 
 Convert an existing all-results CSV into the conference-style markdown tables without rerunning embeddings:

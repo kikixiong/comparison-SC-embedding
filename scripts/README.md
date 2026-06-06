@@ -29,6 +29,13 @@ These are the current, structured benchmark workflows you should prefer for new 
     2. `analyze_grn_transferability_v2.py`
     3. `run_transfer_control_v2.py`
 
+
+## Incremental embedding reruns
+
+Primary benchmark runners, plus the legacy annotation and perturbation scripts, share `scripts/common/embedding_config.py`. When a new checkpoint is added under `save_pretrain/<embedding_name>/best_model.pt`, add its entry to `PRIMARY_EMBEDDING_SPECS` and set `INCRE_EMBEDDINGS` in the same config file to only the new embedding names.
+
+With a non-empty incremental embedding list, runners evaluate only those embeddings, then merge new rows into the existing result CSVs by benchmark-setting keys. Existing rows for older embeddings are preserved. Markdown tables are **not** patched incrementally; they are regenerated from the merged CSVs after each run. Leave `INCRE_EMBEDDINGS = ()` for full reruns.
+
 ## Secondary / legacy scripts
 
 These remain useful for historical reproduction, exploratory analysis, or one-off utilities, but are not the recommended default pipelines.

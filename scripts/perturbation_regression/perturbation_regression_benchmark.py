@@ -37,7 +37,7 @@ warnings.filterwarnings("ignore")
 
 import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from common.embedding_config import build_primary_embeddings
+from common.embedding_config import apply_incre_filter, build_primary_embeddings, merge_incremental_results
 
 BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
 OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/results/perturbation_regression'
@@ -47,7 +47,7 @@ VOCAB_PATH = f"{BASE_DIR}/vocab.json"
 PERTURB_DATA_DIR = f"{BASE_DIR}/data/downstreams/perturbation/processed_data"
 DATASETS = ["adamson", "dixit", "norman"]
 
-EMBEDDINGS = build_primary_embeddings(BASE_DIR)
+EMBEDDINGS = build_primary_embeddings(BASE_DIR, apply_incremental=False)
 
 SEED = 42
 TOP_K = 256
@@ -125,6 +125,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--finetune_epochs", type=int, default=200)
     p.add_argument("--finetune_lr", type=float, default=1e-3)
     p.add_argument("--finetune_weight_decay", type=float, default=1e-4)
+    p.add_argument("--embeddings", default="", help="Optional comma-separated embedding names. Overrides INCRE_EMBEDDINGS when set.")
     return p.parse_args()
 
 
@@ -601,6 +602,8 @@ def run_benchmark(args: argparse.Namespace) -> Tuple[pd.DataFrame, pd.DataFrame]
     summary_rows: List[Dict[str, object]] = []
     fold_rows: List[Dict[str, object]] = []
 
+    embeddings = apply_incre_filter(EMBEDDINGS, args.embeddings.split(",") if getattr(args, "embeddings", "") else None)
+
     for ds in DATASETS:
         log(f"\n[Dataset] {ds}")
         try:
@@ -615,7 +618,7 @@ def run_benchmark(args: argparse.Namespace) -> Tuple[pd.DataFrame, pd.DataFrame]
             log("  ! No valid context found. Skip dataset.")
             continue
 
-        for emb_name, emb_cfg in EMBEDDINGS.items():
+        for emb_name, emb_cfg in embeddings.items():
             try:
                 emb_matrix = load_checkpoint_embedding(emb_cfg["path"], emb_cfg["key"])
             except Exception as e:
@@ -714,14 +717,16 @@ def main() -> None:
     ]
 
     if summary_df.empty:
-        pd.DataFrame(columns=summary_cols).to_csv(summary_csv, index=False)
+        if not os.path.exists(summary_csv):
+            pd.DataFrame(columns=summary_cols).to_csv(summary_csv, index=False)
     else:
-        summary_df[summary_cols].to_csv(summary_csv, index=False)
+        merge_incremental_results(summary_df[summary_cols], summary_csv, ["dataset", "context", "embedding", "method", "setting_group", "n_pert_genes", "target_dim"])
 
     if folds_df.empty:
-        pd.DataFrame(columns=fold_cols).to_csv(folds_csv, index=False)
+        if not os.path.exists(folds_csv):
+            pd.DataFrame(columns=fold_cols).to_csv(folds_csv, index=False)
     else:
-        folds_df[fold_cols].to_csv(folds_csv, index=False)
+        merge_incremental_results(folds_df[fold_cols], folds_csv, ["dataset", "context", "embedding", "method", "fold_id"])
 
     log(f"Saved summary CSV: {summary_csv}")
     log(f"Saved fold-level CSV: {folds_csv}")

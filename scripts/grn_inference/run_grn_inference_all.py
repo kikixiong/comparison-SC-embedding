@@ -8,6 +8,10 @@ import importlib.util
 
 import numpy as np
 import pandas as pd
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import merge_incremental_results
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("grn_inference_benchmark", HERE / "grn_inference_benchmark.py")
@@ -158,10 +162,12 @@ def main():
             rows.append({**job, **metrics, "n_train_edges": len(train_edges), "n_test_edges": len(test_edges), "status": "OK", "error_message": ""})
         except Exception as e:
             rows.append({**job, "status": "FAILED", "error_message": str(e)})
-    res = pd.DataFrame(rows); res.to_csv(out / 'grn_inference_all_results.csv', index=False)
-    pd.DataFrame(edge_diag).to_csv(out / 'edge_sampling_diagnostics.csv', index=False)
-    pd.DataFrame(split_diag).to_csv(out / 'split_diagnostics.csv', index=False)
-    pd.DataFrame(cov_diag).to_csv(out / 'gene_coverage_diagnostics.csv', index=False)
+    result_keys=['train_dataset','test_dataset','embedding','model','split_mode','negative_sampling','negative_ratio','seed','feature_mode']
+    res = merge_incremental_results(pd.DataFrame(rows), out / 'grn_inference_all_results.csv', result_keys)
+    diag_keys=result_keys+['split']
+    merge_incremental_results(pd.DataFrame(edge_diag), out / 'edge_sampling_diagnostics.csv', diag_keys)
+    merge_incremental_results(pd.DataFrame(split_diag), out / 'split_diagnostics.csv', result_keys)
+    merge_incremental_results(pd.DataFrame(cov_diag), out / 'gene_coverage_diagnostics.csv', result_keys)
     ok = res[res.status == 'OK'] if 'status' in res else pd.DataFrame()
     if len(ok):
         ok.groupby(['embedding','model','split_mode','negative_sampling','negative_ratio'])[['auroc','auprc','precision_at_k','recall_at_k','f1_at_threshold']].agg(['mean','std']).to_csv(out / 'grn_inference_summary.csv')

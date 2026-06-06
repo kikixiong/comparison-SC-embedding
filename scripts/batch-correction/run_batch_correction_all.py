@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 import argparse, importlib.util
 from pathlib import Path
+import sys
 import numpy as np, pandas as pd
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import merge_incremental_results
 
 
 def load_local(name,path):
@@ -209,8 +213,12 @@ def main():
         except Exception as e:
             rows.append({**r,'status':'FAILED','error_message':str(e)})
             if args.strict: raise
-    rdf=pd.DataFrame(rows); rdf.to_csv(out/'batch_correction_all_results.csv',index=False)
-    export_batch_correction_conference_markdown(rdf, out)
+    rdf=pd.DataFrame(rows)
+    result_keys=['dataset','embedding','pooling','correction_method','seed','batch_key','label_key']
+    results_csv=out/'batch_correction_all_results.csv'
+    rdf=merge_incremental_results(rdf, results_csv, result_keys)
+    # Markdown is always regenerated from the merged CSV, never patched incrementally.
+    export_batch_correction_conference_markdown_from_csv(results_csv, out)
     ok=rdf[rdf.status=='OK'].copy()
     if len(ok):
         summ=ok.groupby(['dataset','embedding','pooling','correction_method']).agg(['mean','std'])

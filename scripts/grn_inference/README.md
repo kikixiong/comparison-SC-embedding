@@ -8,6 +8,13 @@ Datasets must provide curated GRN edges as `Train_set.csv`, `Validation_set.csv`
 ## Fixed embeddings
 The runner uses the fixed `/bigdata2/hyt/projects/scbenchmark/save_pretrain/...` registry. It intentionally does not rediscover random result CSVs as embeddings.
 
+
+## Incremental embedding reruns
+
+The same command below can be reused. With `--embeddings fixed`, the fixed registry is filtered by `INCRE_EMBEDDINGS` in `scripts/common/embedding_config.py` when that list is non-empty, so only the new embedding subset is evaluated. New rows are merged into `grn_inference_all_results.csv` and the diagnostic CSVs; unrelated rows for previous embeddings are preserved.
+
+Set `INCRE_EMBEDDINGS = ()` before running when you want the full fixed registry.
+
 ## Usage
 ```bash
 python scripts/grn_inference/run_grn_inference_all.py \

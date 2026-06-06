@@ -12,6 +12,13 @@ nohup python scripts/gene_prompt_completion/run_gene_prompt_completion_all.py --
 
 You can restrict with `--datasets` and `--embeddings` (comma-separated names from the fixed list).
 
+## Incremental embedding reruns
+
+The usage command does not change for incremental runs. When `INCRE_EMBEDDINGS` in `scripts/common/embedding_config.py` is non-empty, the runner evaluates only those embedding names and merges the resulting rows into the existing CSV outputs. In this mode the config-level incremental list takes precedence over the default `--embeddings` list so new checkpoints can be evaluated without re-running old embeddings.
+
+The conference markdown is regenerated from the merged `gene_prompt_completion_all_results.csv` after the CSV merge; markdown is never patched incrementally. Set `INCRE_EMBEDDINGS = ()` for a full fixed-list rerun.
+
+
 ## Outputs
 - `run_plan.csv`
 - `gene_prompt_completion_all_results.csv`

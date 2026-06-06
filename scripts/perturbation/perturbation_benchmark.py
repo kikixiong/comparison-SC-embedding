@@ -22,6 +22,7 @@ Task C: Perturbation Direction Prediction
 """
 
 import os, sys, json, warnings
+from pathlib import Path
 import numpy as np
 import torch
 import pandas as pd
@@ -36,6 +37,9 @@ from sklearn.metrics import accuracy_score, f1_score, r2_score
 
 warnings.filterwarnings("ignore")
 
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.embedding_config import build_primary_embeddings, merge_incremental_results
+
 # =============================================================
 # Config
 # =============================================================
@@ -49,52 +53,8 @@ VOCAB_PATH = f'{BASE_DIR}/vocab.json'
 PERTURB_DATA_DIR = f'{BASE_DIR}/data/downstreams/perturbation/processed_data'
 DATASETS = ['adamson', 'dixit', 'norman']
 
-EMBEDDINGS = {
-    'minus': {
-        'path': f'{BASE_DIR}/save_pretrain/minus/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'baseline': {
-        'path': f'{BASE_DIR}/save_pretrain/baseline/best_model.pt',
-        'key': 'module.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'scGPT_human': {
-        'path': f'{BASE_DIR}/save_pretrain/scGPT_human/best_model.pt',
-        'key': 'encoder.embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_bias_rec_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_bias_rec_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_plain_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_plain_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'v4_type_pe_best': {
-        'path': f'{BASE_DIR}/save_pretrain/v4_type_pe_best/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    'scconcept': {
-        'path': f'{BASE_DIR}/save_pretrain/scconcept/best_model.pt',
-        'key': 'gene_token_encoder.learnable_embs.hsapiens.weight',
-        'type': 'checkpoint',
-    },
-    'scconcept_encoded': {
-        'path': f'{BASE_DIR}/save_pretrain/scconcept_encoded/best_model.pt',
-        'key': 'embedding.weight',
-        'type': 'checkpoint',
-    },
-    # 'GF-12L95M': {
-    #     'dir': '/root/autodl-tmp/gene_embeddings/intersect/GF-12L95M',
-    #     'type': 'geneformer',
-    # },
-}
+EMBEDDINGS = build_primary_embeddings(BASE_DIR)
+
 
 
 def log(msg):
@@ -923,8 +883,9 @@ def main():
                 log(row)
 
         csv_path = os.path.join(OUTPUT_DIR, 'perturbation_results.csv')
-        df.to_csv(csv_path, index=False)
-        log(f"\nResults saved to {csv_path}")
+        result_keys = ['dataset', 'task', 'embedding', 'clf']
+        df = merge_incremental_results(df, csv_path, result_keys)
+        log(f"\nResults merged into {csv_path}")
 
     log("\nDone!")
 

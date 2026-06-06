@@ -85,6 +85,16 @@ nohup python scripts/perturbation_regression/perturbation_regression_benchmark.p
 
 常见可调参数：
 
+### 5.1 增量 embedding 重跑
+
+运行命令本身不需要变化。脚本会读取 `scripts/common/embedding_config.py` 中的 `INCRE_EMBEDDINGS`；当该列表非空时，只评估其中的 embedding，并把新行合并进已有的：
+
+- `perturbation_regression_results.csv`
+- `perturbation_regression_fold_results.csv`
+
+如果要临时指定一个子集，也可以使用 `--embeddings name1,name2`；该参数优先于 `INCRE_EMBEDDINGS`。需要全量重跑时，把 `INCRE_EMBEDDINGS = ()`。后续 markdown/统计报告应继续从合并后的 CSV 生成。
+
+
 - `--top_k`：每 fold 选择的目标基因维度上限。
 - `--hidden_dim`：神经 head 隐层维度。
 - `--finetune_epochs` / `--finetune_lr` / `--finetune_weight_decay`：神经头训练超参数。
