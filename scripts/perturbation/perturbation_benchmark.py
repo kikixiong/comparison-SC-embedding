@@ -44,7 +44,7 @@ from common.embedding_config import PRIMARY_EMBEDDING_SPECS, build_primary_embed
 # Config
 # =============================================================
 BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
-OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/results'
+OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/results/perturbation'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(OUTPUT_DIR, 'perturbation.log')
