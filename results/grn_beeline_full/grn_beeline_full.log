@@ -9883,3 +9883,1121 @@ Protocol: full_candidate
 Results saved to /root/autodl-tmp/projects/comparison-SC-embedding/results/grn_beeline_full/grn_beeline_full_results.csv
 [2026-06-01 20:18:29] 
 Done!
+[2026-06-06 18:22:39] ======================================================================
+[2026-06-06 18:22:39] GRN BEELINE Full Benchmark - Embedding Only
+[2026-06-06 18:22:39] ======================================================================
+[2026-06-06 18:22:39] Vocab: 60697 genes
+[2026-06-06 18:22:39] Loaded cl_v6_fair: (60697, 256)
+[2026-06-06 18:22:39] Negative protocols: ['tf_stratified_1to10', 'full_candidate']
+[2026-06-06 18:22:39] Split ratios: train=0.770, validation=0.000, test=0.230
+[2026-06-06 18:22:39] BEELINE data already present.
+[2026-06-06 18:22:39] 
+--- Part 1: scGREAT pre-processed datasets ---
+[2026-06-06 18:22:39] 
+--- Part 2: BEELINE datasets (from raw data) ---
+[2026-06-06 18:22:39] 
+  Cell type: hESC (human), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:22:41] Split diagnostics: dataset=hESC_Specific_500, negative_protocol=tf_stratified_1to10, test_pos=169, test_neg=465, test_positive_ratio=0.266562, random_auprc_baseline=0.266562, test_neg_to_pos=2.751479
+[2026-06-06 18:22:41] 
+======================================================================
+[2026-06-06 18:22:41] Dataset: hESC_Specific_500 (500 genes)
+[2026-06-06 18:22:41] ======================================================================
+[2026-06-06 18:22:41] Train: 1949 (pos=543)
+[2026-06-06 18:22:41] Test:  634 (pos=169)
+[2026-06-06 18:22:41] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=169, test_neg=465, test_positive_ratio=0.266562, random_auprc_baseline=0.266562, test_neg_to_pos=2.751479
+[2026-06-06 18:22:41] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:41] ------------------------------------------------------------
+[2026-06-06 18:22:41] cl_v6_fair           lr         442/500  0.6176  0.3571
+[2026-06-06 18:22:41] cl_v6_fair           mlp        442/500  0.6668  0.3917
+[2026-06-06 18:22:41] Split diagnostics: dataset=hESC_Specific_500, negative_protocol=full_candidate, test_pos=169, test_neg=875, test_positive_ratio=0.161877, random_auprc_baseline=0.161877, test_neg_to_pos=5.177515
+[2026-06-06 18:22:41] 
+======================================================================
+[2026-06-06 18:22:41] Dataset: hESC_Specific_500 (500 genes)
+[2026-06-06 18:22:41] ======================================================================
+[2026-06-06 18:22:41] Train: 3453 (pos=543)
+[2026-06-06 18:22:41] Test:  1044 (pos=169)
+[2026-06-06 18:22:41] Protocol diagnostics: negative_protocol=full_candidate, test_pos=169, test_neg=875, test_positive_ratio=0.161877, random_auprc_baseline=0.161877, test_neg_to_pos=5.177515
+[2026-06-06 18:22:41] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:41] ------------------------------------------------------------
+[2026-06-06 18:22:42] cl_v6_fair           lr         442/500  0.7788  0.3747
+[2026-06-06 18:22:43] cl_v6_fair           mlp        442/500  0.7979  0.3913
+[2026-06-06 18:22:44] Split diagnostics: dataset=hESC_Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=412, test_neg=1026, test_positive_ratio=0.286509, random_auprc_baseline=0.286509, test_neg_to_pos=2.490291
+[2026-06-06 18:22:44] 
+======================================================================
+[2026-06-06 18:22:44] Dataset: hESC_Specific_1000 (1000 genes)
+[2026-06-06 18:22:44] ======================================================================
+[2026-06-06 18:22:44] Train: 4662 (pos=1356)
+[2026-06-06 18:22:44] Test:  1438 (pos=412)
+[2026-06-06 18:22:44] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=412, test_neg=1026, test_positive_ratio=0.286509, random_auprc_baseline=0.286509, test_neg_to_pos=2.490291
+[2026-06-06 18:22:44] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:44] ------------------------------------------------------------
+[2026-06-06 18:22:45] cl_v6_fair           lr        893/1000  0.6724  0.4149
+[2026-06-06 18:22:46] cl_v6_fair           mlp       893/1000  0.6990  0.4494
+[2026-06-06 18:22:46] Split diagnostics: dataset=hESC_Specific_1000, negative_protocol=full_candidate, test_pos=412, test_neg=2128, test_positive_ratio=0.162205, random_auprc_baseline=0.162205, test_neg_to_pos=5.165049
+[2026-06-06 18:22:46] 
+======================================================================
+[2026-06-06 18:22:46] Dataset: hESC_Specific_1000 (1000 genes)
+[2026-06-06 18:22:46] ======================================================================
+[2026-06-06 18:22:46] Train: 8456 (pos=1356)
+[2026-06-06 18:22:46] Test:  2540 (pos=412)
+[2026-06-06 18:22:46] Protocol diagnostics: negative_protocol=full_candidate, test_pos=412, test_neg=2128, test_positive_ratio=0.162205, random_auprc_baseline=0.162205, test_neg_to_pos=5.165049
+[2026-06-06 18:22:46] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:46] ------------------------------------------------------------
+[2026-06-06 18:22:46] cl_v6_fair           lr        893/1000  0.8410  0.4346
+[2026-06-06 18:22:49] cl_v6_fair           mlp       893/1000  0.8561  0.4673
+[2026-06-06 18:22:50] Split diagnostics: dataset=hESC_Non-Specific_500, negative_protocol=tf_stratified_1to10, test_pos=42, test_neg=334, test_positive_ratio=0.111702, random_auprc_baseline=0.111702, test_neg_to_pos=7.952381
+[2026-06-06 18:22:50] 
+======================================================================
+[2026-06-06 18:22:50] Dataset: hESC_Non-Specific_500 (500 genes)
+[2026-06-06 18:22:50] ======================================================================
+[2026-06-06 18:22:50] Train: 932 (pos=109)
+[2026-06-06 18:22:50] Test:  376 (pos=42)
+[2026-06-06 18:22:50] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=42, test_neg=334, test_positive_ratio=0.111702, random_auprc_baseline=0.111702, test_neg_to_pos=7.952381
+[2026-06-06 18:22:50] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:50] ------------------------------------------------------------
+[2026-06-06 18:22:50] cl_v6_fair           lr         442/500  0.6693  0.2575
+[2026-06-06 18:22:50] cl_v6_fair           mlp        442/500  0.4868  0.1198
+[2026-06-06 18:22:50] Split diagnostics: dataset=hESC_Non-Specific_500, negative_protocol=full_candidate, test_pos=42, test_neg=1810, test_positive_ratio=0.022678, random_auprc_baseline=0.022678, test_neg_to_pos=43.095238
+[2026-06-06 18:22:50] 
+======================================================================
+[2026-06-06 18:22:50] Dataset: hESC_Non-Specific_500 (500 genes)
+[2026-06-06 18:22:50] ======================================================================
+[2026-06-06 18:22:50] Train: 6139 (pos=109)
+[2026-06-06 18:22:50] Test:  1852 (pos=42)
+[2026-06-06 18:22:50] Protocol diagnostics: negative_protocol=full_candidate, test_pos=42, test_neg=1810, test_positive_ratio=0.022678, random_auprc_baseline=0.022678, test_neg_to_pos=43.095238
+[2026-06-06 18:22:50] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:50] ------------------------------------------------------------
+[2026-06-06 18:22:50] cl_v6_fair           lr         442/500  0.8670  0.2058
+[2026-06-06 18:22:52] cl_v6_fair           mlp        442/500  0.8392  0.1919
+[2026-06-06 18:22:53] Split diagnostics: dataset=hESC_Non-Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=161, test_neg=1230, test_positive_ratio=0.115744, random_auprc_baseline=0.115744, test_neg_to_pos=7.639752
+[2026-06-06 18:22:53] 
+======================================================================
+[2026-06-06 18:22:53] Dataset: hESC_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:22:53] ======================================================================
+[2026-06-06 18:22:53] Train: 3853 (pos=464)
+[2026-06-06 18:22:53] Test:  1391 (pos=161)
+[2026-06-06 18:22:53] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=161, test_neg=1230, test_positive_ratio=0.115744, random_auprc_baseline=0.115744, test_neg_to_pos=7.639752
+[2026-06-06 18:22:53] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:53] ------------------------------------------------------------
+[2026-06-06 18:22:53] cl_v6_fair           lr        893/1000  0.6387  0.2293
+[2026-06-06 18:22:54] cl_v6_fair           mlp       893/1000  0.6831  0.2571
+[2026-06-06 18:22:54] Split diagnostics: dataset=hESC_Non-Specific_1000, negative_protocol=full_candidate, test_pos=161, test_neg=9529, test_positive_ratio=0.016615, random_auprc_baseline=0.016615, test_neg_to_pos=59.186335
+[2026-06-06 18:22:54] 
+======================================================================
+[2026-06-06 18:22:54] Dataset: hESC_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:22:54] ======================================================================
+[2026-06-06 18:22:54] Train: 32285 (pos=464)
+[2026-06-06 18:22:54] Test:  9690 (pos=161)
+[2026-06-06 18:22:54] Protocol diagnostics: negative_protocol=full_candidate, test_pos=161, test_neg=9529, test_positive_ratio=0.016615, random_auprc_baseline=0.016615, test_neg_to_pos=59.186335
+[2026-06-06 18:22:54] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:22:54] ------------------------------------------------------------
+[2026-06-06 18:22:55] cl_v6_fair           lr        893/1000  0.8868  0.1591
+[2026-06-06 18:23:02] cl_v6_fair           mlp       893/1000  0.8994  0.1587
+[2026-06-06 18:23:04] Split diagnostics: dataset=hESC_STRING_500, negative_protocol=tf_stratified_1to10, test_pos=32, test_neg=320, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:04] 
+======================================================================
+[2026-06-06 18:23:04] Dataset: hESC_STRING_500 (500 genes)
+[2026-06-06 18:23:04] ======================================================================
+[2026-06-06 18:23:04] Train: 693 (pos=63)
+[2026-06-06 18:23:04] Test:  352 (pos=32)
+[2026-06-06 18:23:04] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=32, test_neg=320, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:04] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:04] ------------------------------------------------------------
+[2026-06-06 18:23:04] cl_v6_fair           lr         442/500  0.7743  0.5012
+[2026-06-06 18:23:04] cl_v6_fair           mlp        442/500  0.5871  0.1529
+[2026-06-06 18:23:04] Split diagnostics: dataset=hESC_STRING_500, negative_protocol=full_candidate, test_pos=32, test_neg=2745, test_positive_ratio=0.011523, random_auprc_baseline=0.011523, test_neg_to_pos=85.781250
+[2026-06-06 18:23:04] 
+======================================================================
+[2026-06-06 18:23:04] Dataset: hESC_STRING_500 (500 genes)
+[2026-06-06 18:23:04] ======================================================================
+[2026-06-06 18:23:04] Train: 9199 (pos=63)
+[2026-06-06 18:23:04] Test:  2777 (pos=32)
+[2026-06-06 18:23:04] Protocol diagnostics: negative_protocol=full_candidate, test_pos=32, test_neg=2745, test_positive_ratio=0.011523, random_auprc_baseline=0.011523, test_neg_to_pos=85.781250
+[2026-06-06 18:23:04] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:04] ------------------------------------------------------------
+[2026-06-06 18:23:04] cl_v6_fair           lr         442/500  0.7913  0.2179
+[2026-06-06 18:23:06] cl_v6_fair           mlp        442/500  0.7455  0.0911
+[2026-06-06 18:23:07] Split diagnostics: dataset=hESC_STRING_1000, negative_protocol=tf_stratified_1to10, test_pos=119, test_neg=1190, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:07] 
+======================================================================
+[2026-06-06 18:23:07] Dataset: hESC_STRING_1000 (1000 genes)
+[2026-06-06 18:23:07] ======================================================================
+[2026-06-06 18:23:07] Train: 3212 (pos=292)
+[2026-06-06 18:23:07] Test:  1309 (pos=119)
+[2026-06-06 18:23:07] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=119, test_neg=1190, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:07] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:07] ------------------------------------------------------------
+[2026-06-06 18:23:07] cl_v6_fair           lr        893/1000  0.7885  0.3739
+[2026-06-06 18:23:09] cl_v6_fair           mlp       893/1000  0.8477  0.4824
+[2026-06-06 18:23:09] Split diagnostics: dataset=hESC_STRING_1000, negative_protocol=full_candidate, test_pos=119, test_neg=12344, test_positive_ratio=0.009548, random_auprc_baseline=0.009548, test_neg_to_pos=103.731092
+[2026-06-06 18:23:09] 
+======================================================================
+[2026-06-06 18:23:09] Dataset: hESC_STRING_1000 (1000 genes)
+[2026-06-06 18:23:09] ======================================================================
+[2026-06-06 18:23:09] Train: 41483 (pos=292)
+[2026-06-06 18:23:09] Test:  12463 (pos=119)
+[2026-06-06 18:23:09] Protocol diagnostics: negative_protocol=full_candidate, test_pos=119, test_neg=12344, test_positive_ratio=0.009548, random_auprc_baseline=0.009548, test_neg_to_pos=103.731092
+[2026-06-06 18:23:09] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:09] ------------------------------------------------------------
+[2026-06-06 18:23:10] cl_v6_fair           lr        893/1000  0.8345  0.2107
+[2026-06-06 18:23:21] cl_v6_fair           mlp       893/1000  0.8637  0.2693
+[2026-06-06 18:23:21] 
+  Cell type: hHep (human), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:23:22]   hHep_Specific_500: too few edges after filtering, skipping
+[2026-06-06 18:23:22] Split diagnostics: dataset=hHep_Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=266, test_neg=583, test_positive_ratio=0.313310, random_auprc_baseline=0.313310, test_neg_to_pos=2.191729
+[2026-06-06 18:23:22] 
+======================================================================
+[2026-06-06 18:23:22] Dataset: hHep_Specific_1000 (1000 genes)
+[2026-06-06 18:23:22] ======================================================================
+[2026-06-06 18:23:22] Train: 2754 (pos=879)
+[2026-06-06 18:23:22] Test:  849 (pos=266)
+[2026-06-06 18:23:22] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=266, test_neg=583, test_positive_ratio=0.313310, random_auprc_baseline=0.313310, test_neg_to_pos=2.191729
+[2026-06-06 18:23:22] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:22] ------------------------------------------------------------
+[2026-06-06 18:23:22] cl_v6_fair           lr        962/1000  0.8437  0.7336
+[2026-06-06 18:23:23] cl_v6_fair           mlp       962/1000  0.8746  0.8033
+[2026-06-06 18:23:23] Split diagnostics: dataset=hHep_Specific_1000, negative_protocol=full_candidate, test_pos=266, test_neg=888, test_positive_ratio=0.230503, random_auprc_baseline=0.230503, test_neg_to_pos=3.338346
+[2026-06-06 18:23:23] 
+======================================================================
+[2026-06-06 18:23:23] Dataset: hHep_Specific_1000 (1000 genes)
+[2026-06-06 18:23:23] ======================================================================
+[2026-06-06 18:23:23] Train: 3842 (pos=879)
+[2026-06-06 18:23:23] Test:  1154 (pos=266)
+[2026-06-06 18:23:23] Protocol diagnostics: negative_protocol=full_candidate, test_pos=266, test_neg=888, test_positive_ratio=0.230503, random_auprc_baseline=0.230503, test_neg_to_pos=3.338346
+[2026-06-06 18:23:23] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:23] ------------------------------------------------------------
+[2026-06-06 18:23:23] cl_v6_fair           lr        962/1000  0.8814  0.7339
+[2026-06-06 18:23:24] cl_v6_fair           mlp       962/1000  0.9143  0.8041
+[2026-06-06 18:23:25] Split diagnostics: dataset=hHep_Non-Specific_500, negative_protocol=tf_stratified_1to10, test_pos=29, test_neg=290, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:25] 
+======================================================================
+[2026-06-06 18:23:25] Dataset: hHep_Non-Specific_500 (500 genes)
+[2026-06-06 18:23:25] ======================================================================
+[2026-06-06 18:23:25] Train: 693 (pos=63)
+[2026-06-06 18:23:25] Test:  319 (pos=29)
+[2026-06-06 18:23:25] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=29, test_neg=290, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:25] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:25] ------------------------------------------------------------
+[2026-06-06 18:23:25] cl_v6_fair           lr         487/500  0.6593  0.2095
+[2026-06-06 18:23:25] cl_v6_fair           mlp        487/500  0.4702  0.1103
+[2026-06-06 18:23:25] Split diagnostics: dataset=hHep_Non-Specific_500, negative_protocol=full_candidate, test_pos=29, test_neg=1710, test_positive_ratio=0.016676, random_auprc_baseline=0.016676, test_neg_to_pos=58.965517
+[2026-06-06 18:23:25] 
+======================================================================
+[2026-06-06 18:23:25] Dataset: hHep_Non-Specific_500 (500 genes)
+[2026-06-06 18:23:25] ======================================================================
+[2026-06-06 18:23:25] Train: 5753 (pos=63)
+[2026-06-06 18:23:25] Test:  1739 (pos=29)
+[2026-06-06 18:23:25] Protocol diagnostics: negative_protocol=full_candidate, test_pos=29, test_neg=1710, test_positive_ratio=0.016676, random_auprc_baseline=0.016676, test_neg_to_pos=58.965517
+[2026-06-06 18:23:25] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:25] ------------------------------------------------------------
+[2026-06-06 18:23:25] cl_v6_fair           lr         487/500  0.8238  0.1255
+[2026-06-06 18:23:26] cl_v6_fair           mlp        487/500  0.7213  0.1310
+[2026-06-06 18:23:27] Split diagnostics: dataset=hHep_Non-Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=97, test_neg=970, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:27] 
+======================================================================
+[2026-06-06 18:23:27] Dataset: hHep_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:23:27] ======================================================================
+[2026-06-06 18:23:27] Train: 2761 (pos=251)
+[2026-06-06 18:23:27] Test:  1067 (pos=97)
+[2026-06-06 18:23:27] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=97, test_neg=970, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:27] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:27] ------------------------------------------------------------
+[2026-06-06 18:23:27] cl_v6_fair           lr        962/1000  0.6460  0.2480
+[2026-06-06 18:23:28] cl_v6_fair           mlp       962/1000  0.6898  0.3010
+[2026-06-06 18:23:28] Split diagnostics: dataset=hHep_Non-Specific_1000, negative_protocol=full_candidate, test_pos=97, test_neg=8672, test_positive_ratio=0.011062, random_auprc_baseline=0.011062, test_neg_to_pos=89.402062
+[2026-06-06 18:23:28] 
+======================================================================
+[2026-06-06 18:23:28] Dataset: hHep_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:23:28] ======================================================================
+[2026-06-06 18:23:28] Train: 29210 (pos=251)
+[2026-06-06 18:23:28] Test:  8769 (pos=97)
+[2026-06-06 18:23:28] Protocol diagnostics: negative_protocol=full_candidate, test_pos=97, test_neg=8672, test_positive_ratio=0.011062, random_auprc_baseline=0.011062, test_neg_to_pos=89.402062
+[2026-06-06 18:23:28] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:28] ------------------------------------------------------------
+[2026-06-06 18:23:29] cl_v6_fair           lr        962/1000  0.8115  0.1491
+[2026-06-06 18:23:35] cl_v6_fair           mlp       962/1000  0.8498  0.1033
+[2026-06-06 18:23:36] Split diagnostics: dataset=hHep_STRING_500, negative_protocol=tf_stratified_1to10, test_pos=67, test_neg=666, test_positive_ratio=0.091405, random_auprc_baseline=0.091405, test_neg_to_pos=9.940299
+[2026-06-06 18:23:36] 
+======================================================================
+[2026-06-06 18:23:36] Dataset: hHep_STRING_500 (500 genes)
+[2026-06-06 18:23:36] ======================================================================
+[2026-06-06 18:23:36] Train: 2065 (pos=189)
+[2026-06-06 18:23:36] Test:  733 (pos=67)
+[2026-06-06 18:23:36] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=67, test_neg=666, test_positive_ratio=0.091405, random_auprc_baseline=0.091405, test_neg_to_pos=9.940299
+[2026-06-06 18:23:36] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:36] ------------------------------------------------------------
+[2026-06-06 18:23:36] cl_v6_fair           lr         487/500  0.8854  0.5265
+[2026-06-06 18:23:37] cl_v6_fair           mlp        487/500  0.9227  0.6393
+[2026-06-06 18:23:37] Split diagnostics: dataset=hHep_STRING_500, negative_protocol=full_candidate, test_pos=67, test_neg=2362, test_positive_ratio=0.027583, random_auprc_baseline=0.027583, test_neg_to_pos=35.253731
+[2026-06-06 18:23:37] 
+======================================================================
+[2026-06-06 18:23:37] Dataset: hHep_STRING_500 (500 genes)
+[2026-06-06 18:23:37] ======================================================================
+[2026-06-06 18:23:37] Train: 8050 (pos=189)
+[2026-06-06 18:23:37] Test:  2429 (pos=67)
+[2026-06-06 18:23:37] Protocol diagnostics: negative_protocol=full_candidate, test_pos=67, test_neg=2362, test_positive_ratio=0.027583, random_auprc_baseline=0.027583, test_neg_to_pos=35.253731
+[2026-06-06 18:23:37] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:37] ------------------------------------------------------------
+[2026-06-06 18:23:37] cl_v6_fair           lr         487/500  0.8819  0.3858
+[2026-06-06 18:23:39] cl_v6_fair           mlp        487/500  0.9189  0.5463
+[2026-06-06 18:23:40] Split diagnostics: dataset=hHep_STRING_1000, negative_protocol=tf_stratified_1to10, test_pos=215, test_neg=2150, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:40] 
+======================================================================
+[2026-06-06 18:23:40] Dataset: hHep_STRING_1000 (1000 genes)
+[2026-06-06 18:23:40] ======================================================================
+[2026-06-06 18:23:40] Train: 6699 (pos=609)
+[2026-06-06 18:23:40] Test:  2365 (pos=215)
+[2026-06-06 18:23:40] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=215, test_neg=2150, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:23:40] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:40] ------------------------------------------------------------
+[2026-06-06 18:23:40] cl_v6_fair           lr        962/1000  0.8545  0.4290
+[2026-06-06 18:23:42] cl_v6_fair           mlp       962/1000  0.8959  0.5942
+[2026-06-06 18:23:42] Split diagnostics: dataset=hHep_STRING_1000, negative_protocol=full_candidate, test_pos=215, test_neg=12018, test_positive_ratio=0.017575, random_auprc_baseline=0.017575, test_neg_to_pos=55.897674
+[2026-06-06 18:23:42] 
+======================================================================
+[2026-06-06 18:23:42] Dataset: hHep_STRING_1000 (1000 genes)
+[2026-06-06 18:23:42] ======================================================================
+[2026-06-06 18:23:42] Train: 40714 (pos=609)
+[2026-06-06 18:23:42] Test:  12233 (pos=215)
+[2026-06-06 18:23:42] Protocol diagnostics: negative_protocol=full_candidate, test_pos=215, test_neg=12018, test_positive_ratio=0.017575, random_auprc_baseline=0.017575, test_neg_to_pos=55.897674
+[2026-06-06 18:23:42] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:23:42] ------------------------------------------------------------
+[2026-06-06 18:23:44] cl_v6_fair           lr        962/1000  0.8873  0.3741
+[2026-06-06 18:24:05] cl_v6_fair           mlp       962/1000  0.8936  0.4867
+[2026-06-06 18:24:05] 
+  Cell type: mDC (mouse), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:24:05] Split diagnostics: dataset=mDC_Specific_500, negative_protocol=tf_stratified_1to10, test_pos=8, test_neg=80, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:05] 
+======================================================================
+[2026-06-06 18:24:05] Dataset: mDC_Specific_500 (500 genes)
+[2026-06-06 18:24:05] ======================================================================
+[2026-06-06 18:24:05] Train: 275 (pos=25)
+[2026-06-06 18:24:05] Test:  88 (pos=8)
+[2026-06-06 18:24:05] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=8, test_neg=80, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:05] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:05] ------------------------------------------------------------
+[2026-06-06 18:24:05] cl_v6_fair           lr         387/500  0.6344  0.1605
+[2026-06-06 18:24:05] cl_v6_fair           mlp        387/500  0.4750  0.1179
+[2026-06-06 18:24:05] Split diagnostics: dataset=mDC_Specific_500, negative_protocol=full_candidate, test_pos=8, test_neg=223, test_positive_ratio=0.034632, random_auprc_baseline=0.034632, test_neg_to_pos=27.875000
+[2026-06-06 18:24:05] 
+======================================================================
+[2026-06-06 18:24:05] Dataset: mDC_Specific_500 (500 genes)
+[2026-06-06 18:24:05] ======================================================================
+[2026-06-06 18:24:05] Train: 768 (pos=25)
+[2026-06-06 18:24:05] Test:  231 (pos=8)
+[2026-06-06 18:24:05] Protocol diagnostics: negative_protocol=full_candidate, test_pos=8, test_neg=223, test_positive_ratio=0.034632, random_auprc_baseline=0.034632, test_neg_to_pos=27.875000
+[2026-06-06 18:24:05] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:05] ------------------------------------------------------------
+[2026-06-06 18:24:05] cl_v6_fair           lr         387/500  0.8419  0.1774
+[2026-06-06 18:24:05] cl_v6_fair           mlp        387/500  0.4254  0.0315
+[2026-06-06 18:24:06] Split diagnostics: dataset=mDC_Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=140, test_neg=696, test_positive_ratio=0.167464, random_auprc_baseline=0.167464, test_neg_to_pos=4.971429
+[2026-06-06 18:24:06] 
+======================================================================
+[2026-06-06 18:24:06] Dataset: mDC_Specific_1000 (1000 genes)
+[2026-06-06 18:24:06] ======================================================================
+[2026-06-06 18:24:06] Train: 2658 (pos=456)
+[2026-06-06 18:24:06] Test:  836 (pos=140)
+[2026-06-06 18:24:06] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=140, test_neg=696, test_positive_ratio=0.167464, random_auprc_baseline=0.167464, test_neg_to_pos=4.971429
+[2026-06-06 18:24:06] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:06] ------------------------------------------------------------
+[2026-06-06 18:24:06] cl_v6_fair           lr        803/1000  0.6765  0.3257
+[2026-06-06 18:24:07] cl_v6_fair           mlp       803/1000  0.7585  0.4639
+[2026-06-06 18:24:07] Split diagnostics: dataset=mDC_Specific_1000, negative_protocol=full_candidate, test_pos=140, test_neg=1705, test_positive_ratio=0.075881, random_auprc_baseline=0.075881, test_neg_to_pos=12.178571
+[2026-06-06 18:24:07] 
+======================================================================
+[2026-06-06 18:24:07] Dataset: mDC_Specific_1000 (1000 genes)
+[2026-06-06 18:24:07] ======================================================================
+[2026-06-06 18:24:07] Train: 6148 (pos=456)
+[2026-06-06 18:24:07] Test:  1845 (pos=140)
+[2026-06-06 18:24:07] Protocol diagnostics: negative_protocol=full_candidate, test_pos=140, test_neg=1705, test_positive_ratio=0.075881, random_auprc_baseline=0.075881, test_neg_to_pos=12.178571
+[2026-06-06 18:24:07] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:07] ------------------------------------------------------------
+[2026-06-06 18:24:07] cl_v6_fair           lr        803/1000  0.8359  0.3553
+[2026-06-06 18:24:09] cl_v6_fair           mlp       803/1000  0.8754  0.4575
+[2026-06-06 18:24:09] Split diagnostics: dataset=mDC_Non-Specific_500, negative_protocol=tf_stratified_1to10, test_pos=11, test_neg=110, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:09] 
+======================================================================
+[2026-06-06 18:24:09] Dataset: mDC_Non-Specific_500 (500 genes)
+[2026-06-06 18:24:09] ======================================================================
+[2026-06-06 18:24:09] Train: 242 (pos=22)
+[2026-06-06 18:24:09] Test:  121 (pos=11)
+[2026-06-06 18:24:09] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=11, test_neg=110, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:09] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:09] ------------------------------------------------------------
+[2026-06-06 18:24:09] cl_v6_fair           lr         387/500  0.7413  0.5141
+[2026-06-06 18:24:09] cl_v6_fair           mlp        387/500  0.7537  0.5051
+[2026-06-06 18:24:09] Split diagnostics: dataset=mDC_Non-Specific_500, negative_protocol=full_candidate, test_pos=11, test_neg=800, test_positive_ratio=0.013564, random_auprc_baseline=0.013564, test_neg_to_pos=72.727273
+[2026-06-06 18:24:09] 
+======================================================================
+[2026-06-06 18:24:09] Dataset: mDC_Non-Specific_500 (500 genes)
+[2026-06-06 18:24:09] ======================================================================
+[2026-06-06 18:24:09] Train: 2684 (pos=22)
+[2026-06-06 18:24:09] Test:  811 (pos=11)
+[2026-06-06 18:24:09] Protocol diagnostics: negative_protocol=full_candidate, test_pos=11, test_neg=800, test_positive_ratio=0.013564, random_auprc_baseline=0.013564, test_neg_to_pos=72.727273
+[2026-06-06 18:24:09] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:09] ------------------------------------------------------------
+[2026-06-06 18:24:09] cl_v6_fair           lr         387/500  0.7510  0.2524
+[2026-06-06 18:24:10] cl_v6_fair           mlp        387/500  0.5743  0.1308
+[2026-06-06 18:24:10] Split diagnostics: dataset=mDC_Non-Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=129, test_neg=1290, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:10] 
+======================================================================
+[2026-06-06 18:24:10] Dataset: mDC_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:24:10] ======================================================================
+[2026-06-06 18:24:10] Train: 3993 (pos=363)
+[2026-06-06 18:24:10] Test:  1419 (pos=129)
+[2026-06-06 18:24:10] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=129, test_neg=1290, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:10] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:10] ------------------------------------------------------------
+[2026-06-06 18:24:10] cl_v6_fair           lr        803/1000  0.7826  0.3691
+[2026-06-06 18:24:12] cl_v6_fair           mlp       803/1000  0.8257  0.5121
+[2026-06-06 18:24:12] Split diagnostics: dataset=mDC_Non-Specific_1000, negative_protocol=full_candidate, test_pos=129, test_neg=8870, test_positive_ratio=0.014335, random_auprc_baseline=0.014335, test_neg_to_pos=68.759690
+[2026-06-06 18:24:12] 
+======================================================================
+[2026-06-06 18:24:12] Dataset: mDC_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:24:12] ======================================================================
+[2026-06-06 18:24:12] Train: 29973 (pos=363)
+[2026-06-06 18:24:12] Test:  8999 (pos=129)
+[2026-06-06 18:24:12] Protocol diagnostics: negative_protocol=full_candidate, test_pos=129, test_neg=8870, test_positive_ratio=0.014335, random_auprc_baseline=0.014335, test_neg_to_pos=68.759690
+[2026-06-06 18:24:12] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:12] ------------------------------------------------------------
+[2026-06-06 18:24:13] cl_v6_fair           lr        803/1000  0.8689  0.1832
+[2026-06-06 18:24:19] cl_v6_fair           mlp       803/1000  0.8742  0.2061
+[2026-06-06 18:24:20] Split diagnostics: dataset=mDC_STRING_500, negative_protocol=tf_stratified_1to10, test_pos=33, test_neg=318, test_positive_ratio=0.094017, random_auprc_baseline=0.094017, test_neg_to_pos=9.636364
+[2026-06-06 18:24:20] 
+======================================================================
+[2026-06-06 18:24:20] Dataset: mDC_STRING_500 (500 genes)
+[2026-06-06 18:24:20] ======================================================================
+[2026-06-06 18:24:20] Train: 973 (pos=92)
+[2026-06-06 18:24:20] Test:  351 (pos=33)
+[2026-06-06 18:24:20] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=33, test_neg=318, test_positive_ratio=0.094017, random_auprc_baseline=0.094017, test_neg_to_pos=9.636364
+[2026-06-06 18:24:20] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:20] ------------------------------------------------------------
+[2026-06-06 18:24:20] cl_v6_fair           lr         387/500  0.8657  0.4174
+[2026-06-06 18:24:20] cl_v6_fair           mlp        387/500  0.7269  0.4163
+[2026-06-06 18:24:20] Split diagnostics: dataset=mDC_STRING_500, negative_protocol=full_candidate, test_pos=33, test_neg=1240, test_positive_ratio=0.025923, random_auprc_baseline=0.025923, test_neg_to_pos=37.575758
+[2026-06-06 18:24:20] 
+======================================================================
+[2026-06-06 18:24:20] Dataset: mDC_STRING_500 (500 genes)
+[2026-06-06 18:24:20] ======================================================================
+[2026-06-06 18:24:20] Train: 4216 (pos=92)
+[2026-06-06 18:24:20] Test:  1273 (pos=33)
+[2026-06-06 18:24:20] Protocol diagnostics: negative_protocol=full_candidate, test_pos=33, test_neg=1240, test_positive_ratio=0.025923, random_auprc_baseline=0.025923, test_neg_to_pos=37.575758
+[2026-06-06 18:24:20] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:20] ------------------------------------------------------------
+[2026-06-06 18:24:20] cl_v6_fair           lr         387/500  0.8777  0.3892
+[2026-06-06 18:24:21] cl_v6_fair           mlp        387/500  0.9184  0.5257
+[2026-06-06 18:24:22] Split diagnostics: dataset=mDC_STRING_1000, negative_protocol=tf_stratified_1to10, test_pos=209, test_neg=2090, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:22] 
+======================================================================
+[2026-06-06 18:24:22] Dataset: mDC_STRING_1000 (1000 genes)
+[2026-06-06 18:24:22] ======================================================================
+[2026-06-06 18:24:22] Train: 6688 (pos=608)
+[2026-06-06 18:24:22] Test:  2299 (pos=209)
+[2026-06-06 18:24:22] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=209, test_neg=2090, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:24:22] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:22] ------------------------------------------------------------
+[2026-06-06 18:24:22] cl_v6_fair           lr        803/1000  0.8479  0.4397
+[2026-06-06 18:24:25] cl_v6_fair           mlp       803/1000  0.9025  0.6500
+[2026-06-06 18:24:25] Split diagnostics: dataset=mDC_STRING_1000, negative_protocol=full_candidate, test_pos=209, test_neg=9023, test_positive_ratio=0.022639, random_auprc_baseline=0.022639, test_neg_to_pos=43.172249
+[2026-06-06 18:24:25] 
+======================================================================
+[2026-06-06 18:24:25] Dataset: mDC_STRING_1000 (1000 genes)
+[2026-06-06 18:24:25] ======================================================================
+[2026-06-06 18:24:25] Train: 30728 (pos=608)
+[2026-06-06 18:24:25] Test:  9232 (pos=209)
+[2026-06-06 18:24:25] Protocol diagnostics: negative_protocol=full_candidate, test_pos=209, test_neg=9023, test_positive_ratio=0.022639, random_auprc_baseline=0.022639, test_neg_to_pos=43.172249
+[2026-06-06 18:24:25] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:25] ------------------------------------------------------------
+[2026-06-06 18:24:26] cl_v6_fair           lr        803/1000  0.8829  0.3775
+[2026-06-06 18:24:41] cl_v6_fair           mlp       803/1000  0.9062  0.5479
+[2026-06-06 18:24:41] 
+  Cell type: mESC (mouse), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:24:42]   mESC_Specific_500: too few edges after filtering, skipping
+[2026-06-06 18:24:43]   mESC_Specific_1000: too few edges after filtering, skipping
+[2026-06-06 18:24:44]   mESC_Non-Specific_500: too few edges after filtering, skipping
+[2026-06-06 18:24:45]   mESC_Non-Specific_1000: too few edges after filtering, skipping
+[2026-06-06 18:24:45]   mESC_STRING_500: too few edges after filtering, skipping
+[2026-06-06 18:24:46]   mESC_STRING_1000: too few edges after filtering, skipping
+[2026-06-06 18:24:46] 
+  Cell type: mHSC-E (mouse), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:24:47] Split diagnostics: dataset=mHSC-E_Specific_500, negative_protocol=tf_stratified_1to10, test_pos=235, test_neg=256, test_positive_ratio=0.478615, random_auprc_baseline=0.478615, test_neg_to_pos=1.089362
+[2026-06-06 18:24:47] 
+======================================================================
+[2026-06-06 18:24:47] Dataset: mHSC-E_Specific_500 (500 genes)
+[2026-06-06 18:24:47] ======================================================================
+[2026-06-06 18:24:47] Train: 1574 (pos=773)
+[2026-06-06 18:24:47] Test:  491 (pos=235)
+[2026-06-06 18:24:47] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=235, test_neg=256, test_positive_ratio=0.478615, random_auprc_baseline=0.478615, test_neg_to_pos=1.089362
+[2026-06-06 18:24:47] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:47] ------------------------------------------------------------
+[2026-06-06 18:24:47] cl_v6_fair           lr         457/500  0.7401  0.7274
+[2026-06-06 18:24:48] cl_v6_fair           mlp        457/500  0.8088  0.8219
+[2026-06-06 18:24:48] Split diagnostics: dataset=mHSC-E_Specific_500, negative_protocol=full_candidate, test_pos=235, test_neg=345, test_positive_ratio=0.405172, random_auprc_baseline=0.405172, test_neg_to_pos=1.468085
+[2026-06-06 18:24:48] 
+======================================================================
+[2026-06-06 18:24:48] Dataset: mHSC-E_Specific_500 (500 genes)
+[2026-06-06 18:24:48] ======================================================================
+[2026-06-06 18:24:48] Train: 1918 (pos=773)
+[2026-06-06 18:24:48] Test:  580 (pos=235)
+[2026-06-06 18:24:48] Protocol diagnostics: negative_protocol=full_candidate, test_pos=235, test_neg=345, test_positive_ratio=0.405172, random_auprc_baseline=0.405172, test_neg_to_pos=1.468085
+[2026-06-06 18:24:48] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:48] ------------------------------------------------------------
+[2026-06-06 18:24:48] cl_v6_fair           lr         457/500  0.8177  0.7585
+[2026-06-06 18:24:49] cl_v6_fair           mlp        457/500  0.8671  0.8209
+[2026-06-06 18:24:50] Split diagnostics: dataset=mHSC-E_Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=1482, test_neg=929, test_positive_ratio=0.614683, random_auprc_baseline=0.614683, test_neg_to_pos=0.626856
+[2026-06-06 18:24:50] 
+======================================================================
+[2026-06-06 18:24:50] Dataset: mHSC-E_Specific_1000 (1000 genes)
+[2026-06-06 18:24:50] ======================================================================
+[2026-06-06 18:24:50] Train: 7984 (pos=4945)
+[2026-06-06 18:24:50] Test:  2411 (pos=1482)
+[2026-06-06 18:24:50] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=1482, test_neg=929, test_positive_ratio=0.614683, random_auprc_baseline=0.614683, test_neg_to_pos=0.626856
+[2026-06-06 18:24:50] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:50] ------------------------------------------------------------
+[2026-06-06 18:24:50] cl_v6_fair           lr        917/1000  0.8221  0.8872
+[2026-06-06 18:24:55] cl_v6_fair           mlp       917/1000  0.8423  0.9002
+[2026-06-06 18:24:55] Split diagnostics: dataset=mHSC-E_Specific_1000, negative_protocol=full_candidate, test_pos=1482, test_neg=1518, test_positive_ratio=0.494000, random_auprc_baseline=0.494000, test_neg_to_pos=1.024291
+[2026-06-06 18:24:55] 
+======================================================================
+[2026-06-06 18:24:55] Dataset: mHSC-E_Specific_1000 (1000 genes)
+[2026-06-06 18:24:55] ======================================================================
+[2026-06-06 18:24:55] Train: 9996 (pos=4945)
+[2026-06-06 18:24:55] Test:  3000 (pos=1482)
+[2026-06-06 18:24:55] Protocol diagnostics: negative_protocol=full_candidate, test_pos=1482, test_neg=1518, test_positive_ratio=0.494000, random_auprc_baseline=0.494000, test_neg_to_pos=1.024291
+[2026-06-06 18:24:55] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:24:55] ------------------------------------------------------------
+[2026-06-06 18:24:55] cl_v6_fair           lr        917/1000  0.8960  0.8893
+[2026-06-06 18:25:03] cl_v6_fair           mlp       917/1000  0.9068  0.9042
+[2026-06-06 18:25:04] Split diagnostics: dataset=mHSC-E_Non-Specific_500, negative_protocol=tf_stratified_1to10, test_pos=66, test_neg=603, test_positive_ratio=0.098655, random_auprc_baseline=0.098655, test_neg_to_pos=9.136364
+[2026-06-06 18:25:04] 
+======================================================================
+[2026-06-06 18:25:04] Dataset: mHSC-E_Non-Specific_500 (500 genes)
+[2026-06-06 18:25:04] ======================================================================
+[2026-06-06 18:25:04] Train: 1821 (pos=182)
+[2026-06-06 18:25:04] Test:  669 (pos=66)
+[2026-06-06 18:25:04] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=66, test_neg=603, test_positive_ratio=0.098655, random_auprc_baseline=0.098655, test_neg_to_pos=9.136364
+[2026-06-06 18:25:04] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:04] ------------------------------------------------------------
+[2026-06-06 18:25:04] cl_v6_fair           lr         457/500  0.7451  0.2717
+[2026-06-06 18:25:05] cl_v6_fair           mlp        457/500  0.7464  0.3717
+[2026-06-06 18:25:05] Split diagnostics: dataset=mHSC-E_Non-Specific_500, negative_protocol=full_candidate, test_pos=66, test_neg=2364, test_positive_ratio=0.027160, random_auprc_baseline=0.027160, test_neg_to_pos=35.818182
+[2026-06-06 18:25:05] 
+======================================================================
+[2026-06-06 18:25:05] Dataset: mHSC-E_Non-Specific_500 (500 genes)
+[2026-06-06 18:25:05] ======================================================================
+[2026-06-06 18:25:05] Train: 8054 (pos=182)
+[2026-06-06 18:25:05] Test:  2430 (pos=66)
+[2026-06-06 18:25:05] Protocol diagnostics: negative_protocol=full_candidate, test_pos=66, test_neg=2364, test_positive_ratio=0.027160, random_auprc_baseline=0.027160, test_neg_to_pos=35.818182
+[2026-06-06 18:25:05] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:05] ------------------------------------------------------------
+[2026-06-06 18:25:05] cl_v6_fair           lr         457/500  0.8243  0.1868
+[2026-06-06 18:25:07] cl_v6_fair           mlp        457/500  0.8767  0.2536
+[2026-06-06 18:25:08] Split diagnostics: dataset=mHSC-E_Non-Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=178, test_neg=1658, test_positive_ratio=0.096950, random_auprc_baseline=0.096950, test_neg_to_pos=9.314607
+[2026-06-06 18:25:08] 
+======================================================================
+[2026-06-06 18:25:08] Dataset: mHSC-E_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:25:08] ======================================================================
+[2026-06-06 18:25:08] Train: 5235 (pos=513)
+[2026-06-06 18:25:08] Test:  1836 (pos=178)
+[2026-06-06 18:25:08] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=178, test_neg=1658, test_positive_ratio=0.096950, random_auprc_baseline=0.096950, test_neg_to_pos=9.314607
+[2026-06-06 18:25:08] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:08] ------------------------------------------------------------
+[2026-06-06 18:25:08] cl_v6_fair           lr        917/1000  0.7651  0.2939
+[2026-06-06 18:25:09] cl_v6_fair           mlp       917/1000  0.7969  0.4030
+[2026-06-06 18:25:09] Split diagnostics: dataset=mHSC-E_Non-Specific_1000, negative_protocol=full_candidate, test_pos=178, test_neg=10898, test_positive_ratio=0.016071, random_auprc_baseline=0.016071, test_neg_to_pos=61.224719
+[2026-06-06 18:25:09] 
+======================================================================
+[2026-06-06 18:25:09] Dataset: mHSC-E_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:25:09] ======================================================================
+[2026-06-06 18:25:09] Train: 36887 (pos=513)
+[2026-06-06 18:25:09] Test:  11076 (pos=178)
+[2026-06-06 18:25:09] Protocol diagnostics: negative_protocol=full_candidate, test_pos=178, test_neg=10898, test_positive_ratio=0.016071, random_auprc_baseline=0.016071, test_neg_to_pos=61.224719
+[2026-06-06 18:25:09] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:09] ------------------------------------------------------------
+[2026-06-06 18:25:10] cl_v6_fair           lr        917/1000  0.8589  0.2010
+[2026-06-06 18:25:19] cl_v6_fair           mlp       917/1000  0.8837  0.2472
+[2026-06-06 18:25:20] Split diagnostics: dataset=mHSC-E_STRING_500, negative_protocol=tf_stratified_1to10, test_pos=62, test_neg=610, test_positive_ratio=0.092262, random_auprc_baseline=0.092262, test_neg_to_pos=9.838710
+[2026-06-06 18:25:20] 
+======================================================================
+[2026-06-06 18:25:20] Dataset: mHSC-E_STRING_500 (500 genes)
+[2026-06-06 18:25:20] ======================================================================
+[2026-06-06 18:25:20] Train: 1796 (pos=166)
+[2026-06-06 18:25:20] Test:  672 (pos=62)
+[2026-06-06 18:25:20] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=62, test_neg=610, test_positive_ratio=0.092262, random_auprc_baseline=0.092262, test_neg_to_pos=9.838710
+[2026-06-06 18:25:20] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:20] ------------------------------------------------------------
+[2026-06-06 18:25:20] cl_v6_fair           lr         457/500  0.9050  0.5309
+[2026-06-06 18:25:20] cl_v6_fair           mlp        457/500  0.9187  0.7065
+[2026-06-06 18:25:21] Split diagnostics: dataset=mHSC-E_STRING_500, negative_protocol=full_candidate, test_pos=62, test_neg=2830, test_positive_ratio=0.021438, random_auprc_baseline=0.021438, test_neg_to_pos=45.645161
+[2026-06-06 18:25:21] 
+======================================================================
+[2026-06-06 18:25:21] Dataset: mHSC-E_STRING_500 (500 genes)
+[2026-06-06 18:25:21] ======================================================================
+[2026-06-06 18:25:21] Train: 9583 (pos=166)
+[2026-06-06 18:25:21] Test:  2892 (pos=62)
+[2026-06-06 18:25:21] Protocol diagnostics: negative_protocol=full_candidate, test_pos=62, test_neg=2830, test_positive_ratio=0.021438, random_auprc_baseline=0.021438, test_neg_to_pos=45.645161
+[2026-06-06 18:25:21] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:21] ------------------------------------------------------------
+[2026-06-06 18:25:21] cl_v6_fair           lr         457/500  0.9100  0.4854
+[2026-06-06 18:25:23] cl_v6_fair           mlp        457/500  0.9040  0.5632
+[2026-06-06 18:25:24] Split diagnostics: dataset=mHSC-E_STRING_1000, negative_protocol=tf_stratified_1to10, test_pos=186, test_neg=1860, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:25:24] 
+======================================================================
+[2026-06-06 18:25:24] Dataset: mHSC-E_STRING_1000 (1000 genes)
+[2026-06-06 18:25:24] ======================================================================
+[2026-06-06 18:25:24] Train: 5676 (pos=516)
+[2026-06-06 18:25:24] Test:  2046 (pos=186)
+[2026-06-06 18:25:24] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=186, test_neg=1860, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:25:24] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:24] ------------------------------------------------------------
+[2026-06-06 18:25:24] cl_v6_fair           lr        917/1000  0.8852  0.5325
+[2026-06-06 18:25:26] cl_v6_fair           mlp       917/1000  0.9259  0.7204
+[2026-06-06 18:25:26] Split diagnostics: dataset=mHSC-E_STRING_1000, negative_protocol=full_candidate, test_pos=186, test_neg=12045, test_positive_ratio=0.015207, random_auprc_baseline=0.015207, test_neg_to_pos=64.758065
+[2026-06-06 18:25:26] 
+======================================================================
+[2026-06-06 18:25:26] Dataset: mHSC-E_STRING_1000 (1000 genes)
+[2026-06-06 18:25:26] ======================================================================
+[2026-06-06 18:25:26] Train: 40716 (pos=516)
+[2026-06-06 18:25:26] Test:  12231 (pos=186)
+[2026-06-06 18:25:26] Protocol diagnostics: negative_protocol=full_candidate, test_pos=186, test_neg=12045, test_positive_ratio=0.015207, random_auprc_baseline=0.015207, test_neg_to_pos=64.758065
+[2026-06-06 18:25:26] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:26] ------------------------------------------------------------
+[2026-06-06 18:25:28] cl_v6_fair           lr        917/1000  0.8859  0.4929
+[2026-06-06 18:25:38] cl_v6_fair           mlp       917/1000  0.8982  0.5211
+[2026-06-06 18:25:38] 
+  Cell type: mHSC-GM (mouse), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:25:39] Split diagnostics: dataset=mHSC-GM_Specific_500, negative_protocol=tf_stratified_1to10, test_pos=448, test_neg=362, test_positive_ratio=0.553086, random_auprc_baseline=0.553086, test_neg_to_pos=0.808036
+[2026-06-06 18:25:39] 
+======================================================================
+[2026-06-06 18:25:39] Dataset: mHSC-GM_Specific_500 (500 genes)
+[2026-06-06 18:25:39] ======================================================================
+[2026-06-06 18:25:39] Train: 2688 (pos=1493)
+[2026-06-06 18:25:39] Test:  810 (pos=448)
+[2026-06-06 18:25:39] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=448, test_neg=362, test_positive_ratio=0.553086, random_auprc_baseline=0.553086, test_neg_to_pos=0.808036
+[2026-06-06 18:25:39] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:39] ------------------------------------------------------------
+[2026-06-06 18:25:39] cl_v6_fair           lr         449/500  0.7723  0.8073
+[2026-06-06 18:25:41] cl_v6_fair           mlp        449/500  0.7860  0.8185
+[2026-06-06 18:25:41] Split diagnostics: dataset=mHSC-GM_Specific_500, negative_protocol=full_candidate, test_pos=448, test_neg=362, test_positive_ratio=0.553086, random_auprc_baseline=0.553086, test_neg_to_pos=0.808036
+[2026-06-06 18:25:41] 
+======================================================================
+[2026-06-06 18:25:41] Dataset: mHSC-GM_Specific_500 (500 genes)
+[2026-06-06 18:25:41] ======================================================================
+[2026-06-06 18:25:41] Train: 2688 (pos=1493)
+[2026-06-06 18:25:41] Test:  810 (pos=448)
+[2026-06-06 18:25:41] Protocol diagnostics: negative_protocol=full_candidate, test_pos=448, test_neg=362, test_positive_ratio=0.553086, random_auprc_baseline=0.553086, test_neg_to_pos=0.808036
+[2026-06-06 18:25:41] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:41] ------------------------------------------------------------
+[2026-06-06 18:25:41] cl_v6_fair           lr         449/500  0.7819  0.8110
+[2026-06-06 18:25:42] cl_v6_fair           mlp        449/500  0.7884  0.8183
+[2026-06-06 18:25:43] Split diagnostics: dataset=mHSC-GM_Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=1689, test_neg=1233, test_positive_ratio=0.578029, random_auprc_baseline=0.578029, test_neg_to_pos=0.730018
+[2026-06-06 18:25:43] 
+======================================================================
+[2026-06-06 18:25:43] Dataset: mHSC-GM_Specific_1000 (1000 genes)
+[2026-06-06 18:25:43] ======================================================================
+[2026-06-06 18:25:43] Train: 9646 (pos=5621)
+[2026-06-06 18:25:43] Test:  2922 (pos=1689)
+[2026-06-06 18:25:43] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=1689, test_neg=1233, test_positive_ratio=0.578029, random_auprc_baseline=0.578029, test_neg_to_pos=0.730018
+[2026-06-06 18:25:43] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:43] ------------------------------------------------------------
+[2026-06-06 18:25:44] cl_v6_fair           lr        895/1000  0.8155  0.8603
+[2026-06-06 18:25:46] cl_v6_fair           mlp       895/1000  0.8240  0.8710
+[2026-06-06 18:25:46] Split diagnostics: dataset=mHSC-GM_Specific_1000, negative_protocol=full_candidate, test_pos=1689, test_neg=1775, test_positive_ratio=0.487587, random_auprc_baseline=0.487587, test_neg_to_pos=1.050918
+[2026-06-06 18:25:46] 
+======================================================================
+[2026-06-06 18:25:46] Dataset: mHSC-GM_Specific_1000 (1000 genes)
+[2026-06-06 18:25:46] ======================================================================
+[2026-06-06 18:25:46] Train: 11530 (pos=5621)
+[2026-06-06 18:25:46] Test:  3464 (pos=1689)
+[2026-06-06 18:25:46] Protocol diagnostics: negative_protocol=full_candidate, test_pos=1689, test_neg=1775, test_positive_ratio=0.487587, random_auprc_baseline=0.487587, test_neg_to_pos=1.050918
+[2026-06-06 18:25:46] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:46] ------------------------------------------------------------
+[2026-06-06 18:25:46] cl_v6_fair           lr        895/1000  0.8741  0.8616
+[2026-06-06 18:25:49] cl_v6_fair           mlp       895/1000  0.8774  0.8694
+[2026-06-06 18:25:50] Split diagnostics: dataset=mHSC-GM_Non-Specific_500, negative_protocol=tf_stratified_1to10, test_pos=39, test_neg=390, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:25:50] 
+======================================================================
+[2026-06-06 18:25:50] Dataset: mHSC-GM_Non-Specific_500 (500 genes)
+[2026-06-06 18:25:50] ======================================================================
+[2026-06-06 18:25:50] Train: 1144 (pos=104)
+[2026-06-06 18:25:50] Test:  429 (pos=39)
+[2026-06-06 18:25:50] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=39, test_neg=390, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:25:50] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:50] ------------------------------------------------------------
+[2026-06-06 18:25:50] cl_v6_fair           lr         449/500  0.6693  0.2736
+[2026-06-06 18:25:50] cl_v6_fair           mlp        449/500  0.5907  0.2083
+[2026-06-06 18:25:50] Split diagnostics: dataset=mHSC-GM_Non-Specific_500, negative_protocol=full_candidate, test_pos=39, test_neg=1699, test_positive_ratio=0.022440, random_auprc_baseline=0.022440, test_neg_to_pos=43.564103
+[2026-06-06 18:25:50] 
+======================================================================
+[2026-06-06 18:25:50] Dataset: mHSC-GM_Non-Specific_500 (500 genes)
+[2026-06-06 18:25:50] ======================================================================
+[2026-06-06 18:25:50] Train: 5753 (pos=104)
+[2026-06-06 18:25:50] Test:  1738 (pos=39)
+[2026-06-06 18:25:50] Protocol diagnostics: negative_protocol=full_candidate, test_pos=39, test_neg=1699, test_positive_ratio=0.022440, random_auprc_baseline=0.022440, test_neg_to_pos=43.564103
+[2026-06-06 18:25:50] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:50] ------------------------------------------------------------
+[2026-06-06 18:25:50] cl_v6_fair           lr         449/500  0.8080  0.2207
+[2026-06-06 18:25:52] cl_v6_fair           mlp        449/500  0.7541  0.0808
+[2026-06-06 18:25:52] Split diagnostics: dataset=mHSC-GM_Non-Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=137, test_neg=1326, test_positive_ratio=0.093643, random_auprc_baseline=0.093643, test_neg_to_pos=9.678832
+[2026-06-06 18:25:52] 
+======================================================================
+[2026-06-06 18:25:52] Dataset: mHSC-GM_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:25:52] ======================================================================
+[2026-06-06 18:25:52] Train: 3771 (pos=356)
+[2026-06-06 18:25:52] Test:  1463 (pos=137)
+[2026-06-06 18:25:52] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=137, test_neg=1326, test_positive_ratio=0.093643, random_auprc_baseline=0.093643, test_neg_to_pos=9.678832
+[2026-06-06 18:25:52] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:52] ------------------------------------------------------------
+[2026-06-06 18:25:52] cl_v6_fair           lr        895/1000  0.7443  0.3087
+[2026-06-06 18:25:53] cl_v6_fair           mlp       895/1000  0.7730  0.4136
+[2026-06-06 18:25:53] Split diagnostics: dataset=mHSC-GM_Non-Specific_1000, negative_protocol=full_candidate, test_pos=137, test_neg=10944, test_positive_ratio=0.012364, random_auprc_baseline=0.012364, test_neg_to_pos=79.883212
+[2026-06-06 18:25:53] 
+======================================================================
+[2026-06-06 18:25:53] Dataset: mHSC-GM_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:25:53] ======================================================================
+[2026-06-06 18:25:53] Train: 36882 (pos=356)
+[2026-06-06 18:25:53] Test:  11081 (pos=137)
+[2026-06-06 18:25:53] Protocol diagnostics: negative_protocol=full_candidate, test_pos=137, test_neg=10944, test_positive_ratio=0.012364, random_auprc_baseline=0.012364, test_neg_to_pos=79.883212
+[2026-06-06 18:25:53] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:25:53] ------------------------------------------------------------
+[2026-06-06 18:25:55] cl_v6_fair           lr        895/1000  0.8534  0.1939
+[2026-06-06 18:26:12] cl_v6_fair           mlp       895/1000  0.8705  0.2632
+[2026-06-06 18:26:13] Split diagnostics: dataset=mHSC-GM_STRING_500, negative_protocol=tf_stratified_1to10, test_pos=31, test_neg=310, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:26:13] 
+======================================================================
+[2026-06-06 18:26:13] Dataset: mHSC-GM_STRING_500 (500 genes)
+[2026-06-06 18:26:13] ======================================================================
+[2026-06-06 18:26:13] Train: 770 (pos=70)
+[2026-06-06 18:26:13] Test:  341 (pos=31)
+[2026-06-06 18:26:13] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=31, test_neg=310, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:26:13] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:13] ------------------------------------------------------------
+[2026-06-06 18:26:13] cl_v6_fair           lr         449/500  0.7695  0.2640
+[2026-06-06 18:26:13] cl_v6_fair           mlp        449/500  0.8217  0.4948
+[2026-06-06 18:26:13] Split diagnostics: dataset=mHSC-GM_STRING_500, negative_protocol=full_candidate, test_pos=31, test_neg=2512, test_positive_ratio=0.012190, random_auprc_baseline=0.012190, test_neg_to_pos=81.032258
+[2026-06-06 18:26:13] 
+======================================================================
+[2026-06-06 18:26:13] Dataset: mHSC-GM_STRING_500 (500 genes)
+[2026-06-06 18:26:13] ======================================================================
+[2026-06-06 18:26:13] Train: 8435 (pos=70)
+[2026-06-06 18:26:13] Test:  2543 (pos=31)
+[2026-06-06 18:26:13] Protocol diagnostics: negative_protocol=full_candidate, test_pos=31, test_neg=2512, test_positive_ratio=0.012190, random_auprc_baseline=0.012190, test_neg_to_pos=81.032258
+[2026-06-06 18:26:13] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:13] ------------------------------------------------------------
+[2026-06-06 18:26:13] cl_v6_fair           lr         449/500  0.7750  0.0817
+[2026-06-06 18:26:15] cl_v6_fair           mlp        449/500  0.8385  0.2188
+[2026-06-06 18:26:16] Split diagnostics: dataset=mHSC-GM_STRING_1000, negative_protocol=tf_stratified_1to10, test_pos=129, test_neg=1290, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:26:16] 
+======================================================================
+[2026-06-06 18:26:16] Dataset: mHSC-GM_STRING_1000 (1000 genes)
+[2026-06-06 18:26:16] ======================================================================
+[2026-06-06 18:26:16] Train: 3586 (pos=326)
+[2026-06-06 18:26:16] Test:  1419 (pos=129)
+[2026-06-06 18:26:16] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=129, test_neg=1290, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:26:16] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:16] ------------------------------------------------------------
+[2026-06-06 18:26:16] cl_v6_fair           lr        895/1000  0.8348  0.4542
+[2026-06-06 18:26:18] cl_v6_fair           mlp       895/1000  0.8885  0.6199
+[2026-06-06 18:26:18] Split diagnostics: dataset=mHSC-GM_STRING_1000, negative_protocol=full_candidate, test_pos=129, test_neg=13022, test_positive_ratio=0.009809, random_auprc_baseline=0.009809, test_neg_to_pos=100.945736
+[2026-06-06 18:26:18] 
+======================================================================
+[2026-06-06 18:26:18] Dataset: mHSC-GM_STRING_1000 (1000 genes)
+[2026-06-06 18:26:18] ======================================================================
+[2026-06-06 18:26:18] Train: 43792 (pos=326)
+[2026-06-06 18:26:18] Test:  13151 (pos=129)
+[2026-06-06 18:26:18] Protocol diagnostics: negative_protocol=full_candidate, test_pos=129, test_neg=13022, test_positive_ratio=0.009809, random_auprc_baseline=0.009809, test_neg_to_pos=100.945736
+[2026-06-06 18:26:18] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:18] ------------------------------------------------------------
+[2026-06-06 18:26:19] cl_v6_fair           lr        895/1000  0.8625  0.3448
+[2026-06-06 18:26:31] cl_v6_fair           mlp       895/1000  0.8788  0.3630
+[2026-06-06 18:26:31] 
+  Cell type: mHSC-L (mouse), networks: ['Specific', 'Non-Specific', 'STRING']
+[2026-06-06 18:26:32] Split diagnostics: dataset=mHSC-L_Specific_500, negative_protocol=tf_stratified_1to10, test_pos=550, test_neg=384, test_positive_ratio=0.588865, random_auprc_baseline=0.588865, test_neg_to_pos=0.698182
+[2026-06-06 18:26:32] 
+======================================================================
+[2026-06-06 18:26:32] Dataset: mHSC-L_Specific_500 (500 genes)
+[2026-06-06 18:26:32] ======================================================================
+[2026-06-06 18:26:32] Train: 3065 (pos=1823)
+[2026-06-06 18:26:32] Test:  934 (pos=550)
+[2026-06-06 18:26:32] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=550, test_neg=384, test_positive_ratio=0.588865, random_auprc_baseline=0.588865, test_neg_to_pos=0.698182
+[2026-06-06 18:26:32] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:32] ------------------------------------------------------------
+[2026-06-06 18:26:32] cl_v6_fair           lr         442/500  0.7636  0.8091
+[2026-06-06 18:26:33] cl_v6_fair           mlp        442/500  0.7897  0.8451
+[2026-06-06 18:26:33] Split diagnostics: dataset=mHSC-L_Specific_500, negative_protocol=full_candidate, test_pos=550, test_neg=378, test_positive_ratio=0.592672, random_auprc_baseline=0.592672, test_neg_to_pos=0.687273
+[2026-06-06 18:26:33] 
+======================================================================
+[2026-06-06 18:26:33] Dataset: mHSC-L_Specific_500 (500 genes)
+[2026-06-06 18:26:33] ======================================================================
+[2026-06-06 18:26:33] Train: 3071 (pos=1823)
+[2026-06-06 18:26:33] Test:  928 (pos=550)
+[2026-06-06 18:26:33] Protocol diagnostics: negative_protocol=full_candidate, test_pos=550, test_neg=378, test_positive_ratio=0.592672, random_auprc_baseline=0.592672, test_neg_to_pos=0.687273
+[2026-06-06 18:26:33] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:33] ------------------------------------------------------------
+[2026-06-06 18:26:33] cl_v6_fair           lr         442/500  0.7661  0.8238
+[2026-06-06 18:26:35] cl_v6_fair           mlp        442/500  0.8069  0.8485
+[2026-06-06 18:26:36] Split diagnostics: dataset=mHSC-L_Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=2087, test_neg=1259, test_positive_ratio=0.623730, random_auprc_baseline=0.623730, test_neg_to_pos=0.603258
+[2026-06-06 18:26:36] 
+======================================================================
+[2026-06-06 18:26:36] Dataset: mHSC-L_Specific_1000 (1000 genes)
+[2026-06-06 18:26:36] ======================================================================
+[2026-06-06 18:26:36] Train: 11123 (pos=6964)
+[2026-06-06 18:26:36] Test:  3346 (pos=2087)
+[2026-06-06 18:26:36] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=2087, test_neg=1259, test_positive_ratio=0.623730, random_auprc_baseline=0.623730, test_neg_to_pos=0.603258
+[2026-06-06 18:26:36] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:36] ------------------------------------------------------------
+[2026-06-06 18:26:36] cl_v6_fair           lr        898/1000  0.8148  0.8791
+[2026-06-06 18:26:39] cl_v6_fair           mlp       898/1000  0.8247  0.8854
+[2026-06-06 18:26:39] Split diagnostics: dataset=mHSC-L_Specific_1000, negative_protocol=full_candidate, test_pos=2087, test_neg=1607, test_positive_ratio=0.564970, random_auprc_baseline=0.564970, test_neg_to_pos=0.770005
+[2026-06-06 18:26:39] 
+======================================================================
+[2026-06-06 18:26:39] Dataset: mHSC-L_Specific_1000 (1000 genes)
+[2026-06-06 18:26:39] ======================================================================
+[2026-06-06 18:26:39] Train: 12301 (pos=6964)
+[2026-06-06 18:26:39] Test:  3694 (pos=2087)
+[2026-06-06 18:26:39] Protocol diagnostics: negative_protocol=full_candidate, test_pos=2087, test_neg=1607, test_positive_ratio=0.564970, random_auprc_baseline=0.564970, test_neg_to_pos=0.770005
+[2026-06-06 18:26:39] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:39] ------------------------------------------------------------
+[2026-06-06 18:26:40] cl_v6_fair           lr        898/1000  0.8617  0.8877
+[2026-06-06 18:26:43] cl_v6_fair           mlp       898/1000  0.8615  0.8808
+[2026-06-06 18:26:43] Split diagnostics: dataset=mHSC-L_Non-Specific_500, negative_protocol=tf_stratified_1to10, test_pos=46, test_neg=460, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:26:43] 
+======================================================================
+[2026-06-06 18:26:43] Dataset: mHSC-L_Non-Specific_500 (500 genes)
+[2026-06-06 18:26:43] ======================================================================
+[2026-06-06 18:26:43] Train: 1441 (pos=131)
+[2026-06-06 18:26:43] Test:  506 (pos=46)
+[2026-06-06 18:26:43] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=46, test_neg=460, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:26:43] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:43] ------------------------------------------------------------
+[2026-06-06 18:26:43] cl_v6_fair           lr         442/500  0.6924  0.2642
+[2026-06-06 18:26:44] cl_v6_fair           mlp        442/500  0.7053  0.2658
+[2026-06-06 18:26:44] Split diagnostics: dataset=mHSC-L_Non-Specific_500, negative_protocol=full_candidate, test_pos=46, test_neg=1807, test_positive_ratio=0.024825, random_auprc_baseline=0.024825, test_neg_to_pos=39.282609
+[2026-06-06 18:26:44] 
+======================================================================
+[2026-06-06 18:26:44] Dataset: mHSC-L_Non-Specific_500 (500 genes)
+[2026-06-06 18:26:44] ======================================================================
+[2026-06-06 18:26:44] Train: 6137 (pos=131)
+[2026-06-06 18:26:44] Test:  1853 (pos=46)
+[2026-06-06 18:26:44] Protocol diagnostics: negative_protocol=full_candidate, test_pos=46, test_neg=1807, test_positive_ratio=0.024825, random_auprc_baseline=0.024825, test_neg_to_pos=39.282609
+[2026-06-06 18:26:44] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:44] ------------------------------------------------------------
+[2026-06-06 18:26:44] cl_v6_fair           lr         442/500  0.7818  0.2786
+[2026-06-06 18:26:46] cl_v6_fair           mlp        442/500  0.8640  0.2852
+[2026-06-06 18:26:47] Split diagnostics: dataset=mHSC-L_Non-Specific_1000, negative_protocol=tf_stratified_1to10, test_pos=153, test_neg=1497, test_positive_ratio=0.092727, random_auprc_baseline=0.092727, test_neg_to_pos=9.784314
+[2026-06-06 18:26:47] 
+======================================================================
+[2026-06-06 18:26:47] Dataset: mHSC-L_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:26:47] ======================================================================
+[2026-06-06 18:26:47] Train: 4475 (pos=417)
+[2026-06-06 18:26:47] Test:  1650 (pos=153)
+[2026-06-06 18:26:47] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=153, test_neg=1497, test_positive_ratio=0.092727, random_auprc_baseline=0.092727, test_neg_to_pos=9.784314
+[2026-06-06 18:26:47] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:47] ------------------------------------------------------------
+[2026-06-06 18:26:47] cl_v6_fair           lr        898/1000  0.7079  0.2605
+[2026-06-06 18:26:48] cl_v6_fair           mlp       898/1000  0.7716  0.4003
+[2026-06-06 18:26:48] Split diagnostics: dataset=mHSC-L_Non-Specific_1000, negative_protocol=full_candidate, test_pos=153, test_neg=11390, test_positive_ratio=0.013255, random_auprc_baseline=0.013255, test_neg_to_pos=74.444444
+[2026-06-06 18:26:48] 
+======================================================================
+[2026-06-06 18:26:48] Dataset: mHSC-L_Non-Specific_1000 (1000 genes)
+[2026-06-06 18:26:48] ======================================================================
+[2026-06-06 18:26:48] Train: 38420 (pos=417)
+[2026-06-06 18:26:48] Test:  11543 (pos=153)
+[2026-06-06 18:26:48] Protocol diagnostics: negative_protocol=full_candidate, test_pos=153, test_neg=11390, test_positive_ratio=0.013255, random_auprc_baseline=0.013255, test_neg_to_pos=74.444444
+[2026-06-06 18:26:48] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:26:48] ------------------------------------------------------------
+[2026-06-06 18:26:50] cl_v6_fair           lr        898/1000  0.8425  0.1585
+[2026-06-06 18:27:07] cl_v6_fair           mlp       898/1000  0.8667  0.2380
+[2026-06-06 18:27:08] Split diagnostics: dataset=mHSC-L_STRING_500, negative_protocol=tf_stratified_1to10, test_pos=34, test_neg=340, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:27:08] 
+======================================================================
+[2026-06-06 18:27:08] Dataset: mHSC-L_STRING_500 (500 genes)
+[2026-06-06 18:27:08] ======================================================================
+[2026-06-06 18:27:08] Train: 902 (pos=82)
+[2026-06-06 18:27:08] Test:  374 (pos=34)
+[2026-06-06 18:27:08] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=34, test_neg=340, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:27:08] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:27:08] ------------------------------------------------------------
+[2026-06-06 18:27:08] cl_v6_fair           lr         442/500  0.8644  0.5450
+[2026-06-06 18:27:08] cl_v6_fair           mlp        442/500  0.8234  0.4553
+[2026-06-06 18:27:08] Split diagnostics: dataset=mHSC-L_STRING_500, negative_protocol=full_candidate, test_pos=34, test_neg=2396, test_positive_ratio=0.013992, random_auprc_baseline=0.013992, test_neg_to_pos=70.470588
+[2026-06-06 18:27:08] 
+======================================================================
+[2026-06-06 18:27:08] Dataset: mHSC-L_STRING_500 (500 genes)
+[2026-06-06 18:27:08] ======================================================================
+[2026-06-06 18:27:08] Train: 8049 (pos=82)
+[2026-06-06 18:27:08] Test:  2430 (pos=34)
+[2026-06-06 18:27:08] Protocol diagnostics: negative_protocol=full_candidate, test_pos=34, test_neg=2396, test_positive_ratio=0.013992, random_auprc_baseline=0.013992, test_neg_to_pos=70.470588
+[2026-06-06 18:27:08] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:27:08] ------------------------------------------------------------
+[2026-06-06 18:27:08] cl_v6_fair           lr         442/500  0.8702  0.3047
+[2026-06-06 18:27:11] cl_v6_fair           mlp        442/500  0.8727  0.4020
+[2026-06-06 18:27:12] Split diagnostics: dataset=mHSC-L_STRING_1000, negative_protocol=tf_stratified_1to10, test_pos=148, test_neg=1480, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:27:12] 
+======================================================================
+[2026-06-06 18:27:12] Dataset: mHSC-L_STRING_1000 (1000 genes)
+[2026-06-06 18:27:12] ======================================================================
+[2026-06-06 18:27:12] Train: 4004 (pos=364)
+[2026-06-06 18:27:12] Test:  1628 (pos=148)
+[2026-06-06 18:27:12] Protocol diagnostics: negative_protocol=tf_stratified_1to10, test_pos=148, test_neg=1480, test_positive_ratio=0.090909, random_auprc_baseline=0.090909, test_neg_to_pos=10.000000
+[2026-06-06 18:27:12] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:27:12] ------------------------------------------------------------
+[2026-06-06 18:27:12] cl_v6_fair           lr        898/1000  0.8201  0.4280
+[2026-06-06 18:27:13] cl_v6_fair           mlp       898/1000  0.8572  0.5653
+[2026-06-06 18:27:13] Split diagnostics: dataset=mHSC-L_STRING_1000, negative_protocol=full_candidate, test_pos=148, test_neg=15081, test_positive_ratio=0.009718, random_auprc_baseline=0.009718, test_neg_to_pos=101.898649
+[2026-06-06 18:27:13] 
+======================================================================
+[2026-06-06 18:27:13] Dataset: mHSC-L_STRING_1000 (1000 genes)
+[2026-06-06 18:27:13] ======================================================================
+[2026-06-06 18:27:13] Train: 50705 (pos=364)
+[2026-06-06 18:27:13] Test:  15229 (pos=148)
+[2026-06-06 18:27:13] Protocol diagnostics: negative_protocol=full_candidate, test_pos=148, test_neg=15081, test_positive_ratio=0.009718, random_auprc_baseline=0.009718, test_neg_to_pos=101.898649
+[2026-06-06 18:27:13] 
+Embedding            Clf       Coverage    AUROC    AUPRC
+[2026-06-06 18:27:13] ------------------------------------------------------------
+[2026-06-06 18:27:15] cl_v6_fair           lr        898/1000  0.8711  0.3149
+[2026-06-06 18:27:40] cl_v6_fair           mlp       898/1000  0.8670  0.3708
+[2026-06-06 18:27:40] 
+======================================================================
+[2026-06-06 18:27:40] FINAL SUMMARY (LR results)
+[2026-06-06 18:27:40] ======================================================================
+[2026-06-06 18:27:40] 
+======================================================================
+[2026-06-06 18:27:40] FINAL SUMMARY (LR results)
+[2026-06-06 18:27:40] ======================================================================
+[2026-06-06 18:27:40] 
+Dataset                             Protocol                 cl_v6_fair      
+[2026-06-06 18:27:40] -----------------------------------------------------------------------------
+[2026-06-06 18:27:40] hESC_Specific_500                   tf_stratified_1to10      0.6176/0.3571  
+[2026-06-06 18:27:40] hESC_Specific_1000                  tf_stratified_1to10      0.6724/0.4149  
+[2026-06-06 18:27:40] hESC_Non-Specific_500               tf_stratified_1to10      0.6693/0.2575  
+[2026-06-06 18:27:40] hESC_Non-Specific_1000              tf_stratified_1to10      0.6387/0.2293  
+[2026-06-06 18:27:40] hESC_STRING_500                     tf_stratified_1to10      0.7743/0.5012  
+[2026-06-06 18:27:40] hESC_STRING_1000                    tf_stratified_1to10      0.7885/0.3739  
+[2026-06-06 18:27:40] hHep_Specific_1000                  tf_stratified_1to10      0.8437/0.7336  
+[2026-06-06 18:27:40] hHep_Non-Specific_500               tf_stratified_1to10      0.6593/0.2095  
+[2026-06-06 18:27:40] hHep_Non-Specific_1000              tf_stratified_1to10      0.6460/0.2480  
+[2026-06-06 18:27:40] hHep_STRING_500                     tf_stratified_1to10      0.8854/0.5265  
+[2026-06-06 18:27:40] hHep_STRING_1000                    tf_stratified_1to10      0.8545/0.4290  
+[2026-06-06 18:27:40] mDC_Specific_500                    tf_stratified_1to10      0.6344/0.1605  
+[2026-06-06 18:27:40] mDC_Specific_1000                   tf_stratified_1to10      0.6765/0.3257  
+[2026-06-06 18:27:40] mDC_Non-Specific_500                tf_stratified_1to10      0.7413/0.5141  
+[2026-06-06 18:27:40] mDC_Non-Specific_1000               tf_stratified_1to10      0.7826/0.3691  
+[2026-06-06 18:27:40] mDC_STRING_500                      tf_stratified_1to10      0.8657/0.4174  
+[2026-06-06 18:27:40] mDC_STRING_1000                     tf_stratified_1to10      0.8479/0.4397  
+[2026-06-06 18:27:40] mHSC-E_Specific_500                 tf_stratified_1to10      0.7401/0.7274  
+[2026-06-06 18:27:40] mHSC-E_Specific_1000                tf_stratified_1to10      0.8221/0.8872  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_500             tf_stratified_1to10      0.7451/0.2717  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_1000            tf_stratified_1to10      0.7651/0.2939  
+[2026-06-06 18:27:40] mHSC-E_STRING_500                   tf_stratified_1to10      0.9050/0.5309  
+[2026-06-06 18:27:40] mHSC-E_STRING_1000                  tf_stratified_1to10      0.8852/0.5325  
+[2026-06-06 18:27:40] mHSC-GM_Specific_500                tf_stratified_1to10      0.7723/0.8073  
+[2026-06-06 18:27:40] mHSC-GM_Specific_1000               tf_stratified_1to10      0.8155/0.8603  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_500            tf_stratified_1to10      0.6693/0.2736  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_1000           tf_stratified_1to10      0.7443/0.3087  
+[2026-06-06 18:27:40] mHSC-GM_STRING_500                  tf_stratified_1to10      0.7695/0.2640  
+[2026-06-06 18:27:40] mHSC-GM_STRING_1000                 tf_stratified_1to10      0.8348/0.4542  
+[2026-06-06 18:27:40] mHSC-L_Specific_500                 tf_stratified_1to10      0.7636/0.8091  
+[2026-06-06 18:27:40] mHSC-L_Specific_1000                tf_stratified_1to10      0.8148/0.8791  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_500             tf_stratified_1to10      0.6924/0.2642  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_1000            tf_stratified_1to10      0.7079/0.2605  
+[2026-06-06 18:27:40] mHSC-L_STRING_500                   tf_stratified_1to10      0.8644/0.5450  
+[2026-06-06 18:27:40] mHSC-L_STRING_1000                  tf_stratified_1to10      0.8201/0.4280  
+[2026-06-06 18:27:40] hESC_Specific_500                   full_candidate           0.7788/0.3747  
+[2026-06-06 18:27:40] hESC_Specific_1000                  full_candidate           0.8410/0.4346  
+[2026-06-06 18:27:40] hESC_Non-Specific_500               full_candidate           0.8670/0.2058  
+[2026-06-06 18:27:40] hESC_Non-Specific_1000              full_candidate           0.8868/0.1591  
+[2026-06-06 18:27:40] hESC_STRING_500                     full_candidate           0.7913/0.2179  
+[2026-06-06 18:27:40] hESC_STRING_1000                    full_candidate           0.8345/0.2107  
+[2026-06-06 18:27:40] hHep_Specific_1000                  full_candidate           0.8814/0.7339  
+[2026-06-06 18:27:40] hHep_Non-Specific_500               full_candidate           0.8238/0.1255  
+[2026-06-06 18:27:40] hHep_Non-Specific_1000              full_candidate           0.8115/0.1491  
+[2026-06-06 18:27:40] hHep_STRING_500                     full_candidate           0.8819/0.3858  
+[2026-06-06 18:27:40] hHep_STRING_1000                    full_candidate           0.8873/0.3741  
+[2026-06-06 18:27:40] mDC_Specific_500                    full_candidate           0.8419/0.1774  
+[2026-06-06 18:27:40] mDC_Specific_1000                   full_candidate           0.8359/0.3553  
+[2026-06-06 18:27:40] mDC_Non-Specific_500                full_candidate           0.7510/0.2524  
+[2026-06-06 18:27:40] mDC_Non-Specific_1000               full_candidate           0.8689/0.1832  
+[2026-06-06 18:27:40] mDC_STRING_500                      full_candidate           0.8777/0.3892  
+[2026-06-06 18:27:40] mDC_STRING_1000                     full_candidate           0.8829/0.3775  
+[2026-06-06 18:27:40] mHSC-E_Specific_500                 full_candidate           0.8177/0.7585  
+[2026-06-06 18:27:40] mHSC-E_Specific_1000                full_candidate           0.8960/0.8893  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_500             full_candidate           0.8243/0.1868  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_1000            full_candidate           0.8589/0.2010  
+[2026-06-06 18:27:40] mHSC-E_STRING_500                   full_candidate           0.9100/0.4854  
+[2026-06-06 18:27:40] mHSC-E_STRING_1000                  full_candidate           0.8859/0.4929  
+[2026-06-06 18:27:40] mHSC-GM_Specific_500                full_candidate           0.7819/0.8110  
+[2026-06-06 18:27:40] mHSC-GM_Specific_1000               full_candidate           0.8741/0.8616  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_500            full_candidate           0.8080/0.2207  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_1000           full_candidate           0.8534/0.1939  
+[2026-06-06 18:27:40] mHSC-GM_STRING_500                  full_candidate           0.7750/0.0817  
+[2026-06-06 18:27:40] mHSC-GM_STRING_1000                 full_candidate           0.8625/0.3448  
+[2026-06-06 18:27:40] mHSC-L_Specific_500                 full_candidate           0.7661/0.8238  
+[2026-06-06 18:27:40] mHSC-L_Specific_1000                full_candidate           0.8617/0.8877  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_500             full_candidate           0.7818/0.2786  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_1000            full_candidate           0.8425/0.1585  
+[2026-06-06 18:27:40] mHSC-L_STRING_500                   full_candidate           0.8702/0.3047  
+[2026-06-06 18:27:40] mHSC-L_STRING_1000                  full_candidate           0.8711/0.3149  
+[2026-06-06 18:27:40] 
+======================================================================
+[2026-06-06 18:27:40] FINAL SUMMARY (MLP results)
+[2026-06-06 18:27:40] ======================================================================
+[2026-06-06 18:27:40] 
+Dataset                             Protocol                 cl_v6_fair      
+[2026-06-06 18:27:40] -----------------------------------------------------------------------------
+[2026-06-06 18:27:40] hESC_Specific_500                   tf_stratified_1to10      0.6668/0.3917  
+[2026-06-06 18:27:40] hESC_Specific_1000                  tf_stratified_1to10      0.6990/0.4494  
+[2026-06-06 18:27:40] hESC_Non-Specific_500               tf_stratified_1to10      0.4868/0.1198  
+[2026-06-06 18:27:40] hESC_Non-Specific_1000              tf_stratified_1to10      0.6831/0.2571  
+[2026-06-06 18:27:40] hESC_STRING_500                     tf_stratified_1to10      0.5871/0.1529  
+[2026-06-06 18:27:40] hESC_STRING_1000                    tf_stratified_1to10      0.8477/0.4824  
+[2026-06-06 18:27:40] hHep_Specific_1000                  tf_stratified_1to10      0.8746/0.8033  
+[2026-06-06 18:27:40] hHep_Non-Specific_500               tf_stratified_1to10      0.4702/0.1103  
+[2026-06-06 18:27:40] hHep_Non-Specific_1000              tf_stratified_1to10      0.6898/0.3010  
+[2026-06-06 18:27:40] hHep_STRING_500                     tf_stratified_1to10      0.9227/0.6393  
+[2026-06-06 18:27:40] hHep_STRING_1000                    tf_stratified_1to10      0.8959/0.5942  
+[2026-06-06 18:27:40] mDC_Specific_500                    tf_stratified_1to10      0.4750/0.1179  
+[2026-06-06 18:27:40] mDC_Specific_1000                   tf_stratified_1to10      0.7585/0.4639  
+[2026-06-06 18:27:40] mDC_Non-Specific_500                tf_stratified_1to10      0.7537/0.5051  
+[2026-06-06 18:27:40] mDC_Non-Specific_1000               tf_stratified_1to10      0.8257/0.5121  
+[2026-06-06 18:27:40] mDC_STRING_500                      tf_stratified_1to10      0.7269/0.4163  
+[2026-06-06 18:27:40] mDC_STRING_1000                     tf_stratified_1to10      0.9025/0.6500  
+[2026-06-06 18:27:40] mHSC-E_Specific_500                 tf_stratified_1to10      0.8088/0.8219  
+[2026-06-06 18:27:40] mHSC-E_Specific_1000                tf_stratified_1to10      0.8423/0.9002  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_500             tf_stratified_1to10      0.7464/0.3717  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_1000            tf_stratified_1to10      0.7969/0.4030  
+[2026-06-06 18:27:40] mHSC-E_STRING_500                   tf_stratified_1to10      0.9187/0.7065  
+[2026-06-06 18:27:40] mHSC-E_STRING_1000                  tf_stratified_1to10      0.9259/0.7204  
+[2026-06-06 18:27:40] mHSC-GM_Specific_500                tf_stratified_1to10      0.7860/0.8185  
+[2026-06-06 18:27:40] mHSC-GM_Specific_1000               tf_stratified_1to10      0.8240/0.8710  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_500            tf_stratified_1to10      0.5907/0.2083  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_1000           tf_stratified_1to10      0.7730/0.4136  
+[2026-06-06 18:27:40] mHSC-GM_STRING_500                  tf_stratified_1to10      0.8217/0.4948  
+[2026-06-06 18:27:40] mHSC-GM_STRING_1000                 tf_stratified_1to10      0.8885/0.6199  
+[2026-06-06 18:27:40] mHSC-L_Specific_500                 tf_stratified_1to10      0.7897/0.8451  
+[2026-06-06 18:27:40] mHSC-L_Specific_1000                tf_stratified_1to10      0.8247/0.8854  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_500             tf_stratified_1to10      0.7053/0.2658  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_1000            tf_stratified_1to10      0.7716/0.4003  
+[2026-06-06 18:27:40] mHSC-L_STRING_500                   tf_stratified_1to10      0.8234/0.4553  
+[2026-06-06 18:27:40] mHSC-L_STRING_1000                  tf_stratified_1to10      0.8572/0.5653  
+[2026-06-06 18:27:40] hESC_Specific_500                   full_candidate           0.7979/0.3913  
+[2026-06-06 18:27:40] hESC_Specific_1000                  full_candidate           0.8561/0.4673  
+[2026-06-06 18:27:40] hESC_Non-Specific_500               full_candidate           0.8392/0.1919  
+[2026-06-06 18:27:40] hESC_Non-Specific_1000              full_candidate           0.8994/0.1587  
+[2026-06-06 18:27:40] hESC_STRING_500                     full_candidate           0.7455/0.0911  
+[2026-06-06 18:27:40] hESC_STRING_1000                    full_candidate           0.8637/0.2693  
+[2026-06-06 18:27:40] hHep_Specific_1000                  full_candidate           0.9143/0.8041  
+[2026-06-06 18:27:40] hHep_Non-Specific_500               full_candidate           0.7213/0.1310  
+[2026-06-06 18:27:40] hHep_Non-Specific_1000              full_candidate           0.8498/0.1033  
+[2026-06-06 18:27:40] hHep_STRING_500                     full_candidate           0.9189/0.5463  
+[2026-06-06 18:27:40] hHep_STRING_1000                    full_candidate           0.8936/0.4867  
+[2026-06-06 18:27:40] mDC_Specific_500                    full_candidate           0.4254/0.0315  
+[2026-06-06 18:27:40] mDC_Specific_1000                   full_candidate           0.8754/0.4575  
+[2026-06-06 18:27:40] mDC_Non-Specific_500                full_candidate           0.5743/0.1308  
+[2026-06-06 18:27:40] mDC_Non-Specific_1000               full_candidate           0.8742/0.2061  
+[2026-06-06 18:27:40] mDC_STRING_500                      full_candidate           0.9184/0.5257  
+[2026-06-06 18:27:40] mDC_STRING_1000                     full_candidate           0.9062/0.5479  
+[2026-06-06 18:27:40] mHSC-E_Specific_500                 full_candidate           0.8671/0.8209  
+[2026-06-06 18:27:40] mHSC-E_Specific_1000                full_candidate           0.9068/0.9042  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_500             full_candidate           0.8767/0.2536  
+[2026-06-06 18:27:40] mHSC-E_Non-Specific_1000            full_candidate           0.8837/0.2472  
+[2026-06-06 18:27:40] mHSC-E_STRING_500                   full_candidate           0.9040/0.5632  
+[2026-06-06 18:27:40] mHSC-E_STRING_1000                  full_candidate           0.8982/0.5211  
+[2026-06-06 18:27:40] mHSC-GM_Specific_500                full_candidate           0.7884/0.8183  
+[2026-06-06 18:27:40] mHSC-GM_Specific_1000               full_candidate           0.8774/0.8694  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_500            full_candidate           0.7541/0.0808  
+[2026-06-06 18:27:40] mHSC-GM_Non-Specific_1000           full_candidate           0.8705/0.2632  
+[2026-06-06 18:27:40] mHSC-GM_STRING_500                  full_candidate           0.8385/0.2188  
+[2026-06-06 18:27:40] mHSC-GM_STRING_1000                 full_candidate           0.8788/0.3630  
+[2026-06-06 18:27:40] mHSC-L_Specific_500                 full_candidate           0.8069/0.8485  
+[2026-06-06 18:27:40] mHSC-L_Specific_1000                full_candidate           0.8615/0.8808  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_500             full_candidate           0.8640/0.2852  
+[2026-06-06 18:27:40] mHSC-L_Non-Specific_1000            full_candidate           0.8667/0.2380  
+[2026-06-06 18:27:40] mHSC-L_STRING_500                   full_candidate           0.8727/0.4020  
+[2026-06-06 18:27:40] mHSC-L_STRING_1000                  full_candidate           0.8670/0.3708  
+[2026-06-06 18:27:40] 
+======================================================================
+[2026-06-06 18:27:40] AVERAGE ACROSS BEELINE DATASETS (LR)
+[2026-06-06 18:27:40] ======================================================================
+[2026-06-06 18:27:40] 
+Protocol: tf_stratified_1to10
+[2026-06-06 18:27:40]   cl_v6_fair           AUROC: 0.7637±0.0826  AUPRC: 0.4544±0.2109  (n=35)
+[2026-06-06 18:27:40] 
+Protocol: full_candidate
+[2026-06-06 18:27:40]   cl_v6_fair           AUROC: 0.8424±0.0422  AUPRC: 0.3829±0.2464  (n=35)
+[2026-06-06 18:27:41] Conference table saved to /root/autodl-tmp/projects/comparison-SC-embedding/results/grn_beeline_full/conference_table.md
+[2026-06-06 18:27:41] WARNING: full_candidate positive ratio exceeds tf_stratified_1to10 for mHSC-L_Specific_500: full_candidate=0.592672, tf_stratified_1to10=0.588865
+[2026-06-06 18:27:41] Diagnostics saved to /root/autodl-tmp/projects/comparison-SC-embedding/results/grn_beeline_full/diagnotics
+[2026-06-06 18:27:41] 
+Results merged into /root/autodl-tmp/projects/comparison-SC-embedding/results/grn_beeline_full/grn_beeline_full_results.csv
+[2026-06-06 18:27:41] 
+Done!

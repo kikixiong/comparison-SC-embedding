@@ -13,11 +13,12 @@ Latent variables: metric=AUROC, classifier=lr, aggregation=mean, dataset_split=1
 | baseline | 0.6249 | 0.7166 | 0.7798 | <span style='color:red'><strong>0.7960</strong></span> |
 | scGPT_human | **0.6605** | 0.4967 | 0.7666 | 0.5466 |
 | v4_bias_rec_best | **0.6282** | 0.6871 | 0.7708 | 0.7867 |
-| v4_plain_best | 0.6060 | 0.4714 | <span style='color:red'><strong>0.7847</strong></span> | 0.5298 |
+| v4_plain_best | 0.6060 | 0.4714 | **0.7847** | 0.5298 |
 | v4_type_pe_best | 0.3874 | 0.4716 | 0.5167 | 0.7799 |
 | scconcept | 0.4057 | 0.4299 | 0.7684 | 0.7672 |
 | scconcept_encoded | **0.6343** | 0.4359 | 0.7632 | 0.5211 |
 | cl_scratch_v5 | 0.6231 | 0.4779 | 0.7784 | 0.7790 |
+| cl_v6_fair | **0.6308** | 0.4694 | <span style='color:red'><strong>0.7854</strong></span> | 0.7816 |
 | random_256 | <span style='color:red'><strong>1.0000</strong></span> | 0.5594 | 0.6790 | 0.6978 |
 
 ## AUROC | Classifier=mlp
@@ -35,6 +36,7 @@ Latent variables: metric=AUROC, classifier=mlp, aggregation=mean, dataset_split=
 | scconcept | 0.4843 | 0.5641 | 0.5687 |
 | scconcept_encoded | 0.4505 | 0.5004 | 0.5433 |
 | cl_scratch_v5 | 0.5158 | 0.5672 | <span style='color:red'><strong>0.8497</strong></span> |
+| cl_v6_fair | 0.5089 | 0.5682 | 0.8393 |
 | random_256 | 0.6146 | 0.6510 | 0.7120 |
 
 ## AUPRC | Classifier=lr
@@ -44,7 +46,7 @@ Latent variables: metric=AUPRC, classifier=lr, aggregation=mean, dataset_split=1
 | Embedding | hHep500 | mHSC-E500 | mHSC-GM500 | mHSC-L500 |
 |---|---:|---:|---:|---:|
 | minus | 0.6051 | 0.7800 | 0.7083 | 0.7205 |
-| baseline | 0.7309 | <span style='color:red'><strong>0.7905</strong></span> | <span style='color:red'><strong>0.8333</strong></span> | <span style='color:red'><strong>0.8517</strong></span> |
+| baseline | 0.7309 | <span style='color:red'><strong>0.7905</strong></span> | 0.8333 | <span style='color:red'><strong>0.8517</strong></span> |
 | scGPT_human | **0.7597** | 0.6898 | 0.8105 | 0.7221 |
 | v4_bias_rec_best | 0.7207 | 0.7628 | 0.8285 | 0.8381 |
 | v4_plain_best | 0.7014 | 0.6581 | 0.8310 | 0.7027 |
@@ -52,6 +54,7 @@ Latent variables: metric=AUPRC, classifier=lr, aggregation=mean, dataset_split=1
 | scconcept | 0.6078 | 0.6319 | 0.8119 | 0.8162 |
 | scconcept_encoded | 0.7180 | 0.6404 | 0.8122 | 0.7015 |
 | cl_scratch_v5 | 0.7267 | 0.6704 | 0.8301 | 0.8361 |
+| cl_v6_fair | 0.7279 | 0.6661 | <span style='color:red'><strong>0.8392</strong></span> | 0.8402 |
 | random_256 | <span style='color:red'><strong>1.0000</strong></span> | 0.6928 | 0.7619 | 0.7965 |
 
 ## AUPRC | Classifier=mlp
@@ -69,5 +72,6 @@ Latent variables: metric=AUPRC, classifier=mlp, aggregation=mean, dataset_split=
 | scconcept | 0.6962 | 0.7336 | 0.7433 |
 | scconcept_encoded | 0.6763 | 0.7075 | 0.7240 |
 | cl_scratch_v5 | 0.7143 | 0.7538 | <span style='color:red'><strong>0.8932</strong></span> |
+| cl_v6_fair | 0.7200 | 0.7499 | **0.8904** |
 | random_256 | 0.7526 | 0.7617 | 0.8035 |
 
