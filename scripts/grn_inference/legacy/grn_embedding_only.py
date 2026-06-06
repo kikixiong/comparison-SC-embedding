@@ -37,7 +37,8 @@ BASE_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark'
 SCGREAT_DIR = '/root/autodl-tmp/projects/scGREAT'
 OUTPUT_DIR = '/root/autodl-tmp/projects/comparison-SC-embedding/grn_benchmark'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', 'grn_embedding_only')
+REPO_ROOT = Path(__file__).resolve().parents[3]
+RESULTS_DIR = os.path.join(REPO_ROOT, 'results', 'grn_embedding_only')
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(RESULTS_DIR, 'grn_emb_only.log')
@@ -100,11 +101,17 @@ def _collapse_dataset_label(name):
     return name.split('->', 1)[0].strip()
 
 
-def write_conference_md(df):
+def write_conference_md(csv_path=None):
     out_md = os.path.join(RESULTS_DIR, 'conference_table.md')
-    out_csv = os.path.join(RESULTS_DIR, 'grn_emb_only_results.csv')
+    csv_path = csv_path or os.path.join(RESULTS_DIR, 'grn_emb_only_results.csv')
 
-    df.to_csv(out_csv, index=False)
+    if not os.path.exists(csv_path):
+        log(f'Skip conference table export: missing {csv_path}')
+        return
+    df = pd.read_csv(csv_path)
+    if df.empty:
+        log(f'Skip conference table export: empty {csv_path}')
+        return
 
     embeddings = [e for e in EMBED_ORDER if e in df['embedding'].unique()] + [e for e in sorted(df['embedding'].unique()) if e not in EMBED_ORDER]
     lines = [
@@ -570,8 +577,8 @@ def main():
         log("Done!")
         return
     result_keys = ['dataset', 'embedding', 'setting', 'train_dataset', 'test_dataset', 'clf']
-    df = merge_incremental_results(df, csv_path, result_keys)
-    write_conference_md(df)
+    merge_incremental_results(df, csv_path, result_keys)
+    write_conference_md(csv_path)
     log(f"\nResults merged into {csv_path}")
     log("Done!")
 

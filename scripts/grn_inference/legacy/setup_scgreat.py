@@ -32,7 +32,8 @@ BASE_DIR = '/bigdata2/hyt/projects/scbenchmark'
 SCGREAT_DIR = '/bigdata2/hyt/projects/scGREAT'
 OUTPUT_DIR = '/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding/grn_benchmark'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', 'grn_benchmark')
+REPO_ROOT = Path(__file__).resolve().parents[3]
+RESULTS_DIR = os.path.join(REPO_ROOT, 'results', 'grn_benchmark')
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(RESULTS_DIR, 'setup.log')
@@ -137,7 +138,11 @@ def export_run_all_conference_table():
     df = pd.DataFrame(rows)
     summary_csv = os.path.join(RESULTS_DIR, 'run_all_summary_parsed.csv')
     result_keys = ['embedding', 'dataset']
-    df = merge_incremental_results(df, summary_csv, result_keys)
+    merge_incremental_results(df, summary_csv, result_keys)
+    df = pd.read_csv(summary_csv)
+    if df.empty:
+        log(f'Skip conference table export: empty {summary_csv}')
+        return
     df['dataset_display'] = df['dataset'].map(_collapse_dataset_label)
 
     embeddings = [e for e in EMBED_ORDER if e in df['embedding'].unique()] + [e for e in sorted(df['embedding'].unique()) if e not in EMBED_ORDER]

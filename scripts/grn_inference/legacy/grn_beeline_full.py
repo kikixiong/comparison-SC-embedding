@@ -514,12 +514,17 @@ def write_diagnostics(dataset_diagnostics, results_df):
     log(f'Diagnostics saved to {DIAGNOSTICS_DIR}')
 
 
-def write_conference_md(df):
+def write_conference_md(csv_path=None):
     out_md = os.path.join(RESULTS_DIR, 'conference_table.md')
-    out_csv = os.path.join(RESULTS_DIR, 'grn_beeline_full_results.csv')
+    csv_path = csv_path or os.path.join(RESULTS_DIR, 'grn_beeline_full_results.csv')
 
-    df = ensure_auprc_lift(df)
-    df.to_csv(out_csv, index=False)
+    if not os.path.exists(csv_path):
+        log(f'Skip conference table export: missing {csv_path}')
+        return
+    df = ensure_auprc_lift(pd.read_csv(csv_path))
+    if df.empty:
+        log(f'Skip conference table export: empty {csv_path}')
+        return
 
     embeddings = [e for e in EMBED_ORDER if e in df['embedding'].unique()] + [e for e in sorted(df['embedding'].unique()) if e not in EMBED_ORDER]
     lines = [
@@ -1433,7 +1438,7 @@ def main():
         df = merge_incremental_results(df, csv_path, result_keys)
         df = add_baseline_comparisons(ensure_auprc_lift(df))
         df.to_csv(csv_path, index=False)
-        write_conference_md(df)
+        write_conference_md(csv_path)
         write_diagnostics(dataset_diagnostics, df)
         log(f"\nResults merged into {csv_path}")
 
