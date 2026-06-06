@@ -38,7 +38,7 @@ from sklearn.metrics import accuracy_score, f1_score, r2_score
 warnings.filterwarnings("ignore")
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from common.embedding_config import build_primary_embeddings, merge_incremental_results
+from common.embedding_config import PRIMARY_EMBEDDING_SPECS, build_primary_embeddings, merge_incremental_results
 
 # =============================================================
 # Config
@@ -675,6 +675,147 @@ def run_expression_delta_regression(data, emb_matrix, vocab, emb_name,
 
 
 # =============================================================
+# Conference-style Markdown Export (perturbation)
+# =============================================================
+def _ordered_embeddings(embeddings):
+    """Return embeddings in full registry order, with unknown names appended alphabetically."""
+    preferred = list(PRIMARY_EMBEDDING_SPECS.keys()) + ['GF-12L95M']
+    names = [e for e in pd.Series(embeddings).dropna().drop_duplicates().tolist()]
+    return sorted(names, key=lambda x: (preferred.index(x) if x in preferred else len(preferred), str(x)))
+
+
+def _format_metric_value(row, metric_col, std_col=None):
+    """Format a metric value, optionally with its standard deviation."""
+    if row is None or metric_col not in row or pd.isna(row[metric_col]):
+        return 'N/A'
+    value = float(row[metric_col])
+    if std_col and std_col in row and not pd.isna(row[std_col]):
+        return f"{value:.4f}±{float(row[std_col]):.4f}"
+    return f"{value:.4f}"
+
+
+def _metric_is_better(value, reference, *, higher_is_better=True):
+    """Return whether value is better than reference for the metric direction."""
+    if value is None or reference is None:
+        return False
+    return value > reference if higher_is_better else value < reference
+
+
+def _style_metric_value(text, *, is_best=False, better_than_baseline=False):
+    """Style metric values for markdown tables.
+
+    Best values are red and bold. Non-best values that beat baseline are black bold.
+    """
+    if text == 'N/A':
+        return text
+    if is_best:
+        return f'<span style="color: red"><strong>{text}</strong></span>'
+    if better_than_baseline:
+        return f'**{text}**'
+    return text
+
+
+def _append_metric_table(md_lines, df, title, row_cols, metric_col, *, std_col=None, higher_is_better=True):
+    """Append one embedding-comparison markdown table for a metric."""
+    available = df[df[metric_col].notna()].copy() if metric_col in df.columns else pd.DataFrame()
+    if available.empty:
+        return
+
+    embeddings = _ordered_embeddings(available['embedding'])
+    row_keys = available[row_cols].drop_duplicates().sort_values(row_cols).to_dict('records')
+    direction = 'higher is better' if higher_is_better else 'lower is better'
+    md_lines.extend([
+        f"## {title}",
+        "",
+        f"Metric: `{metric_col}` ({direction}). Values better than baseline are **black bold**; best values are <span style=\"color: red\"><strong>red bold</strong></span>.",
+        "",
+    ])
+    md_lines.append("| " + " | ".join(row_cols + embeddings) + " |")
+    md_lines.append("|" + "|".join(['---'] * len(row_cols) + ['---:'] * len(embeddings)) + "|")
+
+    for key in row_keys:
+        row_values = []
+        numeric_values = []
+        for emb in embeddings:
+            mask = available['embedding'].eq(emb)
+            for col, val in key.items():
+                mask &= available[col].eq(val)
+            match = available[mask]
+            row = match.iloc[0] if not match.empty else None
+            row_values.append(_format_metric_value(row, metric_col, std_col))
+            numeric_values.append(None if row is None or pd.isna(row[metric_col]) else float(row[metric_col]))
+
+        valid_values = [v for v in numeric_values if v is not None]
+        best = (max(valid_values) if higher_is_better else min(valid_values)) if valid_values else None
+        baseline_value = next((numeric_values[i] for i, emb in enumerate(embeddings) if emb == 'baseline'), None)
+
+        for i, value in enumerate(numeric_values):
+            is_best = best is not None and value is not None and np.isclose(value, best, rtol=1e-10, atol=1e-12)
+            better_than_baseline = embeddings[i] != 'baseline' and _metric_is_better(
+                value, baseline_value, higher_is_better=higher_is_better
+            )
+            row_values[i] = _style_metric_value(
+                row_values[i], is_best=is_best, better_than_baseline=better_than_baseline
+            )
+
+        md_lines.append("| " + " | ".join([str(key[col]) for col in row_cols] + row_values) + " |")
+    md_lines.append("")
+
+
+def export_perturbation_conference_markdown(results_df, output_dir):
+    """Export perturbation benchmark results to conference-style markdown tables."""
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    if results_df.empty:
+        log("No perturbation results found; skip conference markdown export.")
+        return None
+
+    df = results_df.copy()
+    md_lines = [
+        "# Perturbation Benchmark (Conference-style Tables)",
+        "",
+        "Tables are regenerated from the merged `perturbation_results.csv` after every run, including incremental embedding runs.",
+        "Values are grouped by task and dataset; values better than baseline are black bold, and the best embedding value within each row is red bold.",
+        "",
+    ]
+
+    cls_df = df[df['task'].eq('classification')].copy() if 'task' in df.columns else pd.DataFrame()
+    if not cls_df.empty:
+        _append_metric_table(md_lines, cls_df, "Task A: Perturbation classification accuracy", ['dataset', 'clf'], 'accuracy', std_col='acc_std')
+        _append_metric_table(md_lines, cls_df, "Task A: Perturbation classification macro F1", ['dataset', 'clf'], 'f1_macro', std_col='f1_std')
+
+    sim_df = df[df['task'].eq('similarity')].copy() if 'task' in df.columns else pd.DataFrame()
+    if not sim_df.empty:
+        _append_metric_table(md_lines, sim_df, "Task B: Perturbation effect similarity (Spearman)", ['dataset'], 'spearman_r')
+        _append_metric_table(md_lines, sim_df, "Task B: Perturbation effect similarity (Pearson)", ['dataset'], 'pearson_r')
+
+    dir_df = df[df['task'].eq('direction')].copy() if 'task' in df.columns else pd.DataFrame()
+    if not dir_df.empty:
+        _append_metric_table(md_lines, dir_df, "Task C: Perturbation direction prediction (Pearson)", ['dataset'], 'pearson_r', std_col='pearson_r_std')
+        _append_metric_table(md_lines, dir_df, "Task C: Perturbation direction prediction (MSE)", ['dataset'], 'mse', higher_is_better=False)
+
+    dreg_df = df[df['task'].eq('expr_delta_regression')].copy() if 'task' in df.columns else pd.DataFrame()
+    if not dreg_df.empty:
+        _append_metric_table(md_lines, dreg_df, "Task D: Cell-type-specific delta regression (Pearson)", ['dataset'], 'pearson_r', std_col='pearson_r_std')
+        _append_metric_table(md_lines, dreg_df, "Task D: Cell-type-specific delta regression (R2)", ['dataset'], 'r2')
+        _append_metric_table(md_lines, dreg_df, "Task D: Cell-type-specific delta regression (MSE)", ['dataset'], 'mse', higher_is_better=False)
+
+    md_path = out_dir / 'perturbation_conference_tables.md'
+    md_path.write_text("\n".join(md_lines) + "\n", encoding='utf-8')
+    log(f"Conference markdown saved to {md_path}")
+    return md_path
+
+
+def export_perturbation_conference_markdown_from_csv(csv_path, output_dir):
+    """Load perturbation result CSV and export conference-style markdown directly."""
+    if not os.path.exists(csv_path):
+        raise FileNotFoundError(f"CSV not found: {csv_path}")
+    results_df = pd.read_csv(csv_path)
+    return export_perturbation_conference_markdown(results_df, output_dir)
+
+
+# =============================================================
 # Main
 # =============================================================
 def main():
@@ -886,6 +1027,7 @@ def main():
         result_keys = ['dataset', 'task', 'embedding', 'clf']
         df = merge_incremental_results(df, csv_path, result_keys)
         log(f"\nResults merged into {csv_path}")
+        export_perturbation_conference_markdown(df, OUTPUT_DIR)
 
     log("\nDone!")
 
