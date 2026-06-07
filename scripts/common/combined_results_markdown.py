@@ -30,6 +30,8 @@ SUMMARY_SOURCES: Tuple[Tuple[str, str], ...] = (
     ("Perturbation regression", "perturbation_regression/conference_embedding_aggregate.md"),
     ("GRN embedding-only", "grn_embedding_only/conference_table.md"),
     ("GRN BEELINE full", "grn_beeline_full/conference_table.md"),
+    ("Integration", "integration_reference/integration_conference_table.md"),
+    ("Reference mapping", "integration_reference/reference_mapping_conference_table.md"),
 )
 
 
