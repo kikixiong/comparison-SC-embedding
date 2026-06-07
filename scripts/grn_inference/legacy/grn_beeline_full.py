@@ -10,7 +10,7 @@ Network types: Specific ChIP-seq, Non-Specific ChIP-seq, STRING
 Gene counts: 500, 1000
 """
 
-import os, sys, json, gzip, zipfile, warnings, random
+import os, sys, json, gzip, zipfile, warnings, random, re
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -158,9 +158,9 @@ def log(msg):
         f.write(line + '\n')
 
 
-def _style_metric_matrix(pivot):
-    """Style matrix where rows=embedding, cols=dataset.
-    Per dataset column: red bold = best; bold = better than baseline.
+def _style_metric_matrix(pivot, higher_is_better=True):
+    """Style matrix where rows=embedding, cols=dataset/aggregate.
+    Per column: red bold = best; bold = better than baseline.
     """
     styled = {}
     for emb in pivot.index:
@@ -172,11 +172,12 @@ def _style_metric_matrix(pivot):
                 continue
             txt = f'{v:.4f}'
             col = pivot[ds].dropna()
-            best = col.max() if not col.empty else np.nan
+            best = col.max() if higher_is_better else col.min() if not col.empty else np.nan
             baseline = pivot.at['baseline', ds] if 'baseline' in pivot.index else np.nan
-            if pd.notna(best) and v == best:
-                styled[emb][ds] = f"<span style='color:red'><strong>{txt}</strong></span>"
-            elif emb != 'baseline' and pd.notna(baseline) and v > baseline:
+            better_than_baseline = (v > baseline) if higher_is_better else (v < baseline)
+            if pd.notna(best) and np.isclose(v, best):
+                styled[emb][ds] = f'<span style="color:red"><strong>{txt}</strong></span>'
+            elif pd.notna(baseline) and better_than_baseline:
                 styled[emb][ds] = f'**{txt}**'
             else:
                 styled[emb][ds] = txt
@@ -188,6 +189,15 @@ def _collapse_dataset_label(name):
     if not isinstance(name, str):
         return name
     return name.split('->', 1)[0].strip()
+
+
+def _dataset_size_label(name):
+    """Return the terminal gene-count/HVG suffix so _500 and _1000 aggregate separately."""
+    if not isinstance(name, str):
+        return "unknown"
+    collapsed = _collapse_dataset_label(name)
+    match = re.search(r"_?(\d+)$", collapsed)
+    return match.group(1) if match else "unknown"
 
 
 def _infer_network_group(dataset_name):
@@ -588,6 +598,27 @@ def write_conference_md(csv_path=None):
                 for emb in pivot.index:
                     lines.append('| ' + emb + ' | ' + ' | '.join(styled[emb][ds] for ds in datasets) + ' |')
                 lines.append('')
+
+                size_groups = {}
+                for ds in datasets:
+                    size_groups.setdefault(_dataset_size_label(ds), []).append(ds)
+                for size_label in sorted(size_groups, key=lambda x: (x == 'unknown', int(x) if str(x).isdigit() else str(x))):
+                    ds_for_size = size_groups[size_label]
+                    mean_pivot = pivot[ds_for_size].mean(axis=1, skipna=True).to_frame('Mean')
+                    mean_pivot = mean_pivot.reindex(index=embeddings)
+                    styled_mean = _style_metric_matrix(mean_pivot)
+                    size_title = f'{size_label}-gene' if size_label != 'unknown' else 'unknown-size'
+                    lines.append(f'##### Aggregate mean across {group} {size_title} datasets')
+                    lines.append('')
+                    lines.append(
+                        f'Latent variables: metric={metric.upper()}, negative_protocol={protocol_label}, network_group={group}, '
+                        f'dataset_size={size_label}, classifier=aggregated(lr,mlp), aggregation=mean_across_datasets')
+                    lines.append('')
+                    lines.append('| Embedding | Mean |')
+                    lines.append('|---|---:|')
+                    for emb in mean_pivot.index:
+                        lines.append('| ' + emb + ' | ' + styled_mean[emb]['Mean'] + ' |')
+                    lines.append('')
     with open(out_md, 'w') as f:
         f.write('\n'.join(lines) + '\n')
     log(f'Conference table saved to {out_md}')

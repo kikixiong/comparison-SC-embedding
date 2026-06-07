@@ -454,11 +454,50 @@ def build_conference_aggregate_tables(
     return rank_df, effect_df
 
 
+def _style_value_against_baseline(
+    value: float,
+    baseline_value: float,
+    best_value: float,
+    higher_is_better: bool = True,
+    precision: int = 4,
+) -> str:
+    """Format one Markdown cell: red+bold for best, bold for better than baseline."""
+    if pd.isna(value):
+        return "-"
+    text = f"{float(value):.{precision}f}"
+    is_best = pd.notna(best_value) and np.isclose(float(value), float(best_value))
+    better_than_baseline = False
+    if pd.notna(baseline_value):
+        better_than_baseline = (float(value) > float(baseline_value)) if higher_is_better else (float(value) < float(baseline_value))
+    if is_best:
+        return f'<span style="color:red"><strong>{text}</strong></span>'
+    if better_than_baseline:
+        return f"**{text}**"
+    return text
+
+
+def _style_effect_column(effect_df: pd.DataFrame, row: pd.Series, col: str, higher_is_better: bool) -> str:
+    value = row[col]
+    same_setting = effect_df[effect_df["method"] == row["method"]]
+    baseline_rows = same_setting[same_setting["embedding"] == TARGET_EMBEDDING]
+    baseline_value = baseline_rows[col].iloc[0] if not baseline_rows.empty and col in baseline_rows else np.nan
+    best_value = same_setting[col].max(skipna=True) if higher_is_better else same_setting[col].min(skipna=True)
+    return _style_value_against_baseline(value, baseline_value, best_value, higher_is_better=higher_is_better)
+
+
+def _style_rank_cell(value: float, best_value: float) -> str:
+    if pd.isna(value):
+        return "-"
+    text = f"{float(value):.3f}"
+    return f'<span style="color:red"><strong>{text}</strong></span>' if pd.notna(best_value) and np.isclose(float(value), float(best_value)) else text
+
+
 def write_conference_markdown(out_path: str, rank_df: pd.DataFrame, effect_df: pd.DataFrame) -> None:
     """Write compact conference-style markdown with bold best values."""
     with open(out_path, "w") as f:
         f.write("# Conference-style Aggregated Embedding Comparison\n\n")
-        f.write("抹除数据集差异后，对多个 embedding 做聚合对比（常用指标：Pearson r、MSE）。\n\n")
+        f.write("抹除数据集差异后，对多个 embedding 做聚合对比（常用指标：Pearson r、MSE）。\n")
+        f.write('**加粗**表示同一 method/setting 下优于 baseline；<span style="color:red"><strong>红色加粗</strong></span>表示同一列最优。\n\n')
 
         f.write("## Table A. Aggregated average rank across datasets (lower is better)\n\n")
         f.write("| Embedding | Frozen Linear Rank | Backbone+Head Rank | Overall Rank |\n")
@@ -471,16 +510,11 @@ def write_conference_markdown(out_path: str, rank_df: pd.DataFrame, effect_df: p
             best_overall = rank_df["rank_overall"].min(skipna=True)
             for _, r in rank_df.iterrows():
                 emb = str(r["embedding"])
-                lin = "-" if pd.isna(r["rank_frozen_linear"]) else f"{r['rank_frozen_linear']:.3f}"
-                head = "-" if pd.isna(r["rank_frozen_backbone_trainable_head"]) else f"{r['rank_frozen_backbone_trainable_head']:.3f}"
-                overall = "-" if pd.isna(r["rank_overall"]) else f"{r['rank_overall']:.3f}"
-                if pd.notna(r["rank_frozen_linear"]) and np.isclose(r["rank_frozen_linear"], best_lin):
-                    lin = f"**{lin}**"
-                if pd.notna(r["rank_frozen_backbone_trainable_head"]) and np.isclose(r["rank_frozen_backbone_trainable_head"], best_head):
-                    head = f"**{head}**"
+                lin = _style_rank_cell(r["rank_frozen_linear"], best_lin)
+                head = _style_rank_cell(r["rank_frozen_backbone_trainable_head"], best_head)
                 if pd.notna(r["rank_overall"]) and np.isclose(r["rank_overall"], best_overall):
-                    emb = f"**{emb}**"
-                    overall = f"**{overall}**"
+                    emb = f'<span style="color:red"><strong>{emb}</strong></span>'
+                overall = _style_rank_cell(r["rank_overall"], best_overall)
                 f.write(f"| {emb} | {lin} | {head} | {overall} |\n")
 
         f.write("\n## Table B. Dataset-wise regression metrics\n\n")
@@ -513,31 +547,28 @@ def write_conference_markdown(out_path: str, rank_df: pd.DataFrame, effect_df: p
             f.write("| " + " | ".join(header_top) + " |\n")
             f.write("|" + "|".join(["---"] + ["---:" for _ in header_top[1:]]) + "|\n")
             f.write("| " + " | ".join(header_bottom) + " |\n")
-            best_by_col = {}
-            for c in ordered_ds_cols + ["mean_pearson_r", "mean_mse", "mean_acc"]:
-                best_by_col[c] = effect_df[c].max(skipna=True)
             for _, r in effect_df.iterrows():
                 emb = str(r["embedding_label"])
                 metric_cells = []
                 for c in ordered_ds_cols:
-                    v = r[c]
-                    cell = "-" if pd.isna(v) else f"{v:.4f}"
-                    if pd.notna(v) and np.isclose(v, best_by_col[c]):
-                        cell = f"**{cell}**"
-                    metric_cells.append(cell)
-                pearson = "-" if pd.isna(r["mean_pearson_r"]) else f"{r['mean_pearson_r']:.4f}"
-                mse = "-" if pd.isna(r["mean_mse"]) else f"{r['mean_mse']:.4f}"
-                acc = "-" if pd.isna(r["mean_acc"]) else f"{r['mean_acc']:.4f}"
+                    higher_is_better = not c.endswith("_mse")
+                    metric_cells.append(_style_effect_column(effect_df, r, c, higher_is_better=higher_is_better))
+                pearson = _style_effect_column(effect_df, r, "mean_pearson_r", higher_is_better=True)
+                mse = _style_effect_column(effect_df, r, "mean_mse", higher_is_better=False)
+                acc = _style_effect_column(effect_df, r, "mean_acc", higher_is_better=True)
                 f1 = "-" if pd.isna(r["mean_f1"]) else f"{r['mean_f1']:.4f}"
-                if pd.notna(r["mean_pearson_r"]) and np.isclose(r["mean_pearson_r"], best_by_col["mean_pearson_r"]):
-                    pearson = f"**{pearson}**"
-                if pd.notna(r["mean_mse"]) and np.isclose(r["mean_mse"], best_by_col["mean_mse"]):
-                    mse = f"**{mse}**"
-                if pd.notna(r["mean_acc"]) and np.isclose(r["mean_acc"], best_by_col["mean_acc"]):
-                    acc = f"**{acc}**"
                 f.write("| " + " | ".join([emb, *metric_cells, pearson, mse, acc, f1]) + " |\n")
 
-        f.write("\n注：当同一张表内同时出现多个 method 时，embedding 名称后会添加括号用于区分 latent variable。\n")
+            f.write("\n## Table C. Mean aggregation across datasets by method/setting\n\n")
+            f.write("| Method | Embedding | Mean Pearson r | Mean MSE | Mean Sign Acc |\n")
+            f.write("|---|---|---:|---:|---:|\n")
+            for _, r in effect_df.iterrows():
+                pearson = _style_effect_column(effect_df, r, "mean_pearson_r", higher_is_better=True)
+                mse = _style_effect_column(effect_df, r, "mean_mse", higher_is_better=False)
+                acc = _style_effect_column(effect_df, r, "mean_acc", higher_is_better=True)
+                f.write(f"| {r['method']} | {r['embedding']} | {pearson} | {mse} | {acc} |\n")
+
+        f.write("\n注：当同一张表内同时出现多个 method 时，embedding 名称后会添加括号用于区分 latent variable；MSE 越低越好，其余指标越高越好。\n")
 
 
 def main() -> None:

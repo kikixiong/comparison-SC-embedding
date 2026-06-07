@@ -349,6 +349,37 @@ def run_task(task_name, datasets, data_dir, embeddings, gf_emb, vocab_to_gf, all
 # =============================================================
 # Conference-style Markdown Export (annotation)
 # =============================================================
+def _format_conference_cell(value, baseline_value=None, best_value=None, higher_is_better=True, precision=4):
+    """Format one markdown table cell: red+bold for best, bold for better than baseline."""
+    if pd.isna(value):
+        return "N/A"
+    text = f"{float(value):.{precision}f}"
+    is_best = pd.notna(best_value) and np.isclose(float(value), float(best_value))
+    better_than_baseline = False
+    if baseline_value is not None and pd.notna(baseline_value):
+        better_than_baseline = (float(value) > float(baseline_value)) if higher_is_better else (float(value) < float(baseline_value))
+    if is_best:
+        return f'<span style="color:red"><strong>{text}</strong></span>'
+    if better_than_baseline:
+        return f"**{text}**"
+    return text
+
+
+def _format_conference_mean_std(mean, std, baseline_mean=None, best_mean=None, higher_is_better=True):
+    if pd.isna(mean):
+        return "N/A"
+    base_text = f"{float(mean):.4f}±{float(std):.4f}" if pd.notna(std) else f"{float(mean):.4f}"
+    is_best = pd.notna(best_mean) and np.isclose(float(mean), float(best_mean))
+    better_than_baseline = False
+    if baseline_mean is not None and pd.notna(baseline_mean):
+        better_than_baseline = (float(mean) > float(baseline_mean)) if higher_is_better else (float(mean) < float(baseline_mean))
+    if is_best:
+        return f'<span style="color:red"><strong>{base_text}</strong></span>'
+    if better_than_baseline:
+        return f"**{base_text}**"
+    return base_text
+
+
 def export_annotation_conference_markdown(results_df, output_dir):
     """Export annotation results to conference-style markdown tables."""
     ann_df = results_df[results_df['task'] == 'annotation'].copy()
@@ -375,7 +406,8 @@ def export_annotation_conference_markdown(results_df, output_dir):
         "# Annotation Benchmark (Conference-style Tables)",
         "",
         "Tables are generated from `benchmark_results.csv` (`task=annotation`).",
-        "Each metric is shown in a separate table; **non-baseline embeddings are bold if mean > baseline under the same dataset + classifier**.",
+        'Each metric is shown in a separate table; **bold** means better than `baseline` under the same setting, and <span style="color:red"><strong>red bold</strong></span> marks the best value.',
+        "Aggregate-mean tables average different datasets under the same metric + classifier setting to reduce reviewer-facing table volume.",
         "",
     ]
 
@@ -394,6 +426,7 @@ def export_annotation_conference_markdown(results_df, output_dir):
 
                 base_row = sub[sub['embedding'] == 'baseline']
                 baseline_val = float(base_row.iloc[0][mean_col]) if not base_row.empty else None
+                best_val = sub[mean_col].max(skipna=True)
 
                 values = []
                 for emb in embeddings:
@@ -404,13 +437,26 @@ def export_annotation_conference_markdown(results_df, output_dir):
 
                     mean = float(row.iloc[0][mean_col])
                     std = float(row.iloc[0][std_col])
-                    text = f"{mean:.4f}±{std:.4f}"
-
-                    if emb != 'baseline' and baseline_val is not None and mean > baseline_val:
-                        text = f"**{text}**"
-                    values.append(text)
+                    values.append(_format_conference_mean_std(mean, std, baseline_val, best_val, higher_is_better=True))
 
                 md_lines.append(f"| {ds} | {clf.upper()} | " + " | ".join(values) + " |")
+        md_lines.append("")
+
+        md_lines.extend([f"### {title}: aggregate mean across datasets", ""])
+        md_lines.append("| Classifier | " + " | ".join(embeddings) + " |")
+        md_lines.append("|---|" + "---:|" * len(embeddings))
+        for clf in classifiers:
+            sub = ann_df[ann_df['classifier'] == clf]
+            if sub.empty:
+                continue
+            agg = sub.groupby('embedding', as_index=True)[mean_col].mean()
+            baseline_val = agg.get('baseline', np.nan)
+            best_val = agg.max(skipna=True)
+            values = [
+                _format_conference_cell(agg.get(emb, np.nan), baseline_val, best_val, higher_is_better=True)
+                for emb in embeddings
+            ]
+            md_lines.append(f"| {clf.upper()} | " + " | ".join(values) + " |")
         md_lines.append("")
 
     md_path = os.path.join(output_dir, 'annotation_conference_tables.md')
