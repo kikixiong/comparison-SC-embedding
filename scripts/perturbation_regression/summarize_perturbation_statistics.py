@@ -12,11 +12,16 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
 from scipy.stats import wilcoxon
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from common.combined_results_markdown import update_combined_summary_markdown
 
 PRIMARY_METHOD = "frozen_linear"
 SECONDARY_METHOD = "frozen_backbone_trainable_head"
@@ -637,6 +642,7 @@ def main() -> None:
     ]
     conf_df.reindex(columns=conf_cols).to_csv(conf_csv_out, index=False)
     write_conference_markdown(conf_md_out, rank_df, effect_df)
+    update_combined_summary_markdown(Path(args.input_dir).resolve().parent)
 
 
 if __name__ == "__main__":

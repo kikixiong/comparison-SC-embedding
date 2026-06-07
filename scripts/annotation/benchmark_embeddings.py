@@ -35,6 +35,7 @@ warnings.filterwarnings("ignore")
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from common.embedding_config import build_primary_embeddings, get_incre_embeddings, merge_incremental_results
+from common.combined_results_markdown import update_combined_summary_markdown
 
 # =============================================================
 # Configuration
@@ -463,6 +464,8 @@ def export_annotation_conference_markdown(results_df, output_dir):
     with open(md_path, 'w', encoding='utf-8') as f:
         f.write("\n".join(md_lines))
     log(f"Conference markdown saved to {md_path}")
+    combined_path = update_combined_summary_markdown(Path(output_dir).resolve().parents[0] if Path(output_dir).name != 'results' else output_dir)
+    log(f"Combined summary markdown refreshed at {combined_path}")
 
 
 def export_annotation_conference_markdown_from_csv(csv_path, output_dir):

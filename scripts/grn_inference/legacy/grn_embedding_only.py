@@ -27,6 +27,7 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from common.embedding_config import build_primary_embeddings, get_incre_embeddings, merge_incremental_results
+from common.combined_results_markdown import update_combined_summary_markdown
 
 warnings.filterwarnings("ignore")
 
@@ -174,6 +175,8 @@ def write_conference_md(csv_path=None):
     with open(out_md, 'w') as f:
         f.write('\n'.join(lines) + '\n')
     log(f'Conference table saved to {out_md}')
+    combined_path = update_combined_summary_markdown(Path(RESULTS_DIR).parent)
+    log(f'Combined summary markdown refreshed at {combined_path}')
 
 
 # =============================================================
