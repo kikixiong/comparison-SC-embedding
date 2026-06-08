@@ -26,7 +26,7 @@ from scipy import sparse
 
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from common.embedding_config import build_primary_embeddings, apply_incre_filter, merge_incremental_results
+from common.embedding_config import build_primary_embeddings, apply_incre_filter, merge_incremental_results, parse_embedding_names
 
 
 @dataclass
@@ -104,10 +104,6 @@ def canonical(g: str, mode: str) -> str:
     if mode == "lower":
         return s.lower()
     return s
-
-
-def default_embeddings_config(base_dir: str) -> dict[str, dict[str, str]]:
-    return build_primary_embeddings(base_dir, apply_incremental=False)
 
 
 def load_embedding(path: str, key: str):
@@ -629,13 +625,18 @@ def main() -> None:
         ds[d] = prepare_dataset(ad.read_h5ad(p), split_mode=args.split_mode, split_seed=seed, dataset_name=d)
         ds_split_rows.append(ds[d]["split_diag"])
 
+    explicit_embeddings = parse_embedding_names(args.embeddings)
     if args.embeddings_config:
         with open(args.embeddings_config, encoding="utf-8") as f:
             emb_cfg = json.load(f)
+        emb_cfg = apply_incre_filter(emb_cfg, explicit_embeddings if explicit_embeddings else None)
     else:
-        emb_cfg = default_embeddings_config(args.base_dir)
+        # Keep transfer_v2 aligned with the shared primary embedding registry.
+        # New checkpoints only need to be added to scripts/common/embedding_config.py.
+        emb_cfg = build_primary_embeddings(args.base_dir, apply_incremental=not explicit_embeddings)
+        if explicit_embeddings:
+            emb_cfg = apply_incre_filter(emb_cfg, explicit_embeddings)
 
-    emb_cfg = apply_incre_filter(emb_cfg, args.embeddings.split(",") if args.embeddings else None)
     emb_cfg = {k: v for k, v in emb_cfg.items() if os.path.exists(v.get("path", ""))}
     emb_map = {name: load_embedding(cfg["path"], cfg["key"]) for name, cfg in emb_cfg.items()}
 

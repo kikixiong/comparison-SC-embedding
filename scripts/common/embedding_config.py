@@ -28,7 +28,7 @@ PRIMARY_EMBEDDING_SPECS: Dict[str, Dict[str, str]] = {
 # is added and only that subset should be evaluated. CSV/markdown writers in the
 # primary runners merge those new rows with existing outputs instead of replacing
 # prior embeddings.
-INCRE_EMBEDDINGS: Sequence[str] = ("cl_v6_fair",)
+INCRE_EMBEDDINGS: Sequence[str] = ("cl_scratch_v5",)
 
 
 def parse_embedding_names(value: str | Iterable[str] | None) -> list[str]:

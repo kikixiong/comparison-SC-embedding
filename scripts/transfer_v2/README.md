@@ -20,18 +20,9 @@
 
 ### 1.2 比较对象
 
-代码默认 embedding 配置（见 `analyze_grn_transferability_v2.py::default_embeddings_config`）为：
+`analyze_grn_transferability_v2.py` 默认从共享配置 `scripts/common/embedding_config.py::PRIMARY_EMBEDDING_SPECS` 读取 embedding 注册表，不在 transfer-v2 内另行写死名单；新增 checkpoint（例如 `cl_scratch_v5`、`cl_v6_fair`）只需要加入共享配置即可被 transfer-v2 识别。
 
-- `baseline`
-- `minus`
-- `scGPT_human`
-- `v4_bias_rec_best`
-- `v4_plain_best`
-- `v4_type_pe_best`
-- `scconcept`
-- `scconcept_encoded`
-
-默认路径和权重 key 可通过 `--embeddings-config` 覆盖（JSON）。
+默认路径和权重 key 可通过 `--embeddings-config` 覆盖（JSON）。如需只跑部分 embedding，可使用 `--embeddings name1,name2`；否则会遵循共享配置中的 `INCRE_EMBEDDINGS` 增量开关。
 
 ### 1.3 协议（protocol）
 
@@ -60,7 +51,7 @@ transfer-v2 同时评估 4 种协议：
 
 - 数据集：`hESC, hHep, mDC, mHSC-E, mHSC-GM, mHSC-L`（共 6 个）；
 - 有向迁移对数量：`N*(N-1)=6*5=30`；
-- 每个迁移对有 48 条聚合记录（3 protocol × 2 clf × 8 embedding）；
+- 每个迁移对的聚合记录数取决于当前共享 embedding 注册表与 `INCRE_EMBEDDINGS` 增量开关（历史结果曾为 3 protocol × 2 clf × 8 embedding = 48 条）；
 - 每条聚合记录对应 5 个 seeds。
 
 > 若数据集是 7 个，则有向迁移对应为 `7*6=42`。当前仓库这批 v2 结果文件实际只包含 6 个数据集，因此是 30 对。

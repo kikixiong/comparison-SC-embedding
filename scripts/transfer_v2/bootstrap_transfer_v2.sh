@@ -1,5 +1,5 @@
-EMB_BASE_DIR=/bigdata2/hyt/projects/scbenchmark_xjq/comparison-SC-embedding
-SCBENCHMARK_DIR=/bigdata2/hyt/projects/scbenchmark
+EMB_BASE_DIR=/root/autodl-tmp/projects/comparison-SC-embedding
+SCBENCHMARK_DIR=/root/autodl-tmp/projects/comparison-SC-embedding/scbenchmark
 
 python convert_scrnaseq_to_h5ad.py \
   --input-root "$EMB_BASE_DIR/scRNA-Seq" \
@@ -15,12 +15,12 @@ python transfer_v2_prepare.py \
 
 python analyze_grn_transferability_v2.py \
   --base-dir "$SCBENCHMARK_DIR" \
-  --h5ad-root ""$EMB_BASE_DIR/processed/native" \
-  --pair-manifest ""$EMB_BASE_DIR/transfer_v2/pair_manifest.csv" \
-  --out-dir ""$EMB_BASE_DIR/results/transfer_v2"
+  --h5ad-root "$EMB_BASE_DIR/processed/native" \
+  --pair-manifest "$EMB_BASE_DIR/transfer_v2/pair_manifest.csv" \
+  --out-dir "$EMB_BASE_DIR/results/transfer_v2"
 
 python build_three_tables_v2.py \
   --seed-results "$EMB_BASE_DIR/results/transfer_v2/embedding_transfer_seed_results_v2.csv" \
-  --quality ""$EMB_BASE_DIR/transfer_v2/pair_diagnostics.csv" \
-  --out-dir ""$EMB_BASE_DIR/results/transfer_v2" \
+  --quality "$EMB_BASE_DIR/transfer_v2/pair_diagnostics.csv" \
+  --out-dir "$EMB_BASE_DIR/results/transfer_v2" \
   --close-margin-ratio 0.20
