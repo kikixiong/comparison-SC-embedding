@@ -32,6 +32,8 @@ SUMMARY_SOURCES: Tuple[Tuple[str, str], ...] = (
     ("GRN BEELINE full", "grn_beeline_full/conference_table.md"),
     ("Integration", "integration_reference/integration_conference_table.md"),
     ("Reference mapping", "integration_reference/reference_mapping_conference_table.md"),
+    ("Transfer v2 AUROC", "transfer_v2/auroc_embedding_x_train_all_settings.md"),
+    ("Transfer v2 AUPRC", "transfer_v2/auprc_embedding_x_train_all_settings.md"),
 )
 
 
@@ -253,6 +255,8 @@ def _combine_size_split_sections(sections: List[str]) -> List[str]:
 def _iter_source_sections(results_root: Path) -> Iterable[Tuple[str, Path, List[str]]]:
     for source_title, rel_path in SUMMARY_SOURCES:
         md_path = results_root / rel_path
+        if not md_path.exists():
+            continue
         yield source_title, md_path, _combine_size_split_sections(_extract_summary_sections(md_path))
 
 

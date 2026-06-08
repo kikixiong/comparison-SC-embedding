@@ -6,9 +6,11 @@ Requested aggregation:
 2) aggregate seeds within each (train_dataset, test_dataset, embedding)
 3) aggregate test_dataset within each (train_dataset, embedding)
 4) pivot to embedding x train_dataset markdown matrix
+5) append an aggregate embedding x setting table that averages the 7 train-dataset means
 
-Each cell is formatted as: mean ± std, where std is computed across test_dataset
-after seed-level averaging for the same (train_dataset, embedding).
+Matrix cells are formatted as: mean ± std, where std is computed across test_dataset
+after seed-level averaging for the same (train_dataset, embedding). Aggregate table
+cells are the mean of the matrix means across train datasets for the same setting.
 
 Outputs:
 - auroc_embedding_x_train_all_settings.md
@@ -20,9 +22,17 @@ from __future__ import annotations
 import argparse
 import csv
 import os
+import sys
 from collections import defaultdict
 from math import isclose
 from statistics import mean, pstdev
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPTS_ROOT = os.path.dirname(SCRIPT_DIR)
+if SCRIPTS_ROOT not in sys.path:
+    sys.path.insert(0, SCRIPTS_ROOT)
+
+from common.combined_results_markdown import update_combined_summary_markdown
 
 
 def parse_args() -> argparse.Namespace:
@@ -97,6 +107,72 @@ def render_markdown_matrix(title: str, row_labels: list[str], col_labels: list[s
     return "\n".join(lines)
 
 
+def fmt_mean_cell(mu: float | None) -> str:
+    if mu is None:
+        return "-"
+    return f"{mu:.6f}"
+
+
+def render_setting_aggregate_table(
+    metric: str,
+    row_labels: list[str],
+    setting_labels: list[str],
+    data: dict[tuple[str, str], float],
+    dataset_count_by_setting: dict[str, int],
+) -> str:
+    """Render one embedding x setting table after averaging train-dataset means."""
+    best_by_setting = {}
+    for setting in setting_labels:
+        vals = [data[(emb, setting)] for emb in row_labels if (emb, setting) in data]
+        best_by_setting[setting] = max(vals) if vals else None
+
+    baseline_by_setting = {
+        setting: data.get(("baseline", setting))
+        for setting in setting_labels
+    }
+
+    dataset_counts = "/".join(str(dataset_count_by_setting[s]) for s in setting_labels)
+    lines = [
+        "## Aggregate mean across train datasets",
+        "",
+        (
+            f"Latent variables: metric={metric}, task=transfer_v2, "
+            "aggregation=mean_across_train_dataset_means, "
+            f"settings={'/'.join(setting_labels)}, train_dataset_count={dataset_counts}"
+        ),
+        "",
+        "Each cell is the mean of that embedding's per-train-dataset means from the setting-specific matrix above.",
+        "",
+        "| Embedding | " + " | ".join(setting_labels) + " |",
+        "|---|" + "|".join(["---:" for _ in setting_labels]) + "|",
+    ]
+    for emb in row_labels:
+        cells = []
+        for setting in setting_labels:
+            mu = data.get((emb, setting))
+            txt = fmt_mean_cell(mu)
+            if mu is not None:
+                best = best_by_setting.get(setting)
+                baseline = baseline_by_setting.get(setting)
+                is_best = (best is not None) and isclose(mu, best, rel_tol=1e-12, abs_tol=1e-12)
+                above_baseline = (
+                    emb != "baseline"
+                    and baseline is not None
+                    and (mu > baseline)
+                    and (not isclose(mu, baseline, rel_tol=1e-12, abs_tol=1e-12))
+                )
+                if is_best and above_baseline:
+                    txt = f"**{red(txt)}**"
+                elif is_best:
+                    txt = f"**{txt}**"
+                elif above_baseline:
+                    txt = red(txt)
+            cells.append(txt)
+        lines.append("| " + emb + " | " + " | ".join(cells) + " |")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def main() -> None:
     args = parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
@@ -114,6 +190,11 @@ def main() -> None:
 
     au_sections: list[str] = []
     ap_sections: list[str] = []
+    aggregate_au: dict[tuple[str, str], float] = {}
+    aggregate_ap: dict[tuple[str, str], float] = {}
+    aggregate_dataset_counts: dict[str, int] = {}
+    aggregate_embeddings: list[str] = []
+    aggregate_settings: list[str] = []
     generated = 0
     for protocol, clf in settings:
         filt = [
@@ -166,20 +247,35 @@ def main() -> None:
         for k, vals in by_train_emb_ap.items():
             ap_data[k] = (mean(vals), pstdev(vals) if len(vals) > 1 else 0.0)
 
+        setting_label = f"{protocol} + {clf}"
         au_sections.append(
             render_markdown_matrix(
-            f"{protocol} + {clf} | AUROC matrix (embedding × train_dataset)",
-            embeddings,
-            trains,
-            au_data,
-        ))
+                f"{setting_label} | AUROC matrix (embedding × train_dataset)",
+                embeddings,
+                trains,
+                au_data,
+            )
+        )
         ap_sections.append(
             render_markdown_matrix(
-            f"{protocol} + {clf} | AUPRC matrix (embedding × train_dataset)",
-            embeddings,
-            trains,
-            ap_data,
-        ))
+                f"{setting_label} | AUPRC matrix (embedding × train_dataset)",
+                embeddings,
+                trains,
+                ap_data,
+            )
+        )
+
+        aggregate_settings.append(setting_label)
+        aggregate_dataset_counts[setting_label] = len(trains)
+        for emb in embeddings:
+            if emb not in aggregate_embeddings:
+                aggregate_embeddings.append(emb)
+            au_vals = [au_data[(emb, tr)][0] for tr in trains if (emb, tr) in au_data]
+            ap_vals = [ap_data[(emb, tr)][0] for tr in trains if (emb, tr) in ap_data]
+            if au_vals:
+                aggregate_au[(emb, setting_label)] = mean(au_vals)
+            if ap_vals:
+                aggregate_ap[(emb, setting_label)] = mean(ap_vals)
 
         print(f"[INFO] setting={protocol}+{clf}, shape: {len(embeddings)} x {len(trains)}")
         generated += 1
@@ -189,6 +285,18 @@ def main() -> None:
 
     au_md = os.path.join(args.out_dir, "auroc_embedding_x_train_all_settings.md")
     ap_md = os.path.join(args.out_dir, "auprc_embedding_x_train_all_settings.md")
+    aggregate_embeddings = sorted(aggregate_embeddings)
+    au_sections.append(
+        render_setting_aggregate_table(
+            "AUROC", aggregate_embeddings, aggregate_settings, aggregate_au, aggregate_dataset_counts
+        )
+    )
+    ap_sections.append(
+        render_setting_aggregate_table(
+            "AUPRC", aggregate_embeddings, aggregate_settings, aggregate_ap, aggregate_dataset_counts
+        )
+    )
+
     with open(au_md, "w", encoding="utf-8") as f:
         f.write("# AUROC matrices by setting (embedding × train_dataset)\n\n")
         f.write("\n".join(au_sections))
@@ -197,6 +305,9 @@ def main() -> None:
         f.write("\n".join(ap_sections))
     print(f"[OK] wrote {au_md}")
     print(f"[OK] wrote {ap_md}")
+
+    combined_path = update_combined_summary_markdown(os.path.dirname(args.out_dir.rstrip(os.sep)))
+    print(f"[OK] updated {combined_path}")
 
 
 if __name__ == "__main__":

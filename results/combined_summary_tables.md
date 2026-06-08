@@ -3,7 +3,7 @@
 This file is rebuilt from generated Markdown exports under `results/`.
 It collects only aggregate/summary tables so reviewers can inspect cross-dataset results in one place.
 
-Last rebuilt: 2026-06-07 11:12:55
+Last rebuilt: 2026-06-08 06:05:26
 
 ## Annotation
 
@@ -255,3 +255,49 @@ Latent variables: metric=F1, negative_protocol=full_candidate, classifier=aggreg
 | scconcept_encoded | 0.4990 | 0.6064 | 0.0474 | 0.0457 | 0.0836 | 0.0641 |
 | cl_scratch_v5 | **0.5336** | **0.6417** | **0.1455** | **0.2033** | 0.3378 | **0.3985** |
 | cl_v6_fair | 0.5124 | <span style="color:red"><strong>0.6446</strong></span> | **0.1392** | 0.1483 | 0.3343 | **0.3978** |
+
+## Transfer v2 AUROC
+
+Source: `transfer_v2/auroc_embedding_x_train_all_settings.md`
+
+### Aggregate mean across train datasets
+
+Latent variables: metric=AUROC, task=transfer_v2, aggregation=mean_across_train_dataset_means, settings=coverage_matched + lr/coverage_matched + mlp/native + lr/native + mlp/strict + lr/strict + mlp/topology_matched + lr/topology_matched + mlp, train_dataset_count=7/7/7/7/7/7/7/7
+
+Each cell is the mean of that embedding's per-train-dataset means from the setting-specific matrix above.
+
+| Embedding | coverage_matched + lr | coverage_matched + mlp | native + lr | native + mlp | strict + lr | strict + mlp | topology_matched + lr | topology_matched + mlp |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| baseline | **0.592388** | 0.598909 | 0.566524 | **0.594150** | 0.602783 | 0.606156 | 0.600095 | 0.602248 |
+| cl_scratch_v5 | 0.591561 | **<span style="color:red">0.605642</span>** | <span style="color:red">0.569422</span> | 0.588911 | **<span style="color:red">0.606641</span>** | <span style="color:red">0.610030</span> | **<span style="color:red">0.606924</span>** | **<span style="color:red">0.606408</span>** |
+| cl_v6_fair | 0.575606 | 0.584201 | **<span style="color:red">0.573700</span>** | 0.593141 | 0.598169 | **<span style="color:red">0.611316</span>** | 0.592066 | <span style="color:red">0.602387</span> |
+| minus | 0.549884 | 0.565133 | 0.555924 | 0.577247 | 0.577195 | 0.589083 | 0.578466 | 0.586531 |
+| scGPT_human | 0.583374 | 0.589032 | <span style="color:red">0.567752</span> | 0.589698 | 0.595844 | 0.600142 | <span style="color:red">0.602918</span> | 0.589016 |
+| scconcept | 0.513491 | 0.516416 | 0.518305 | 0.521747 | 0.517669 | 0.524064 | 0.514107 | 0.523414 |
+| scconcept_encoded | 0.515992 | 0.529192 | 0.516575 | 0.526032 | 0.525731 | 0.537919 | 0.525051 | 0.526650 |
+| v4_bias_rec_best | 0.567777 | 0.588799 | 0.548391 | 0.579826 | 0.548625 | 0.597267 | 0.563224 | 0.597002 |
+| v4_plain_best | 0.557666 | 0.572275 | 0.558329 | 0.586329 | <span style="color:red">0.605548</span> | <span style="color:red">0.607116</span> | 0.593335 | 0.586092 |
+| v4_type_pe_best | 0.571477 | 0.584766 | 0.558697 | 0.593046 | 0.589838 | <span style="color:red">0.606811</span> | 0.585163 | 0.595815 |
+
+## Transfer v2 AUPRC
+
+Source: `transfer_v2/auprc_embedding_x_train_all_settings.md`
+
+### Aggregate mean across train datasets
+
+Latent variables: metric=AUPRC, task=transfer_v2, aggregation=mean_across_train_dataset_means, settings=coverage_matched + lr/coverage_matched + mlp/native + lr/native + mlp/strict + lr/strict + mlp/topology_matched + lr/topology_matched + mlp, train_dataset_count=7/7/7/7/7/7/7/7
+
+Each cell is the mean of that embedding's per-train-dataset means from the setting-specific matrix above.
+
+| Embedding | coverage_matched + lr | coverage_matched + mlp | native + lr | native + mlp | strict + lr | strict + mlp | topology_matched + lr | topology_matched + mlp |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| baseline | **0.619306** | **0.625390** | 0.579060 | **0.601418** | 0.572757 | 0.607198 | 0.571226 | 0.605813 |
+| cl_scratch_v5 | 0.598874 | 0.605657 | <span style="color:red">0.579900</span> | 0.593719 | 0.571186 | 0.590328 | <span style="color:red">0.573246</span> | 0.580086 |
+| cl_v6_fair | 0.590021 | 0.593411 | **<span style="color:red">0.587066</span>** | 0.597406 | 0.567257 | 0.591824 | 0.563756 | 0.595669 |
+| minus | 0.588855 | 0.577265 | 0.572096 | 0.587808 | 0.548202 | 0.600984 | 0.570384 | <span style="color:red">0.622377</span> |
+| scGPT_human | 0.616233 | 0.609953 | <span style="color:red">0.580588</span> | 0.598603 | 0.563497 | 0.602535 | **<span style="color:red">0.577671</span>** | <span style="color:red">0.610649</span> |
+| scconcept | 0.544878 | 0.540629 | 0.528730 | 0.534178 | 0.487650 | 0.535994 | 0.496011 | 0.561949 |
+| scconcept_encoded | 0.546644 | 0.549184 | 0.526312 | 0.537724 | 0.491557 | 0.544311 | 0.498705 | 0.522595 |
+| v4_bias_rec_best | 0.588615 | 0.588797 | 0.564965 | 0.591524 | 0.528991 | 0.606782 | 0.542088 | **<span style="color:red">0.627673</span>** |
+| v4_plain_best | 0.559575 | 0.572861 | 0.573162 | 0.595488 | **<span style="color:red">0.575590</span>** | **<span style="color:red">0.615907</span>** | 0.561069 | <span style="color:red">0.621008</span> |
+| v4_type_pe_best | 0.595181 | 0.592247 | 0.571618 | 0.597866 | 0.555390 | <span style="color:red">0.613174</span> | 0.548393 | <span style="color:red">0.620136</span> |
