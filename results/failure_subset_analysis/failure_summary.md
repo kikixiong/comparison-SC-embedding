@@ -13,6 +13,7 @@ This diagnostic report analyzes failure modes on top of existing benchmark CSVs.
 Perturbation folds with n_test < 5 or n_train < 20 are treated as diagnostic only and excluded from headline failure tables.
 
 ## Top failure subsets
+
 | embedding | comparator | task | metric | delta | setting |
 |---|---|---|---:|---:|---|
 | scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.191 | dataset=norman;context=dataset::all;method=frozen_linear;fold_id=2;n_train=80;n_test=20 |
@@ -28,6 +29,8 @@ Perturbation folds with n_test < 5 or n_train < 20 are treated as diagnostic onl
 
 ## Protocol sensitivity summary
 - Flagged protocol-sensitive cases: **2300**.
+
+
 | embedding | metric | native | topology_matched | rank_native | rank_topology | flags |
 |---|---|---:|---:|---:|---:|---|
 | cl_v6_fair | auprc | 0.6744 | 0.4734 | 1 | 10 | native_win_topology_loss;rank_change>=2 |
