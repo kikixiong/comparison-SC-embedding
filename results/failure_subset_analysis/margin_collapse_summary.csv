@@ -1,0 +1,1 @@
+task,source_file,setting,embedding,mean_pos_score_source,mean_neg_score_source,margin_source,mean_pos_score_target,mean_neg_score_target,margin_target,delta_pos,delta_neg,delta_margin,abs_shift_margin,dominant_shift
