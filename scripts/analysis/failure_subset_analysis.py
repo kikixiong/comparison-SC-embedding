@@ -33,11 +33,19 @@ METRIC_ALIASES = {
     "pearson_r": ("pearson_r",),
     "sign_acc": ("sign_acc",),
     "mse": ("mse",),
+    "rmse": ("rmse",),
+    "mae": ("mae",),
+    "loss": ("loss",),
     "calibration_brier": ("calibration_brier", "mean_calibration_brier"),
 }
 
-LOWER_IS_BETTER = {"mse", "calibration_brier"}
+LOWER_IS_BETTER = {"mse", "rmse", "mae", "loss"}
 STD_SUFFIXES = ("_std", "std_")
+
+
+def metric_direction(metric: str) -> str:
+    canonical = canonical_metric(metric) or metric
+    return "lower_is_better" if canonical in LOWER_IS_BETTER else "higher_is_better"
 
 
 @dataclass
@@ -187,8 +195,33 @@ def mean(values: Iterable[Optional[float]]) -> Optional[float]:
 def delta(a: Optional[float], b: Optional[float], metric: str) -> Optional[float]:
     if a is None or b is None:
         return None
-    raw = a - b
-    return -raw if metric in LOWER_IS_BETTER else raw
+    return a - b
+
+
+def delta_is_failure(value: float, metric: str) -> bool:
+    if metric_direction(metric) == "lower_is_better":
+        return value > DELTA_EPS
+    return value < -DELTA_EPS
+
+
+def delta_is_improvement(value: float, metric: str) -> bool:
+    if metric_direction(metric) == "lower_is_better":
+        return value < -DELTA_EPS
+    return value > DELTA_EPS
+
+
+def delta_magnitude(value: float) -> float:
+    return abs(value)
+
+
+def perturbation_diagnostic_flags(task: str, row: Dict[str, str]) -> Tuple[bool, bool, bool]:
+    if task != "perturbation_regression":
+        return False, False, False
+    n_test = to_float(row.get("n_test"))
+    n_train = to_float(row.get("n_train"))
+    small_test_warning = n_test is not None and n_test < 5
+    small_train_warning = n_train is not None and n_train < 20
+    return small_test_warning, small_train_warning, small_test_warning or small_train_warning
 
 
 def fmt(value: object, digits: int = 4) -> str:
@@ -256,7 +289,7 @@ def metric_disagreement(tables: List[CsvTable], baseline: str, warnings: Warning
                     d_secondary = delta(secondary_value, secondary_base, secondary)
                     if d_primary is None or d_secondary is None:
                         continue
-                    if d_primary > DELTA_EPS and d_secondary < -DELTA_EPS:
+                    if delta_is_improvement(d_primary, primary) and delta_is_failure(d_secondary, secondary):
                         rows_out.append({
                             "task": task,
                             "source_file": str(table.path),
@@ -309,7 +342,7 @@ def protocol_sensitivity(transfer_tables: List[CsvTable], baseline: str, warning
                 protocol_embeddings[protocol].append((embedding, value))
             ranks: Dict[Tuple[str, str], int] = {}
             for protocol, items in protocol_embeddings.items():
-                reverse = metric not in LOWER_IS_BETTER
+                reverse = metric_direction(metric) == "higher_is_better"
                 for rank, (embedding, _) in enumerate(sorted(items, key=lambda x: x[1], reverse=reverse), start=1):
                     ranks[(embedding, protocol)] = rank
             embeddings = sorted({embedding for embedding, _protocol in values})
@@ -334,8 +367,8 @@ def protocol_sensitivity(transfer_tables: List[CsvTable], baseline: str, warning
                     base_strict = values.get((baseline, "strict"))
                     d_cov_base = delta(coverage, base_cov, metric)
                     d_strict_base = delta(strict, base_strict, metric)
-                    coverage_improves_vs_baseline = d_cov_base is not None and d_cov_base > DELTA_EPS
-                    strict_collapse = d_strict_base is not None and d_strict_base < -DELTA_EPS
+                    coverage_improves_vs_baseline = d_cov_base is not None and delta_is_improvement(d_cov_base, metric)
+                    strict_collapse = d_strict_base is not None and delta_is_failure(d_strict_base, metric)
                 rank_change = None
                 if rank_native is not None and rank_topology is not None:
                     rank_change = rank_topology - rank_native
@@ -572,7 +605,7 @@ def margin_collapse(all_tables: List[CsvTable], warnings: WarningLog) -> List[Di
 
 def model_specific_vulnerabilities(tables: List[CsvTable], baseline: str, external: str, warnings: WarningLog) -> List[Dict[str, object]]:
     out: List[Dict[str, object]] = []
-    metric_candidates = ("auprc", "auroc", "f1", "precision_at_k", "balanced_accuracy", "accuracy", "f1_macro", "pearson_r", "sign_acc", "mse")
+    metric_candidates = ("auprc", "auroc", "f1", "precision_at_k", "balanced_accuracy", "accuracy", "f1_macro", "pearson_r", "sign_acc", "mse", "rmse", "mae", "loss")
     for table in tables:
         if "embedding" not in table.columns:
             continue
@@ -580,6 +613,7 @@ def model_specific_vulnerabilities(tables: List[CsvTable], baseline: str, extern
         if not metrics:
             warnings.add(f"Model-specific vulnerability analysis skipped {table.path}: no supported metric columns.")
             continue
+        task = detect_task(table)
         by_key: Dict[Tuple[Tuple[str, str], ...], List[Dict[str, str]]] = defaultdict(list)
         for row in table.rows:
             by_key[setting_key(row, table.columns)].append(row)
@@ -596,9 +630,11 @@ def model_specific_vulnerabilities(tables: List[CsvTable], baseline: str, extern
                         d = delta(value, comp_value, metric)
                         if d is None:
                             continue
-                        severity = -d
+                        is_failure = delta_is_failure(d, metric)
+                        is_improvement = delta_is_improvement(d, metric)
+                        small_test_warning, small_train_warning, diagnostic_only = perturbation_diagnostic_flags(task, row)
                         out.append({
-                            "task": detect_task(table),
+                            "task": task,
                             "source_file": str(table.path),
                             "setting": key_to_string(key),
                             "embedding": emb,
@@ -607,8 +643,16 @@ def model_specific_vulnerabilities(tables: List[CsvTable], baseline: str, extern
                             "value": value,
                             "comparator_value": comp_value,
                             "delta_vs_comparator_positive_is_better": d,
-                            "severity_if_negative": severity if d < 0 else 0,
-                            "direction": "failure" if d < -DELTA_EPS else ("improvement" if d > DELTA_EPS else "tie"),
+                            "metric_direction": metric_direction(metric),
+                            "is_failure": is_failure,
+                            "is_improvement": is_improvement,
+                            "failure_magnitude": delta_magnitude(d) if is_failure else 0,
+                            "improvement_magnitude": delta_magnitude(d) if is_improvement else 0,
+                            "small_test_warning": small_test_warning,
+                            "small_train_warning": small_train_warning,
+                            "diagnostic_only": diagnostic_only,
+                            "severity_if_negative": delta_magnitude(d) if is_failure else 0,
+                            "direction": "failure" if is_failure else ("improvement" if is_improvement else "tie"),
                         })
     # Keep the report manageable: worst and best per embedding/comparator/metric/task.
     grouped: Dict[Tuple[str, str, str, str], List[Dict[str, object]]] = defaultdict(list)
@@ -616,10 +660,11 @@ def model_specific_vulnerabilities(tables: List[CsvTable], baseline: str, extern
         grouped[(str(row["task"]), str(row["embedding"]), str(row["comparator"]), str(row["metric"]))].append(row)
     trimmed: List[Dict[str, object]] = []
     for rows in grouped.values():
-        failures = sorted([r for r in rows if r["direction"] == "failure"], key=lambda r: float(r["delta_vs_comparator_positive_is_better"]))[:10]
-        improvements = sorted([r for r in rows if r["direction"] == "improvement"], key=lambda r: -float(r["delta_vs_comparator_positive_is_better"]))[:10]
-        trimmed.extend(failures + improvements)
-    trimmed.sort(key=lambda r: (r["embedding"], r["comparator"], r["task"], r["metric"], float(r["delta_vs_comparator_positive_is_better"])))
+        failures = sorted([r for r in rows if r.get("is_failure") is True and r.get("diagnostic_only") is not True], key=lambda r: -float(r.get("failure_magnitude") or 0))[:10]
+        improvements = sorted([r for r in rows if r.get("is_improvement") is True and r.get("diagnostic_only") is not True], key=lambda r: -float(r.get("improvement_magnitude") or 0))[:10]
+        diagnostics = sorted([r for r in rows if r.get("diagnostic_only") is True], key=lambda r: -(float(r.get("failure_magnitude") or 0) + float(r.get("improvement_magnitude") or 0)))[:10]
+        trimmed.extend(failures + improvements + diagnostics)
+    trimmed.sort(key=lambda r: (r["embedding"], r["comparator"], r["task"], r["metric"], -float(r.get("failure_magnitude") or 0), -float(r.get("improvement_magnitude") or 0)))
     return trimmed
 
 
@@ -689,9 +734,12 @@ def write_markdown(path: Path, *, metric_rows: List[Dict[str, object]], protocol
     lines.append(f"- Model-specific vulnerability rows: **{len(vuln_rows)}** comparing against `{baseline}` and `{external}` where available.")
     lines.append("")
 
+    lines.append("Perturbation folds with n_test < 5 or n_train < 20 are treated as diagnostic only and excluded from headline failure tables.")
+    lines.append("")
+
     lines.append("## Top failure subsets")
     if vuln_rows:
-        worst = top_n([r for r in vuln_rows if r.get("direction") == "failure"], 10, key=lambda r: float(r.get("delta_vs_comparator_positive_is_better") or 0))
+        worst = top_n([r for r in vuln_rows if r.get("is_failure") is True and r.get("diagnostic_only") is not True], 10, key=lambda r: -float(r.get("failure_magnitude") or 0))
         lines.append("| embedding | comparator | task | metric | delta | setting |")
         lines.append("|---|---|---|---:|---:|---|")
         for r in worst:
@@ -828,9 +876,11 @@ def main() -> None:
     write_csv(out_dir / "margin_collapse_summary.csv", margin_rows, [
         "task", "source_file", "setting", "embedding", "mean_pos_score_source", "mean_neg_score_source", "margin_source", "mean_pos_score_target", "mean_neg_score_target", "margin_target", "delta_pos", "delta_neg", "delta_margin", "abs_shift_margin", "dominant_shift",
     ])
-    write_csv(out_dir / "model_specific_vulnerable_settings.csv", vuln_rows, [
-        "task", "source_file", "setting", "embedding", "comparator", "metric", "value", "comparator_value", "delta_vs_comparator_positive_is_better", "severity_if_negative", "direction",
-    ])
+    model_specific_fields = [
+        "task", "source_file", "setting", "embedding", "comparator", "metric", "value", "comparator_value", "delta_vs_comparator_positive_is_better", "metric_direction", "is_failure", "is_improvement", "failure_magnitude", "improvement_magnitude", "small_test_warning", "small_train_warning", "diagnostic_only", "severity_if_negative", "direction",
+    ]
+    write_csv(out_dir / "model_specific_vulnerable_settings.csv", vuln_rows, model_specific_fields)
+    write_csv(out_dir / "fold_level_extreme_diagnostics.csv", [r for r in vuln_rows if r.get("diagnostic_only") is True], model_specific_fields)
 
     if args.make_plots:
         maybe_make_plots(out_dir, metric_rows, protocol_rows, low_pos_rows, margin_rows, warnings)

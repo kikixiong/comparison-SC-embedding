@@ -8,21 +8,23 @@ This diagnostic report analyzes failure modes on top of existing benchmark CSVs.
 - Low-positive / sparse GRN warnings: **722**.
 - Topology/frequency summary rows: **150**.
 - Margin-collapse rows: **0**.
-- Model-specific vulnerability rows: **5118** comparing against `baseline` and `scGPT_human` where available.
+- Model-specific vulnerability rows: **5581** comparing against `baseline` and `scGPT_human` where available.
+
+Perturbation folds with n_test < 5 or n_train < 20 are treated as diagnostic only and excluded from headline failure tables.
 
 ## Top failure subsets
 | embedding | comparator | task | metric | delta | setting |
 |---|---|---|---:|---:|---|
-| scconcept_encoded | scGPT_human | perturbation_regression | mse | -3.906 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=0;n_train=18;n_test=1 |
-| scconcept_encoded | baseline | perturbation_regression | mse | -3.64 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=0;n_train=18;n_test=1 |
-| baseline | scGPT_human | perturbation_regression | mse | -2.567 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=9;n_train=18;n_test=1 |
-| v4_plain_best | scGPT_human | perturbation_regression | mse | -2.367 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=9;n_train=18;n_test=1 |
-| scconcept_encoded | baseline | perturbation_regression | mse | -2.061 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=14;n_train=18;n_test=1 |
-| scconcept_encoded | scGPT_human | perturbation_regression | pearson_r | -1.977 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=0;n_train=18;n_test=1 |
-| scconcept_encoded | baseline | perturbation_regression | pearson_r | -1.972 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=0;n_train=18;n_test=1 |
-| scGPT_human | baseline | perturbation_regression | pearson_r | -1.966 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=1;n_train=18;n_test=1 |
-| scconcept_encoded | scGPT_human | perturbation_regression | mse | -1.958 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=15;n_train=18;n_test=1 |
-| scconcept | scGPT_human | perturbation_regression | pearson_r | -1.956 | dataset=dixit;context=dataset::all;method=frozen_linear;fold_id=4;n_train=18;n_test=1 |
+| scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.191 | dataset=norman;context=dataset::all;method=frozen_linear;fold_id=2;n_train=80;n_test=20 |
+| scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.181 | dataset=adamson;context=dataset::all;method=frozen_linear;fold_id=4;n_train=60;n_test=15 |
+| scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.159 | dataset=adamson;context=dataset::all;method=frozen_linear;fold_id=3;n_train=60;n_test=15 |
+| scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.148 | dataset=adamson;context=dataset::all;method=frozen_linear;fold_id=2;n_train=60;n_test=15 |
+| scconcept_encoded | baseline | perturbation_regression | mse | 1.147 | dataset=adamson;context=dataset::all;method=frozen_linear;fold_id=4;n_train=60;n_test=15 |
+| scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.024 | dataset=norman;context=dataset::all;method=frozen_linear;fold_id=1;n_train=80;n_test=20 |
+| scconcept_encoded | scGPT_human | perturbation_regression | mse | 1.001 | dataset=adamson;context=dataset::all;method=frozen_linear;setting_group=frozen_probe;n_pert_genes=75;target_dim=256;n_folds=5 |
+| cl_scratch_v5 | baseline | grn | auroc | -1 | dataset=mHSC-E500->hHep500;setting=transfer;train_dataset=mHSC-E500;test_dataset=hHep500;clf=lr;coverage=457/500->487/500 |
+| cl_scratch_v5 | baseline | grn | auroc | -1 | dataset=mHSC-E500->hHep500;setting=transfer;train_dataset=mHSC-E500;test_dataset=hHep500;clf=mlp;coverage=457/500->487/500 |
+| cl_scratch_v5 | baseline | grn | auroc | -1 | dataset=mHSC-GM500->hHep500;setting=transfer;train_dataset=mHSC-GM500;test_dataset=hHep500;clf=mlp;coverage=449/500->487/500 |
 
 ## Protocol sensitivity summary
 - Flagged protocol-sensitive cases: **2300**.
