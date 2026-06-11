@@ -81,6 +81,7 @@ nohup python scripts/perturbation_regression/perturbation_regression_benchmark.p
   --top_k 256 \
   --enable_full_finetune false \
   > logs/perturbation_regression_top256.log 2>&1 &
+nohup python scripts/perturbation_regression/summarize_perturbation_statistics.py
 ```
 
 常见可调参数：

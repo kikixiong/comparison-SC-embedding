@@ -21,6 +21,10 @@ PRIMARY_EMBEDDING_SPECS: Dict[str, Dict[str, str]] = {
     "scconcept_encoded": {"subpath": "save_pretrain/scconcept_encoded/best_model.pt", "key": "embedding.weight", "type": "checkpoint"},
     "cl_scratch_v5": {"subpath": "save_pretrain/cl_scratch_v5/best_model.pt", "key": "embedding.weight", "type": "checkpoint"},
     "cl_v6_fair": {"subpath": "save_pretrain/cl_v6_fair/best_model.pt", "key": "embedding.weight", "type": "checkpoint"},
+    "cl_v7_fair": {"subpath": "save_pretrain/cl_v7_fair/best_model.pt", "key": "module.embedding.weight", "type": "checkpoint"},
+    "cl_v6_tau01": {"subpath": "save_pretrain/cl_v6_tau01/best_model.pt", "key": "embedding.weight", "type": "checkpoint"},
+    "cl_v6_tau02": {"subpath": "save_pretrain/cl_v6_tau02/best_model.pt", "key": "embedding.weight", "type": "checkpoint"},
+    "cl_v6_tau03": {"subpath": "save_pretrain/cl_v6_tau03/best_model.pt", "key": "embedding.weight", "type": "checkpoint"},
 }
 
 # Incremental benchmark switch. Leave empty to run all registered embeddings.
@@ -28,7 +32,7 @@ PRIMARY_EMBEDDING_SPECS: Dict[str, Dict[str, str]] = {
 # is added and only that subset should be evaluated. CSV/markdown writers in the
 # primary runners merge those new rows with existing outputs instead of replacing
 # prior embeddings.
-INCRE_EMBEDDINGS: Sequence[str] = ("cl_scratch_v5",)
+INCRE_EMBEDDINGS: Sequence[str] = ("cl_v6_tau03",)
 
 
 def parse_embedding_names(value: str | Iterable[str] | None) -> list[str]:

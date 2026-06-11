@@ -18,7 +18,8 @@ Latent variables: metric=AUROC, classifier=lr, aggregation=mean, dataset_split=1
 | scconcept | 0.4057 | 0.4299 | 0.7684 | 0.7672 |
 | scconcept_encoded | **0.6343** | 0.4359 | 0.7632 | 0.5211 |
 | cl_scratch_v5 | 0.6231 | 0.4779 | 0.7784 | 0.7790 |
-| cl_v6_fair | **0.6308** | 0.4694 | <span style="color:red"><strong>0.7854</strong></span> | 0.7816 |
+| cl_v6_fair | **0.6308** | 0.4694 | **0.7854** | 0.7816 |
+| cl_v7_fair | **0.6443** | 0.4778 | <span style="color:red"><strong>0.7878</strong></span> | 0.7838 |
 | random_256 | <span style="color:red"><strong>1.0000</strong></span> | 0.5594 | 0.6790 | 0.6978 |
 
 ### Aggregate mean across 500-gene datasets | AUROC | Classifier=lr
@@ -37,6 +38,7 @@ Latent variables: metric=AUROC, classifier=lr, dataset_size=500, aggregation=mea
 | scconcept_encoded | 0.5887 |
 | cl_scratch_v5 | 0.6646 |
 | cl_v6_fair | 0.6668 |
+| cl_v7_fair | 0.6734 |
 | random_256 | <span style="color:red"><strong>0.7341</strong></span> |
 
 ## AUROC | Classifier=mlp
@@ -55,6 +57,7 @@ Latent variables: metric=AUROC, classifier=mlp, aggregation=mean, dataset_split=
 | scconcept_encoded | 0.4505 | 0.5004 | 0.5433 |
 | cl_scratch_v5 | 0.5158 | 0.5672 | <span style="color:red"><strong>0.8497</strong></span> |
 | cl_v6_fair | 0.5089 | 0.5682 | 0.8393 |
+| cl_v7_fair | 0.5180 | 0.5553 | **0.8413** |
 | random_256 | 0.6146 | 0.6510 | 0.7120 |
 
 ### Aggregate mean across 500-gene datasets | AUROC | Classifier=mlp
@@ -73,6 +76,7 @@ Latent variables: metric=AUROC, classifier=mlp, dataset_size=500, aggregation=me
 | scconcept_encoded | 0.4981 |
 | cl_scratch_v5 | 0.6442 |
 | cl_v6_fair | 0.6388 |
+| cl_v7_fair | 0.6382 |
 | random_256 | 0.6592 |
 
 ## AUPRC | Classifier=lr
@@ -91,6 +95,7 @@ Latent variables: metric=AUPRC, classifier=lr, aggregation=mean, dataset_split=1
 | scconcept_encoded | 0.7180 | 0.6404 | 0.8122 | 0.7015 |
 | cl_scratch_v5 | 0.7267 | 0.6704 | 0.8301 | 0.8361 |
 | cl_v6_fair | 0.7279 | 0.6661 | <span style="color:red"><strong>0.8392</strong></span> | 0.8402 |
+| cl_v7_fair | **0.7312** | 0.6740 | **0.8351** | 0.8392 |
 | random_256 | <span style="color:red"><strong>1.0000</strong></span> | 0.6928 | 0.7619 | 0.7965 |
 
 ### Aggregate mean across 500-gene datasets | AUPRC | Classifier=lr
@@ -109,6 +114,7 @@ Latent variables: metric=AUPRC, classifier=lr, dataset_size=500, aggregation=mea
 | scconcept_encoded | 0.7180 |
 | cl_scratch_v5 | 0.7658 |
 | cl_v6_fair | 0.7684 |
+| cl_v7_fair | 0.7699 |
 | random_256 | <span style="color:red"><strong>0.8128</strong></span> |
 
 ## AUPRC | Classifier=mlp
@@ -127,6 +133,7 @@ Latent variables: metric=AUPRC, classifier=mlp, aggregation=mean, dataset_split=
 | scconcept_encoded | 0.6763 | 0.7075 | 0.7240 |
 | cl_scratch_v5 | 0.7143 | 0.7538 | <span style="color:red"><strong>0.8932</strong></span> |
 | cl_v6_fair | 0.7200 | 0.7499 | **0.8904** |
+| cl_v7_fair | 0.7225 | 0.7445 | 0.8863 |
 | random_256 | 0.7526 | 0.7617 | 0.8035 |
 
 ### Aggregate mean across 500-gene datasets | AUPRC | Classifier=mlp
@@ -145,5 +152,6 @@ Latent variables: metric=AUPRC, classifier=mlp, dataset_size=500, aggregation=me
 | scconcept_encoded | 0.7026 |
 | cl_scratch_v5 | 0.7871 |
 | cl_v6_fair | 0.7868 |
+| cl_v7_fair | 0.7844 |
 | random_256 | 0.7726 |
 

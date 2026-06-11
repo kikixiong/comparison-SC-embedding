@@ -27,7 +27,7 @@ PRIMARY_METHOD = "frozen_linear"
 SECONDARY_METHOD = "frozen_backbone_trainable_head"
 TARGET_METHODS = [PRIMARY_METHOD, SECONDARY_METHOD]
 TARGET_EMBEDDING = "baseline"
-COMPARATORS = ["scGPT_human","minus","v4_bias_rec_best", "v4_plain_best", "v4_type_pe_best", "scconcept" , "scconcept_encoded", "cl_scratch_v5", "cl_v6_fair"]
+COMPARATORS = ["scGPT_human","minus","v4_bias_rec_best", "v4_plain_best", "v4_type_pe_best", "scconcept" , "scconcept_encoded", "cl_scratch_v5", "cl_v6_fair","cl_v7_fair","cl_v6_tau01","cl_v6_tau02","cl_v6_tau03"]
 METRICS = ["pearson_r", "mse", "sign_acc"]
 EMBEDDING_ORDER = [TARGET_EMBEDDING, *COMPARATORS]
 
